@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponky_web</title>
+    <style>
+        /* Estilos generales */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #979797; /* Fondo gris */
+        }
+
+        /* Estilos de la barra de navegación */
+        .navbar {
+            background-color: #7e0e0e; /* Fondo rojo */
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Estilos de los enlaces en la barra */
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2rem;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .textto {
+            background-color: rgb(136, 37, 37);
+            border-radius: 6%;
+        } 
+        .cat {
+            border-radius: 15px;
+        }
+    </style>
+    <script>
+        // Función para calcular la edad
+        function mostrarEdad() {
+            const fechaNacimiento = new Date(2003, 7, 19); // Mes en base 0 (0=enero, 7=agosto)
+            const fechaActual = new Date();
+            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
+            
+            // Ajuste si aún no ha llegado el mes o el día del cumpleaños de este año
+            if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+            document.getElementById("edad").textContent = edad;
+        }
+        // Ejecutar la función al cargar la página
+        window.onload = mostrarEdad;
+    </script>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="contacto.html">Contactos</a>
+        <a href="amigos.html">Amigos</a>
+    </div>
+    <!-- Contenido principal -->
+    <main class="textto">
+        <h1>Sponky.web</h1>
+        <img src="icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="gato negro" width="150" class="cat">
+        <h3>hola soy sponky y soy estudiante de ingenieria en informatica actualmente tengo <span id="edad"></span> años, me gusta el idioma ruso y tambien me gusta tocar la guitarra
+        y el piano
+        </h3><br>
+    </main>
+   
+
+</body>
+</html>

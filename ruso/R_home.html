@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponky_web</title>
+    <link rel="stylesheet" href="../css/css.css">
+    <script>
+        // Функция для расчета возраста
+        function mostrarEdad() {
+            const fechaNacimiento = new Date(2003, 7, 19); // Месяц начинается с 0 (0=январь, 7=август)
+            const fechaActual = new Date();
+            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
+            
+            // Корректировка, если месяц или день рождения еще не наступил в этом году
+            if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+            document.getElementById("edad").textContent = edad;
+        }
+
+        // Выполнить функцию при загрузке страницы
+        window.onload = mostrarEdad;
+    </script>
+    <style>
+        /* Стили для того, чтобы ссылки выглядели как кнопки */
+        .language-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            background-color: #7e0e0e; /* Красный фон */
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .language-buttons a:hover {
+            background-color: #5e0b0b; /* Изменение цвета при наведении */
+        }
+    </style>
+</head>
+<body>
+    <!-- Панель навигации -->
+    <div class="navbar">
+        <a href="R_home.html">Главная</a>
+        <a href="contacto.html">Контакты</a>
+    </div>
+    <!-- Основное содержание -->
+    <main class="textto">
+        <h1> Sponky.web</h1>
+        <img src="../icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="черный кот" width="150" class="cat">
+        <h3>Привет, я Спонки, и я студент на факультете информатики. Мне <span id="edad"></span> лет. Я люблю русский язык, а также мне нравится играть на гитаре и пианино.</h3>
+
+        <!-- Кнопки для выбора языка в виде ссылок -->
+        <div class="language-buttons">
+            <a href="../ingles/in_home.html">Испанский</a>
+            <a href="R_home.html">Русский</a>
+            <a href="../ingles/in_home.html">Английский</a>
+        </div>
+    </main>
+</body>
+</html>

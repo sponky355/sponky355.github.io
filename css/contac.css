@@ -1,0 +1,30 @@
+        /* Estilos generales */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #979797 ; /* Fondo gris */
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilos de la imagen como botón */
+        .img-button {
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 40px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .img-button img {
+            display: block;
+            border-radius: 15px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .img-button:hover {
+            transform: scale(1.1); /* Agranda la imagen al pasar el mouse */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra */
+        }

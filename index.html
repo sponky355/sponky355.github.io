@@ -48,18 +48,24 @@
         <a href="contacto.html">Contactos</a>
     </div>
 
-    <!-- Contenido principal -->
+    <!-- Contenido principal
+                                      esta es la pagina base, esta es la que voy a usar para poder crear las otras paginas de los otros idiomas  
+    -->
     <main class="textto">
+        <div class="language-dropdown">
+            <button class="dropdown-button">Idioma / язык / language</button>
+            <div class="dropdown-menu">
+                <a href="index.html">Español</a>
+                <a href="ruso/R_home.html">Русский</a>
+                <a href="ingles/in_home.html">English</a>
+            </div>
+        </div>
         <h1> Sponky.web</h1>
         <img src="icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="gato negro" width="150" class="cat">
         <h3>Hola, soy Sponky y soy estudiante de ingeniería en informática, actualmente tengo <span id="edad"></span> años. Me gusta el idioma ruso y también me gusta tocar la guitarra y el piano.</h3>
 
-        <!-- Botones de idioma como enlaces -->
-        <div class="language-buttons">
-            <a href="index.html">Español</a>
-            <a href="ruso/R_home.html">Русский</a>
-            <a href="ingles/in_home.html">English</a>
-        </div>
     </main>
+    <script src="java/botones.js"></script>
 </body>
+
 </html>

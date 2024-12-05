@@ -1,58 +1,169 @@
-/* Estilos generales */
+/* Estilos generales para el cuerpo de la página */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #979797; /* Fondo gris */
+    margin: 0; /* Elimina los márgenes predeterminados del navegador */
+    font-family: Arial, sans-serif; /* Fuente base para el texto */
+    background-color: #979797; /* Color de fondo gris */
 }
 
-/* Estilos de la barra de navegación */
+/* -------------------------- */
+/* Barra de navegación (Desktop) */
+/* -------------------------- */
 .navbar {
-    background-color: #7e0e0e; /* Fondo rojo */
-    padding: 1rem;
-    text-align: center;
+    background-color: #7e0e0e; /* Fondo rojo para la barra */
+    padding: 1rem; /* Espaciado alrededor del contenido de la barra */
+    text-align: center; /* Centra los enlaces horizontalmente */
 }
 
-/* Estilos de los enlaces en la barra */
 .navbar a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 1.2rem;
+    color: white; /* Color del texto en los enlaces */
+    text-decoration: none; /* Elimina el subrayado predeterminado de los enlaces */
+    margin: 0 15px; /* Espaciado horizontal entre enlaces */
+    font-size: 1.2rem; /* Tamaño de fuente de los enlaces */
 }
 
 .navbar a:hover {
-    text-decoration: underline;
+    text-decoration: underline; /* Subraya el texto al pasar el cursor */
 }
 
+/* -------------------------- */
+/* Estilos del contenedor principal */
+/* -------------------------- */
 .textto {
-    background-color: rgb(136, 37, 37);
-    border-radius: 6%;
-    padding: 1rem;
-    text-align: center;
+    background-color: rgb(136, 37, 37); /* Fondo rojo oscuro para el contenido principal */
+    border-radius: 6%; /* Bordes redondeados del contenedor */
+    padding: 1rem; /* Espaciado interno */
+    text-align: center; /* Centra el contenido del texto */
+    color: white; /* Color de texto blanco para mayor contraste */
 }
 
 .cat {
-    border-radius: 15px;
+    border-radius: 15px; /* Bordes redondeados para la imagen */
 }
 
-/* Estilos de los botones de idioma */
-.language-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
+/* -------------------------- */
+/* Menú desplegable de idiomas */
+/* -------------------------- */
+
+/* Contenedor del menú desplegable */
+.language-dropdown {
+    position: relative; /* Asegura que el menú desplegable se posicione relativo al contenedor */
+    display: inline-block; /* Mantiene el contenedor en línea con otros elementos */
 }
 
-.language-buttons button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #7e0e0e;
-    color: white;
+/* Botón principal del menú desplegable */
+.dropdown-button {
+    padding: 0.5rem 1rem; /* Espaciado interno del botón */
+    font-size: 1rem; /* Tamaño del texto en el botón */
+    border: none; /* Elimina los bordes predeterminados */
+    border-radius: 5px; /* Bordes redondeados del botón */
+    cursor: pointer; /* Muestra el puntero al pasar el cursor */
+    background-color: #7e0e0e; /* Fondo rojo */
+    color: white; /* Texto blanco */
+    transition: background-color 0.3s; /* Suaviza el cambio de color en hover */
 }
 
-.language-buttons button:hover {
-    background-color: #5a0b0b;
+.dropdown-button:hover {
+    background-color: #5a0b0b; /* Fondo más oscuro al pasar el cursor */
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+    display: none; /* Oculta el menú por defecto */
+    position: absolute; /* Posiciona el menú respecto al botón */
+    background-color: white; /* Fondo blanco para el menú */
+    min-width: 150px; /* Ancho mínimo del menú */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados del menú */
+    z-index: 1; /* Coloca el menú sobre otros elementos */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar un efecto elevado */
+}
+
+/* Opciones dentro del menú desplegable */
+.dropdown-menu a {
+    color: #333; /* Color de texto negro claro */
+    text-decoration: none; /* Sin subrayado en las opciones */
+    display: block; /* Cada enlace ocupa toda la línea */
+    padding: 0.5rem 1rem; /* Espaciado interno de las opciones */
+    font-size: 1rem; /* Tamaño del texto */
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0; /* Fondo gris claro al pasar el cursor */
+}
+
+/* Menú desplegable activo */
+.language-dropdown.active .dropdown-menu {
+    display: block; /* Muestra el menú cuando está activo */
+}
+
+/* -------------------------- */
+/* Estilos Responsivos */
+/* -------------------------- */
+
+/* Ajustes generales para pantallas pequeñas */
+@media (max-width: 768px) {
+    body {
+        font-size: 90%; /* Reduce ligeramente el tamaño del texto */
+    }
+    
+    /* Ajustes al cuerpo */
+    /* Barra de navegación */
+    .navbar {
+        padding: 1rem; /* Reduce el espaciado alrededor 
+        aca ajuste el tamaño de la barra de arriba, es un formato un poco raro pero funcional
+        
+        */
+    }
+
+    .navbar a {
+        font-size: 1rem; /* Reduce el tamaño de los enlaces */
+        margin: 0 10px; /* Menor espacio entre enlaces */
+    }
+
+    /* Contenedor principal */
+    .textto {
+        border-radius: 10px; /* Menos curvatura para un diseño compacto */
+        padding: 0.5rem; /* Menor espaciado interno */
+    }
+
+    .cat {
+        width: 100px; /* Imagen más pequeña */
+    }
+
+    /* Dropdown en pantallas pequeñas */
+    .dropdown-button {
+        width: 100%; /* Botón ocupa todo el ancho */
+        font-size: 0.9rem; /* Texto más pequeño */
+    }
+
+    .dropdown-menu {
+        min-width: 100%; /* Menú ocupa todo el ancho del botón */
+        border-radius: 0; /* Elimina bordes redondeados */
+    }
+
+    .dropdown-menu a {
+        font-size: 0.9rem; /* Texto más pequeño */
+    }
+}
+
+/* Ajustes específicos para pantallas muy pequeñas (teléfonos) */
+
+@media (max-width: 480px) {
+    /* Contenedor principal */
+    .textto {
+        padding: 0.5rem; /* Menor espacio alrededor del texto */
+    }
+
+    .cat {
+        width: 80px; /* Imagen aún más pequeña */
+    }
+
+    /* Dropdown en pantallas muy pequeñas */
+    .dropdown-button {
+        padding: 0.3rem 0.5rem; /* Botón más compacto */
+    }
+
+    .dropdown-menu a {
+        padding: 0.3rem 0.5rem; /* Opciones del menú más compactas */
+    }
 }

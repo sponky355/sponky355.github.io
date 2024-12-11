@@ -60,7 +60,39 @@
         </div>
         <h1> Sponky.web</h1>
         <img src="../icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="black cat" width="150" class="cat">
-        <h3>Hello, I am Sponky, a computer engineering student. I am currently <span id="age"></span> years old. I enjoy the Russian language and also love playing guitar and piano.</h3>
+        <div style="border: 1px solid #8B0000; padding: 20px; background-color: #660000; border-radius: 10px; max-width: 500px; margin: 20px auto; display: flex; flex-direction: column; align-items: center;">
+            <h3 style="text-align: center; color: #fff;" id="title">Skills and Interests</h3>
+            <ul style="list-style-type: none; padding: 0; font-size: 16px; color: #fff;" id="list">
+                <li><strong>Programming experience:</strong> Web development, Python, basic Java.</li>
+                <li><strong>Continuous learning:</strong> Always looking to improve and learn new skills.</li>
+                <li><strong>Self-taught:</strong> I teach myself through practice and curiosity.</li>
+                <li><strong>Age:</strong> <span id="age"></span> years old.</li>
+                <li><strong>Musician:</strong> I play various instruments, specializing in piano and guitar.</li>
+                <li><strong>Language studies:</strong> Learning Russian, occasionally studying English or Italian.</li>
+                <li><strong>Favorite language:</strong> Russian is the language I like to think in.</li>
+            </ul>
+        </div>
+        
+        <style>
+            @media (max-width: 600px) {
+                /* Make the container more flexible */
+                #content {
+                    width: 100%; /* Full width on small screens */
+                    padding: 20px;
+                    box-sizing: border-box; /* Includes padding in the width calculation */
+                }
+                
+                #title {
+                    display: none; /* Hide the title on small screens */
+                }
+        
+                #list {
+                    font-size: 14px; /* Adjust the font size for the list */
+                    padding-left: 20px; /* Add left padding for better readability */
+                }
+            }
+        </style>
+        
 
     </main>
     <script src="../java/botones.js"></script>

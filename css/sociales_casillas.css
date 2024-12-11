@@ -1,0 +1,43 @@
+/* Estilo para los contenedores de cada red social */
+.social-container {
+    border: 2px solid #8B0000; /* Rojo oscuro para el borde */
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    background-color: #dbaaaa; /* Fondo claro para el contenedor */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil para resaltar el bloque */
+}
+
+/* Las imágenes se mantienen con su tamaño original */
+.img-button {
+    display: inline-block; /* Mantiene el flujo de las imágenes */
+}
+
+.img-button img {
+    display: block;
+    width: auto; /* Mantiene el tamaño original de la imagen */
+}
+
+/* Estilo para los encabezados */
+h1 {
+    color: #8B0000; /* Rojo oscuro para los títulos */
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Para cada sección, agregar el recuadro */
+h1, h4, .img-button {
+    padding: 10px;
+    border: 2px solid #8B0000; /* El borde rojo alrededor de cada red social */
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color:#dbaaaa ; /* Fondo para el recuadro */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+

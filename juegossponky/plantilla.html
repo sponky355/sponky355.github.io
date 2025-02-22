@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consola Retro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .console {
+            width: 90vw;
+            max-width: 350px;
+            height: 90vh;
+            max-height: 600px;
+            background-color: white;
+            border-radius: 20px;
+            border: 4px solid black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .screen {
+            width: 90%;
+            height: 40%;
+            background-color: black;
+            border: 4px solid black;
+            margin-top: 10px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+        .dpad, .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100px;
+            justify-content: center;
+        }
+        .btn {
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+            border-radius: 50%;
+            margin: 8px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="console">
+        <div class="screen" id="screen">Listo para jugar</div>
+        <div class="controls">
+            <div class="dpad">
+                <div class="btn" onclick="move('left')">◄</div>
+                <div class="btn" onclick="move('up')">▲</div>
+                <div class="btn" onclick="move('down')">▼</div>
+                <div class="btn" onclick="move('right')">►</div>
+            </div>
+            <div class="buttons">
+                <div class="btn" onclick="action('A')">A</div>
+                <div class="btn" onclick="action('B')">B</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function move(direction) {
+            document.getElementById('screen').innerText = `Moviendo: ${direction}`;
+        }
+        function action(button) {
+            document.getElementById('screen').innerText = `Botón presionado: ${button}`;
+        }
+    </script>
+</body>
+</html>

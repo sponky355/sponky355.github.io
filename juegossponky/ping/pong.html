@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consola Retro - Ping Pong</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .console {
+            width: 90vw;
+            max-width: 350px;
+            height: 90vh;
+            max-height: 600px;
+            background-color: white;
+            border-radius: 20px;
+            border: 4px solid black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .screen {
+            width: 90%;
+            height: 50%;
+            background-color: black;
+            border: 4px solid black;
+            position: relative;
+            overflow: hidden;
+        }
+        .paddle {
+            width: 60px;
+            height: 10px;
+            background-color: white;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .ball {
+            width: 20px; /* Ajusta el tamaño de la imagen */
+            height: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .score {
+            color: white;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+        .dpad, .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100px;
+            justify-content: center;
+        }
+        .btn {
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+            border-radius: 50%;
+            margin: 8px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="console">
+        <div class="screen" id="screen">
+            <div class="score" id="score">Puntos: 0</div>
+            <div class="paddle" id="paddle"></div>
+            <img src="bola_sin_fondo.png" class="ball" id="ball">  <!-- Imagen de la pelota -->
+        </div>
+        <div class="controls">
+            <div class="dpad">
+                <div class="btn" onclick="movePaddle('left')">◄</div>
+                <div class="btn" onclick="movePaddle('right')">►</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const paddle = document.getElementById('paddle');
+        const ball = document.getElementById('ball');
+        const scoreDisplay = document.getElementById('score');
+        let paddleX = 50;
+        let ballX = 50, ballY = 50;
+        let ballSpeedX = 1.5, ballSpeedY = -1.5;
+        let score = 0;
+
+        function movePaddle(direction) {
+            if (direction === 'left' && paddleX > 5) paddleX -= 5;
+            if (direction === 'right' && paddleX < 95) paddleX += 5;
+            paddle.style.left = paddleX + '%';
+        }
+
+        function moveBall() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            if (ballX <= 0 || ballX >= 100) ballSpeedX *= -1;
+            if (ballY <= 0) ballSpeedY *= -1;
+            
+            if (ballY >= 95 && ballX >= paddleX - 5 && ballX <= paddleX + 5) {
+                ballSpeedY *= -1;
+                score++;
+                scoreDisplay.textContent = `Puntos: ${score}`;
+            }
+            if (ballY > 100) {
+                alert('Game Over');
+                score = 0;
+                scoreDisplay.textContent = `Puntos: ${score}`;
+                ballX = 50;
+                ballY = 50;
+                ballSpeedX = 1.5;
+                ballSpeedY = -1.5;
+            }
+            
+            ball.style.left = ballX + '%';
+            ball.style.top = ballY + '%';
+        }
+        setInterval(moveBall, 30);
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #1a1a1a, #000000);
+    text-align: center;
+    color: #e0c086; /* Dorado suave */
+    overflow: hidden;
+}
+
+/* Contenedor central */
+.container {
+    margin-top: 20%;
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+/* Título */
+h1 {
+    font-size: 2.5em;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+/* Párrafo */
+p {
+    font-size: 1.2em;
+    margin: 20px;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 2s ease-out forwards 0.5s;
+}
+
+/* Botón */
+.start-button {
+    background: linear-gradient(to right, #8c6b30, #e0c086);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    color: black;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(224, 192, 134, 0.5);
+    opacity: 0;
+    animation: fadeIn 2s ease-out forwards 1s;
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+/* Efecto al pasar el mouse */
+.start-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(to right, #a07845, #f0d8a8);
+    box-shadow: 0px 6px 15px rgba(224, 192, 134, 0.8);
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

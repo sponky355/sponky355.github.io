@@ -11,9 +11,9 @@ body {
     width: 100%;
     height: auto;
     position: absolute;
-    top: 50%; /* Centra verticalmente */
-    left: 50%; /* Centra horizontalmente */
-    transform: translate(-50%, -50%); /* Ajusta la imagen para que se centre */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     transition: transform 0.3s ease-out;
   }
   .recuadro {
@@ -21,7 +21,7 @@ body {
     padding: 20px;
     border-radius: 30px 30px 0 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 95%; /* Cambié esto de 90% a 95% */
+    width: 95%;
     max-width: 1200px;
     box-sizing: border-box;
     text-align: center;
@@ -71,13 +71,18 @@ body {
     outline: none;
   }
   
-  /* Ajustes en pantallas pequeñas */
+  /* Bloquear desplazamiento horizontal en móviles */
   @media (max-width: 768px) {
+    html, body {
+      overflow-x: hidden;
+      touch-action: pan-y; /* Permite solo scroll vertical */
+    }
+    
     img {
-      width: 150%; /* Agranda la imagen */
-      top: 20%; /* La sube más */
-      left: 50%; /* Centra horizontalmente */
-      transform: translate(-50%, -20%); /* Ajusta la imagen para que se suba más */
+      width: 150%;
+      top: 10%; /* Subí más la imagen */
+      left: 50%;
+      transform: translate(-50%, -10%);
     }
   }
   

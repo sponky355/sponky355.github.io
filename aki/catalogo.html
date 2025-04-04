@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Sponky</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #333333; /* Fondo oscuro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: #f0f0f0; /* Color de texto claro */
+        }
+        .container {
+            background-color: #444444; /* Fondo más oscuro para la caja */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 40px 60px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            transition: all 0.3s ease-in-out;
+        }
+        .container:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 36px;
+            color: #4e73df; /* Color brillante para el título */
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .button-description {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #cccccc; /* Descripción en un gris claro */
+        }
+        button {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 15px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #2e59ff;
+            transform: scale(1.05);
+        }
+        button:active {
+            background-color: #2557b7;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Estudio Sponky</h1>
+        
+        <!-- Botón que redirige a una página -->
+        <div>
+            <div class="button-description">Este es el botón número 1. Haciendo clic en él, serás llevado a la primera página de tu repositorio.</div>
+            <a href="cloud/cloud.html">
+                <button>Botón 1</button>
+            </a>
+        </div>
+
+        <!-- Botón que redirige a otra página -->
+        <div>
+            <div class="button-description">Este es el botón número 2. Haciendo clic en él, serás llevado a la segunda página de tu repositorio.</div>
+            <a href="pagina2.html">
+                <button>Botón 2</button>
+            </a>
+        </div>
+
+        <!-- Botón para una tercera página -->
+        <div>
+            <div class="button-description">Este es el botón número 3. Este botón te lleva a la tercera página de tu repositorio.</div>
+            <a href="pagina3.html">
+                <button>Botón 3</button>
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

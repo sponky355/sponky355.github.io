@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Sponky - Fichas</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>tecnologias cloud</h1>
+        
+        <!-- Contenedor para las tarjetas -->
+        <div id="cards-container"></div>
+
+        <!-- Botón de reiniciar -->
+        <button class="reset-button" onclick="reloadPage()">Reiniciar Página</button>
+    </div>
+
+    <script>
+        // Lista de preguntas y respuestas corta
+        const questionsAndAnswers = [
+           { 
+              question: "¿Cómo se cobra por los servicios de AWS?", 
+              answer: "Por hora, minuto o segundo. (AWS: Amazon Web Services)"
+           },
+           { 
+             question: "¿Cómo reducir costos en AWS?", 
+                answer: "Usar recursos on-demand (bajo demanda)."
+            },
+             { 
+                 question: "¿Qué servicio usar para bases de datos relacionales?", 
+                  answer: "RDS (Relational Database Service)."
+             },
+             { 
+                 question: "¿Para almacenar y procesar datos masivos?", 
+                 answer: "EMR (Elastic MapReduce)."
+                },
+                { 
+                     question: "¿Qué es una zona de disponibilidad en AWS?", 
+                 answer: "Es un centro de datos aislado (AWS)."
+                 },
+                 { 
+                 question: "¿Cuál de las siguientes opciones describe mejor una región de AWS?", 
+                 answer: "Un conjunto de centros de datos conectados en una sola ubicación geográfica."
+                 },
+                 { 
+                 question: "¿Cuál es la definición correcta de 'computación en la nube'?", 
+                   answer: "Un modelo de entrega de servicios de TI basado en infraestructura virtualizada que se entrega a través de Internet."
+                 },
+                 { 
+                 question: "¿Qué servicio de AWS utilizarías para ejecutar una aplicación web altamente escalable y disponible que recibe miles de solicitudes por segundo?", 
+                 answer: "EC2"
+                },
+                 { 
+                 question: "¿Qué servicio de AWS utilizarías para automatizar la implementación y el escalado de aplicaciones en contenedores?", 
+                 answer: "ECS"
+                 },
+                 { 
+                 question: "¿Qué servicio de AWS utilizarías para enviar mensajes y notificaciones en tiempo real a usuarios de aplicaciones móviles y web?", 
+                 answer: "SNS"
+                 },
+                 { 
+                     question: "¿Qué es un grupo de seguridad en AWS?", 
+                 answer: "Una colección de reglas de firewall que determinan qué tráfico de red se permite o deniega en una instancia de Amazon EC2."
+                 },
+                 { 
+                     question: "¿Qué servicio de AWS utilizarías para crear y administrar flujos de trabajo orquestados en la nube?", 
+                 answer: "AWS Step Functions"
+                 },
+                 { 
+                     question: "Si necesitas ejecutar un sitio web con tráfico variable y escalable, ¿qué servicio de AWS utilizarías?", 
+                     answer: "EC2 y ELB"
+                 },
+                 { 
+                 question: "¿Qué es AWS CloudFront?", 
+                 answer: "Un servicio que proporciona una forma de distribuir contenido de manera rápida y segura a usuarios finales de todo el mundo."
+                 },
+                  { 
+                     question: "Si necesitas crear una red privada virtual para conectar recursos de AWS en diferentes regiones, ¿qué servicio de AWS utilizarías?", 
+                      answer: "VPC y Direct Connect"
+                 },
+                  { 
+                     question: "¿Qué es un modelo de precios de 'pagar por uso'?", 
+                      answer: "Un modelo de precios en el que se paga por el tiempo que un recurso está en uso."
+                     },
+                       { 
+                    question: "¿Qué es AWS Lambda?", 
+                     answer: "Un servicio que permite a los clientes ejecutar aplicaciones y servicios en la nube sin tener que preocuparse por la infraestructura subyacente."
+                     },
+                     { 
+                 question: "¿Qué servicio de AWS utilizarías para alojar una aplicación de chat en tiempo real que debe escalar horizontalmente para manejar miles de conexiones simultáneas?", 
+                        answer: "Amazon ElastiCache"
+
+                       },
+                    { 
+                    question: "¿Qué servicio de AWS utilizarías para almacenar y distribuir contenido web estático (como imágenes, videos y archivos de audio) a nivel mundial con baja latencia y alta disponibilidad?", 
+                       answer: "Amazon CloudFront"
+                  },
+                   { 
+                      question: "¿Cuál de las siguientes opciones es una característica de las zonas de disponibilidad de AWS?", 
+                 answer: "Las zonas de disponibilidad están ubicadas en diferentes centros de datos dentro de una región."
+               }
+];
+
+
+
+        // Función para generar una tarjeta aleatoria
+        function generateRandomCard() {
+            // Selecciona una pregunta al azar
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            const question = questionsAndAnswers[randomIndex].question;
+            const answer = questionsAndAnswers[randomIndex].answer;
+
+            // Crea la tarjeta HTML
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">
+                        <p>${question}</p>
+                    </div>
+                    <div class="card-back">
+                        <p>${answer}</p>
+                    </div>
+                </div>
+            `;
+            card.setAttribute('onclick', 'flipCard(this)');
+            document.getElementById('cards-container').appendChild(card);
+        }
+
+        // Función para voltear la tarjeta
+        function flipCard(card) {
+            card.classList.toggle("flipped");
+        }
+
+        // Función para recargar la página
+        function reloadPage() {
+            location.reload();
+        }
+
+        // Generar una tarjeta al azar cuando la página carga
+        window.onload = function() {
+            generateRandomCard();
+        };
+    </script>
+
+</body>
+</html>

@@ -98,3 +98,49 @@ input[type="range"]::-webkit-slider-thumb {
     width: 150px;
   }
 }
+
+/* estilos nuevos de letras 
+
+/* Importar la fuente Brady */
+@font-face {
+  font-family: 'Brady';
+  src: url('fonts/Brady-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Estilo solo para los elementos h1 */
+h1 {
+  font-family: 'Brady', sans-serif;  /* Aplica la fuente Brady solo al h1 */
+  font-weight: normal;  /* O el peso que prefieras */
+  color: #333;  /* Color del texto */
+  text-align: center;  /* Centrado del texto */
+}
+
+
+
+
+
+/*
+  en este apartado guardo los botones para el link
+ 
+*/
+
+/* Estilos para el botón */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff7b7b;  /* Color de fondo */
+  color: white;  /* Color del texto */
+  text-decoration: none;  /* Quitar subrayado */
+  border-radius: 30px;  /* Bordes redondeados */
+  font-size: 16px;  /* Tamaño de la fuente */
+  font-weight: bold;  /* Negrita */
+  text-align: center;  /* Centrado del texto */
+  transition: background-color 0.3s ease;  /* Transición suave para el color */
+}
+
+.btn:hover {
+  background-color: #ffb3cc;  /* Cambia el color al pasar el ratón */
+}
+

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Libros</title>
+  <link rel="stylesheet" href="css.css">
+  <style>
+    html {
+      scroll-behavior: smooth; /* Activa desplazamiento suave */
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Librería gratuita Sponky</h1>
+
+    <nav class="categorias">
+      <ul style="list-style: none; display: flex; justify-content: center; gap: 20px; padding: 0; margin: 20px 0;">
+        <li><a href="#catalogo" style="text-decoration: none; color: #007BFF; font-weight: bold;">Catálogo</a></li>
+        <li><a href="#dataware" style="text-decoration: none; color: #007BFF; font-weight: bold;">DataWare</a></li>
+        <li><a href="#programacion" style="text-decoration: none; color: #007BFF; font-weight: bold;">Programación</a></li>
+        <li><a href="#fisica" style="text-decoration: none; color: #007BFF; font-weight: bold;">Física</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h3>datawarehouse</h3>
+    <!-- Sección principal del catálogo -->
+    <section id="catalogo" class="catalogo" style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; gap: 20px;">
+
+      <!-- Sección DataWare dentro del catálogo -->
+      <section id="dataware" class="libro" style="border: 1px solid #ccc; border-radius: 10px; overflow: hidden; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <img src="Captura desde 2025-05-05 17-34-45.png" alt="Libro 1" style="width: 100%; height: auto;">
+        <div class="contenido" style="padding: 15px;">
+          <h3>DataWareHouse</h3>
+          <p>Autor: Josep Curto Díaz</p>
+          <p>Libro explicativo del método estrella dentro del data warehouse.</p>
+          <a href="https://drive.google.com/uc?export=download&id=1YY7scXYuLPfB7yS3gyQp7evBvxWrJr2X" target="_blank">
+            <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Ver libro</button>
+          </a>
+        </div>
+      </section>
+
+      <section class="libro" style="border: 1px solid #ccc; border-radius: 10px; overflow: hidden; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <img src="Captura desde 2025-05-06 00-59-59.png" alt="Libro 2" style="width: 100%; height: auto;">
+        <div class="contenido" style="padding: 15px;">
+          <h3>DataWareHouse</h3>
+          <p>Autor: Ralph Kimball</p>
+          <p>Es un libro de tercera edición que habla de metodologías OLAP, ETL y el método estrella y copo de nieve.</p>
+          <a href="https://drive.google.com/uc?export=download&id=1JRtuhXxAHBee_OpwWZXNM7FLRRV1e_dt" target="_blank">
+            <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Ver libro</button>
+          </a>
+        </div>
+      </section>
+    </section>
+    <h3>inteligencia artificial</h3>
+    <!-- Sección Programación -->
+    <section id="programacion" class="catalogo" style="font-family: sans-serif; display: flex; justify-content: center; padding: 20px;">
+      
+      <section class="libro" style="border: 1px solid #ccc; border-radius: 10px; overflow: hidden; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <img src="Captura desde 2025-05-06 01-40-07.png" alt="Libro 2" style="width: 100%; height: auto;">
+        <div class="contenido" style="padding: 15px;">
+          <h3>inteligencia artificial y algoritmos</h3>
+          <p>Autor: muchos autores</p>
+          <p>libro de comprension y entemdimiento sobre el funcionamiento de ia + algoritmos </p>
+          <a href="https://drive.google.com/uc?export=download&id=1NfkrSRyiayx4y89IEflJlI6scBwnlGXK" target="_blank">
+            <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Ver libro</button>
+          </a>
+        </div>
+      </section>
+ 
+    </section>
+    <h3>fisica</h3>
+
+    <!-- Sección Física -->
+    <section id="fisica" class="catalogo" style="font-family: sans-serif; display: flex; justify-content: center; padding: 20px;">
+      <div class="libro" style="border: 1px solid #ccc; border-radius: 10px; overflow: hidden; width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <img src="ejemplo_fisica.png" alt="Libro de Física" style="width: 100%; height: auto;">
+        <div class="contenido" style="padding: 15px;">
+          <h3>Física Cuántica para principiantes</h3>
+          <p>Autor: Ana Torres</p>
+          <p>Explicación sencilla y amigable de conceptos básicos de física cuántica.</p>
+          <a href="#" target="_blank">
+            <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Ver libro</button>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <!-- Agrega más libros aquí
+     https://drive.google.com/uc?export=download&id=1NfkrSRyiayx4y89IEflJlI6scBwnlGXK
+
+     https://drive.google.com/file/d/1NfkrSRyiayx4y89IEflJlI6scBwnlGXK/view?usp=sharing
+
+    -->
+  
+
+</body>
+</html>

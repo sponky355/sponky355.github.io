@@ -1,0 +1,155 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background: #e0f2f1;
+    color: #004d40;
+    scroll-behavior: smooth;
+  }
+  
+  /* Encabezado del mapa */
+  header {
+    background: #a5d6a7;
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 4px solid #81c784;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    animation: fadeInDown 1s ease;
+  }
+  
+  header p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    color: #1b5e20;
+    animation: fadeInUp 1.2s ease;
+  }
+  
+  /* Estilo del mapa */
+  #map {
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1000px;
+    height: 450px;
+    border-radius: 12px;
+    border: 4px solid #80cbc4;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease;
+  }
+  
+  /* Botón de volver */
+  .volver-btn {
+    display: inline-block;
+    background: #388e3c;
+    color: white;
+    padding: 12px 26px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 20px auto 40px;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .volver-btn:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+  }
+  
+  /* Responsividad */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 1.7rem;
+    }
+  
+    #map {
+      height: 350px;
+    }
+  
+    .volver-btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+    }
+  }
+  
+  /* Animaciones */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .mapa-encabezado {
+    background: #c8e6c9;
+    margin: 30px auto 20px;
+    padding: 30px 20px;
+    border-radius: 12px;
+    max-width: 900px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .mapa-encabezado h1 {
+    font-size: 2rem;
+    color: #2e7d32;
+    margin-bottom: 10px;
+    animation: fadeInDown 1s ease;
+  }
+  
+  .mapa-encabezado p {
+    color: #004d40;
+    font-size: 1.1rem;
+    animation: fadeInUp 1.2s ease;
+  }
+  .boton-volver {
+    background: #c8e6c9;
+    color: #004d40;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+    margin-top: 20px;
+  }
+  
+  .boton-volver:hover {
+    background: #a5d6a7;
+    transform: translateY(-2px);
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #a7ffeb;
+    color: #00695c;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 40px;
+  }
+  

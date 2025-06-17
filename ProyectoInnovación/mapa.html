@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa de Puntos Verdes en Santiago</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="mapa.css">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+
+    <div class="mapa-encabezado">
+        <h1>🌱 Mapa de Puntos Verdes</h1>
+        <p>Encuentra el lugar más cercano para llevar tus reciclables, incluyendo dentro de INACAP Santiago Centro.</p>
+      </div>
+      
+
+<div id="map"></div>
+
+<div style="text-align: center;">
+    <a href="puntosverdes.html" class="boton-volver">← Volver Página Anterior 🌎​</a>
+  </div>
+  
+
+<script>
+  const map = L.map('map').setView([-33.45, -70.66], 12);
+
+  // Capa base
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Lista de puntos verdes en Santiago
+  const puntosVerdes = [
+    { nombre: "Punto Verde - Plaza de Armas", coords: [-33.4372, -70.6506] },
+    { nombre: "Punto Verde - Parque Forestal", coords: [-33.4359, -70.6422] },
+    { nombre: "Punto Verde - Estación Central", coords: [-33.4562, -70.6812] },
+    { nombre: "Punto Verde - Ñuñoa", coords: [-33.4568, -70.6046] },
+    { nombre: "Punto Verde - La Reina", coords: [-33.4410, -70.5390] },
+    { nombre: "Punto Verde - Providencia", coords: [-33.4253, -70.6171] },
+    { nombre: "Punto Verde - Las Condes", coords: [-33.4085, -70.5707] },
+    { nombre: "Punto Verde - Maipú", coords: [-33.5152, -70.7566] },
+    { nombre: "Punto Verde - Recoleta", coords: [-33.4128, -70.6414] }
+  ];
+
+  puntosVerdes.forEach(p => {
+    L.marker(p.coords).addTo(map).bindPopup("♻️ " + p.nombre);
+  });
+
+  // Intentar geolocalizar usuario
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    L.marker([lat, lng], {
+      icon: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+      })
+    }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
+
+    map.setView([lat, lng], 13);
+  }, err => {
+    console.warn("Ubicación no detectada.");
+  });
+</script>
+
+<footer>
+    Hecho con 💚 por estudiantes conscientes de INACAP Santiago Centro
+  </footer>  
+
+</body>
+</html>

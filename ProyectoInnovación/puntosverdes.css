@@ -1,0 +1,213 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background: #e0f2f1;
+    color: #004d40;
+    scroll-behavior: smooth;
+  }
+  
+  header {
+    background: #a5d6a7;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    animation: fadeInDown 1s ease;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #1b5e20;
+    animation: fadeInUp 1.2s ease;
+  }
+  
+  section {
+    padding: 30px 20px;
+    max-width: 1000px;
+    margin: auto;
+  }
+  
+  .intro h2,
+  .acciones h2,
+  .galeria h2,
+  .llamada-mapa h2,
+  .impacto h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #00796b;
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+  }
+  
+  .datos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .dato {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 280px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .dato:hover {
+    transform: translateY(-5px);
+  }
+  
+  .dato img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+  
+  .acciones ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .acciones li {
+    background: #b2dfdb;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: background 0.3s;
+  }
+  
+  .acciones li:hover {
+    background: #80cbc4;
+  }
+  
+  .imagenes {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .imagenes img {
+    width: 48%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 1s ease forwards;
+  }
+  
+  .imagenes img:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+  
+  .llamada-mapa {
+    background: #c8e6c9;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 20px;
+  }
+  
+  .llamada-mapa p {
+    font-size: 1.1rem;
+  }
+  
+  .boton {
+    display: inline-block;
+    margin-top: 15px;
+    background: #388e3c;
+    color: white;
+    padding: 12px 28px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+  
+  .boton:hover {
+    background: #1b5e20;
+  }
+  
+  .impacto {
+    background: #ffffff;
+    margin-top: 40px;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  
+  .impacto h3 {
+    margin-top: 20px;
+    color: #00695c;
+  }
+  
+  .impacto ul {
+    padding-left: 20px;
+  }
+  
+  .impacto li {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #a7ffeb;
+    color: #00695c;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 600px) {
+    .dato {
+      width: 100%;
+    }
+    .imagenes img {
+      width: 100%;
+    }
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

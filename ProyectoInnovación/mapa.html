@@ -11,67 +11,278 @@
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Leaflet Polyline Decorator para flechas en rutas -->
+  <script src="https://unpkg.com/leaflet-polylinedecorator@1.7.0/dist/leaflet.polylineDecorator.min.js"></script>
+
+  <style>
+    /* Solo para que los markers emoji se vean centrados y grandes */
+    .marker-emoji {
+      font-size: 30px;
+      line-height: 30px;
+      text-align: center;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="mapa-encabezado">
-        <h1>🌱 Mapa de Puntos Verdes</h1>
-        <p>Encuentra el lugar más cercano para llevar tus reciclables, incluyendo dentro de INACAP Santiago Centro.</p>
+  <div class="mapa-encabezado">
+    <h1>🌱 Mapa de Puntos Verdes</h1>
+    <p>Encuentra el lugar más cercano para llevar tus reciclables, incluyendo dentro de INACAP Santiago Centro.</p>
+  </div>
+  
+  <div id="map"></div>
+  
+  <div class="filtros">
+    <button onclick="mostrarPuntos('todos')">Todos</button>
+    <button onclick="mostrarPuntos('papel')">Papel</button>
+    <button onclick="mostrarPuntos('plastico')">Plástico</button>
+    <button onclick="mostrarPuntos('vidrio')">Vidrio</button>
+  </div>  
+  
+  <script>
+    const map = L.map('map').setView([-33.45, -70.66], 12);
+
+    // Capa base de mapa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Crear icono emoji para marker
+    function crearIconoEmoji(emoji) {
+      return L.divIcon({
+        className: 'marker-emoji',
+        html: emoji,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+      });
+    }
+
+    // Lista de puntos verdes
+    const puntosVerdes = [
+      {
+        nombre: "Punto Verde - Plaza de Armas",
+        coords: [-33.4372, -70.6506],
+        tipo: ['papel', 'plastico'],
+        emoji: "♻️",
+        horario: "Lunes a Viernes 9:00-17:00",
+        direccion: "Plaza de Armas, Santiago Centro",
+        contacto: "plaza@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/plaza",
+        descripcion: "Ubicado en el corazón de Santiago. Ideal para reciclaje rápido con buena conectividad."
+      },
+      {
+        nombre: "Punto Verde - Parque Forestal",
+        coords: [-33.4359, -70.6422],
+        tipo: ['vidrio'],
+        emoji: "🌳",
+        horario: "Todos los días 10:00-18:00",
+        direccion: "Av. Cardenal José María Caro, Santiago",
+        contacto: "forestal@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/forestal",
+        descripcion: "Rodeado de naturaleza. Perfecto para reciclaje de vidrio en un ambiente tranquilo."
+      },
+      {
+        nombre: "Punto Verde - Estación Central",
+        coords: [-33.4562, -70.6812],
+        tipo: ['papel'],
+        emoji: "🚉",
+        horario: "Lunes a Sábado 8:00-16:00",
+        direccion: "Alameda 3500, Estación Central",
+        contacto: "central@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/central",
+        descripcion: "Alta afluencia de público. Perfecto para estudiantes y trabajadores."
+      },
+      {
+        nombre: "Punto Verde - Ñuñoa",
+        coords: [-33.4568, -70.6046],
+        tipo: ['plastico', 'vidrio'],
+        emoji: "🏞️",
+        horario: "Lunes a Viernes 9:00-17:00",
+        direccion: "Av. Irarrázaval 2400, Ñuñoa",
+        contacto: "nunoa@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/nunoa",
+        descripcion: "Punto moderno con contenedores bien señalizados. Zona segura y accesible."
+      },
+      {
+        nombre: "Punto Verde - La Reina",
+        coords: [-33.4410, -70.5390],
+        tipo: ['papel'],
+        emoji: "🏡",
+        horario: "Sábado y Domingo 11:00-15:00",
+        direccion: "Av. Príncipe de Gales 6000, La Reina",
+        contacto: "lareina@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/lareina",
+        descripcion: "Zona residencial ideal para llevar reciclaje familiar durante el fin de semana."
+      },
+      {
+        nombre: "Punto Verde - Providencia",
+        coords: [-33.4253, -70.6171],
+        tipo: ['vidrio'],
+        emoji: "🏙️",
+        horario: "Lunes a Viernes 10:00-17:00",
+        direccion: "Av. Providencia 1500, Providencia",
+        contacto: "providencia@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/providencia",
+        descripcion: "Zona comercial con buen acceso en transporte público."
+      },
+      {
+        nombre: "Punto Verde - Las Condes",
+        coords: [-33.4085, -70.5707],
+        tipo: ['plastico'],
+        emoji: "🏢",
+        horario: "Todos los días 9:00-18:00",
+        direccion: "Av. Apoquindo 5000, Las Condes",
+        contacto: "lascondes@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/lascondes",
+        descripcion: "Espacio moderno con servicios digitales y zona tech-friendly."
+      },
+      {
+        nombre: "Punto Verde - Maipú",
+        coords: [-33.5152, -70.7566],
+        tipo: ['papel', 'plastico', 'vidrio'],
+        emoji: "🌆",
+        horario: "Lunes a Domingo 9:00-19:00",
+        direccion: "Av. Pajaritos 3500, Maipú",
+        contacto: "maipu@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/maipu",
+        descripcion: "Centro de reciclaje integral para toda la comuna de Maipú."
+      },
+      {
+        nombre: "Punto Verde - Recoleta",
+        coords: [-33.4128, -70.6414],
+        tipo: ['vidrio', 'papel'],
+        emoji: "🏛️",
+        horario: "Miércoles a Domingo 10:00-18:00",
+        direccion: "Av. Recoleta 2500, Recoleta",
+        contacto: "recoleta@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/recoleta",
+        descripcion: "Sector histórico con compromiso comunitario con el reciclaje."
+      }
+    ];
+
+    let marcadores = [];
+
+    function mostrarPuntos(tipo) {
+      // Elimina marcadores anteriores
+      marcadores.forEach(m => map.removeLayer(m));
+      marcadores = [];
+
+      // Agrega según filtro
+      puntosVerdes.forEach(p => {
+        if (tipo === 'todos' || p.tipo.includes(tipo)) {
+          const marker = L.marker(p.coords, {icon: crearIconoEmoji(p.emoji)}).addTo(map)
+            .bindPopup(`
+              <strong>♻️ ${p.nombre}</strong><br>
+              🗑️ <b>Materiales:</b> ${p.tipo.join(', ')}<br>
+              🕓 <b>Horario:</b> ${p.horario}<br>
+              📍 <b>Dirección:</b> ${p.direccion}<br>
+              📞 <b>Contacto:</b> ${p.contacto}<br>
+              🌐 <a href="${p.sitio}" target="_blank">Visitar sitio</a><br>
+              📝 <em>${p.descripcion}</em>
+            `);
+          marcadores.push(marker);
+        }
+      });
+    }
+
+    // Mostrar todos al cargar
+    mostrarPuntos('todos');
+
+    // Geolocalización del usuario
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      L.marker([lat, lng], {
+        icon: L.icon({
+          iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
+          iconSize: [30, 30],
+          iconAnchor: [15, 30],
+        })
+      }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
+
+      map.setView([lat, lng], 13);
+    }, err => {
+      console.warn("Ubicación no detectada.");
+    });
+
+    // --- Ejemplo de ruta con flechas entre algunos puntos ---
+
+    // Coordenadas para ruta (Plaza de Armas -> Estación Central -> Maipú)
+    const rutaCoords = [
+      [-33.4372, -70.6506], // Plaza de Armas
+      [-33.4562, -70.6812], // Estación Central
+      [-33.5152, -70.7566], // Maipú
+    ];
+
+    // Crear polyline ruta
+    const ruta = L.polyline(rutaCoords, {
+      color: '#009688',
+      weight: 5,
+      opacity: 0.7,
+    }).addTo(map);
+
+    // Agregar flechas con PolylineDecorator
+    const decorator = L.polylineDecorator(ruta, {
+      patterns: [
+        {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true, color: '#00695c', weight: 3}})}
+      ]
+    }).addTo(map);
+
+  </script>
+
+  <section class="mini-guia">
+    <h2>📚 Mini-Guía: Cómo usar la web y reciclar fácil</h2>
+    
+    <div class="paso">
+      <div class="icono">🖱️</div>
+      <div class="texto">
+        <h3>Paso 1: Explora el mapa</h3>
+        <p>Busca puntos de reciclaje en el mapa y haz clic para ver detalles.</p>
       </div>
-      
+    </div>
+  
+    <div class="paso">
+      <div class="icono">📍</div>
+      <div class="texto">
+        <h3>Paso 2: Selecciona el punto más cercano</h3>
+        <p>Encuentra el punto de reciclaje más accesible para ti y anota su ubicación.</p>
+      </div>
+    </div>
+  
+    <div class="paso">
+      <div class="icono">♻️</div>
+      <div class="texto">
+        <h3>Paso 3: Separa tus residuos</h3>
+        <p>Clasifica tus residuos en orgánicos, plásticos, papel, vidrio y metales.</p>
+      </div>
+    </div>
+  
+    <div class="paso">
+      <div class="icono">🚮</div>
+      <div class="texto">
+        <h3>Paso 4: Deposita en el contenedor correcto</h3>
+        <p>Lleva tus residuos al contenedor correspondiente en el punto de reciclaje.</p>
+      </div>
+    </div>
+  
+    <div class="paso">
+      <div class="icono">🌍</div>
+      <div class="texto">
+        <h3>Paso 5: ¡Contribuye con el planeta!</h3>
+        <p>Reciclar reduce la contaminación y ayuda a cuidar el medio ambiente.</p>
+      </div>
+    </div>
+  </section>
 
-<div id="map"></div>
-
-<div style="text-align: center;">
+  <div style="text-align: center;">
     <a href="puntosverdes.html" class="boton-volver">← Volver Página Anterior 🌎​</a>
   </div>
   
-
-<script>
-  const map = L.map('map').setView([-33.45, -70.66], 12);
-
-  // Capa base
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-
-  // Lista de puntos verdes en Santiago
-  const puntosVerdes = [
-    { nombre: "Punto Verde - Plaza de Armas", coords: [-33.4372, -70.6506] },
-    { nombre: "Punto Verde - Parque Forestal", coords: [-33.4359, -70.6422] },
-    { nombre: "Punto Verde - Estación Central", coords: [-33.4562, -70.6812] },
-    { nombre: "Punto Verde - Ñuñoa", coords: [-33.4568, -70.6046] },
-    { nombre: "Punto Verde - La Reina", coords: [-33.4410, -70.5390] },
-    { nombre: "Punto Verde - Providencia", coords: [-33.4253, -70.6171] },
-    { nombre: "Punto Verde - Las Condes", coords: [-33.4085, -70.5707] },
-    { nombre: "Punto Verde - Maipú", coords: [-33.5152, -70.7566] },
-    { nombre: "Punto Verde - Recoleta", coords: [-33.4128, -70.6414] }
-  ];
-
-  puntosVerdes.forEach(p => {
-    L.marker(p.coords).addTo(map).bindPopup("♻️ " + p.nombre);
-  });
-
-  // Intentar geolocalizar usuario
-  navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    L.marker([lat, lng], {
-      icon: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-      })
-    }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
-
-    map.setView([lat, lng], 13);
-  }, err => {
-    console.warn("Ubicación no detectada.");
-  });
-</script>
-
-<footer>
+  <footer>
     Hecho con 💚 por estudiantes conscientes de INACAP Santiago Centro
   </footer>  
 

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oportunidades Laborales | EcoINACAP</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .opportunities-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+    
+    .opportunities-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .opportunities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+    }
+    
+    .opportunity-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .opportunity-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .opportunity-image {
+      height: 180px;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 3rem;
+    }
+    
+    .opportunity-content {
+      padding: 25px;
+    }
+    
+    .opportunity-title {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+    }
+    
+    .opportunity-company {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+    
+    .opportunity-description {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .opportunity-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .opportunity-type {
+      background: #e3f2fd;
+      color: var(--primary-color);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .apply-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .apply-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .requirements-list {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+    
+    .requirements-list li {
+      margin-bottom: 8px;
+    }
+
+    .back-to-dashboard {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+  .back-to-dashboard i {
+    margin-right: 5px;
+  }
+
+  .back-to-dashboard:hover {
+    background-color: var(--primary-dark);
+  }
+
+  .opportunities-header {
+    position: relative;
+    padding-top: 20px;
+  }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar (igual que en dashboard.html) -->
+    <div class="sidebar">
+      <!-- ... mismo contenido del sidebar ... -->
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="opportunities-container">
+        <div class="opportunities-header">
+          <a href="dashboard.html" class="back-to-dashboard">
+            <i class="fas fa-arrow-left"></i>
+            Volver al Panel
+          </a>
+          <h1>Oportunidades Laborales</h1>
+          <p>Acceso preferencial a prácticas y trabajos en empresas sustentables asociadas</p>
+        </div>
+        
+        <div class="opportunities-grid">
+          <!-- Oportunidad 1 -->
+          <div class="opportunity-card">
+            <div class="opportunity-image">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <div class="opportunity-content">
+              <h3 class="opportunity-title">Practicante de Sustentabilidad</h3>
+              <p class="opportunity-company">EcoEmpresa S.A.</p>
+              <p class="opportunity-description">Buscamos estudiantes comprometidos con el medio ambiente para nuestro programa de prácticas profesionales.</p>
+              
+              <div class="requirements-list">
+                <h4>Requisitos:</h4>
+                <ul>
+                  <li>Estudiante de último año de carreras afines</li>
+                  <li>Disponibilidad de 20 horas semanales</li>
+                  <li>Interés en proyectos sustentables</li>
+                </ul>
+              </div>
+              
+              <div class="opportunity-meta">
+                <span class="opportunity-type">Práctica profesional</span>
+                <button class="apply-btn">Postular</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Oportunidad 2 -->
+          <div class="opportunity-card">
+            <div class="opportunity-image">
+              <i class="fas fa-recycle"></i>
+            </div>
+            <div class="opportunity-content">
+              <h3 class="opportunity-title">Asistente de Reciclaje</h3>
+              <p class="opportunity-company">Green Solutions</p>
+              <p class="opportunity-description">Únete a nuestro equipo de gestión de residuos y programas de reciclaje comunitario.</p>
+              
+              <div class="requirements-list">
+                <h4>Requisitos:</h4>
+                <ul>
+                  <li>Conocimientos básicos de gestión de residuos</li>
+                  <li>Disponibilidad para trabajo en terreno</li>
+                  <li>Mínimo 500 EcoPuntos acumulados</li>
+                </ul>
+              </div>
+              
+              <div class="opportunity-meta">
+                <span class="opportunity-type">Tiempo completo</span>
+                <button class="apply-btn">Postular</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Oportunidad 3 -->
+          <div class="opportunity-card">
+            <div class="opportunity-image">
+              <i class="fas fa-solar-panel"></i>
+            </div>
+            <div class="opportunity-content">
+              <h3 class="opportunity-title">Consultor Junior de Energías Renovables</h3>
+              <p class="opportunity-company">EcoPower Consultores</p>
+              <p class="opportunity-description">Oportunidad para recién graduados en nuestro equipo de consultoría energética.</p>
+              
+              <div class="requirements-list">
+                <h4>Requisitos:</h4>
+                <ul>
+                  <li>Título profesional en ingeniería o carreras afines</li>
+                  <li>Manejo de herramientas de análisis energético</li>
+                  <li>Nivel de inglés intermedio</li>
+                </ul>
+              </div>
+              
+              <div class="opportunity-meta">
+                <span class="opportunity-type">Media jornada</span>
+                <button class="apply-btn">Postular</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Verificar sesión (igual que en dashboard.html)
+    if (!localStorage.getItem('ecoUserLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Lógica para postulaciones
+    document.querySelectorAll('.apply-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const opportunityTitle = this.closest('.opportunity-card').querySelector('.opportunity-title').textContent;
+        if(confirm(`¿Deseas postular a "${opportunityTitle}"?`)) {
+          alert('¡Postulación enviada con éxito! Revisa tu correo para más información.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

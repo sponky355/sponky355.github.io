@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoINACAP - Mi Panel</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet CSS for map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    .dashboard {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 30px 20px;
+      position: relative;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'Raleway', sans-serif;
+      color: white;
+    }
+    
+    .sidebar-logo span {
+      color: var(--primary-light);
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-right: 15px;
+      color: var(--primary-dark);
+    }
+    
+    .user-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+    
+    .user-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 10px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-link.active {
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .logout-btn i {
+      margin-right: 10px;
+    }
+    
+    .main-content {
+      padding: 30px;
+      background: #f5f5f5;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .dashboard-title {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+    }
+    
+    .notification-btn {
+      position: relative;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      cursor: pointer;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary-color);
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .stat-title {
+      font-size: 1rem;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+    
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 5px;
+    }
+    
+    .stat-change {
+      font-size: 0.9rem;
+      color: #4caf50;
+      display: flex;
+      align-items: center;
+    }
+    
+    .stat-change.negative {
+      color: #f44336;
+    }
+    
+    .stat-change i {
+      margin-right: 5px;
+    }
+    
+    .progress-container {
+      margin-top: 15px;
+    }
+    
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-color);
+      border-radius: 4px;
+      width: 65%;
+    }
+    
+    .dashboard-section {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 1.3rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    
+    .section-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    
+    .history-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .history-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e3f2fd;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1rem;
+    }
+    
+    .history-details h4 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: var(--text-dark);
+    }
+    
+    .history-details p {
+      font-size: 0.8rem;
+      color: #757575;
+    }
+    
+    .history-points {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .map-container {
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    
+    .hidden-benefit {
+      display: none;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .benefit-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .benefit-image {
+      height: 120px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 2rem;
+    }
+    
+    .benefit-content {
+      padding: 15px;
+    }
+    
+    .benefit-title {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+    }
+    
+    .benefit-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .benefit-points {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .show-benefits .hidden-benefit {
+      display: block;
+      opacity: 1;
+      height: auto;
+    }
+  
+    #toggle-benefits {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+  
+    #toggle-benefits:hover {
+      color: var(--primary-dark);
+    }
+    
+    .redeem-btn {
+      padding: 5px 10px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .redeem-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .redeem-btn:disabled {
+      background: #bdbdbd;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 992px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">Eco<span>INACAP</span></div>
+      </div>
+      
+      <div class="user-profile">
+        <div class="user-avatar" id="userAvatar">JD</div>
+        <div class="user-info">
+          <h3 id="userName">Juan Díaz</h3>
+          <p id="userCareer">Ing. en Medio Ambiente</p>
+        </div>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-coins"></i>
+            <span>EcoPuntos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Puntos de Reciclaje</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-gift"></i>
+            <span>Beneficios</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-briefcase"></i> <!-- Nuevo ícono -->
+            <span>Oportunidades laborales</span> <!-- Nueva opción -->
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Mi Progreso</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+      
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Mi Panel EcoINACAP</h1>
+        <div class="header-actions">
+          <button class="home-btn" id="homeBtn" title="Volver al inicio">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <h3 class="stat-title">EcoPuntos Acumulados</h3>
+            <div class="stat-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+          </div>
+          <div class="stat-value" id="totalPoints">1,250</div>
+          <div class="stat-change">
+            <i class="fas fa-arrow-up"></i>
+            <span>150 esta semana</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Nivel 3</span>
+              <span>65%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <h3 class="stat-title">Impacto Ambiental</h3>
+            <div class="stat-icon">
+              <i class="fas fa-globe-americas"></i>
+            </div>
+          </div>
+          <div class="stat-value">42 kg</div>
+          <div class="stat-change">
+            <i class="fas fa-arrow-up"></i>
+            <span>5 kg esta semana</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>CO2 reducido</span>
+              <span>Equivale a 10 árboles</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <h3 class="stat-title">Ranking INACAP</h3>
+            <div class="stat-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+          </div>
+          <div class="stat-value">#8</div>
+          <div class="stat-change negative">
+            <i class="fas fa-arrow-down"></i>
+            <span>2 puestos esta semana</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Top 10% de la sede</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h2 class="section-title">Actividad Reciente</h2>
+          <a href="#" class="section-link">Ver todo</a>
+        </div>
+        
+        <div class="history-list" id="activityList">
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-icon">
+                <i class="fas fa-recycle"></i>
+              </div>
+              <div class="history-details">
+                <h4>Reciclaje de plástico</h4>
+                <p>Hoy, 15:30 - Punto Verde #3</p>
+              </div>
+            </div>
+            <div class="history-points">+50 pts</div>
+          </div>
+          
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-icon">
+                <i class="fas fa-newspaper"></i>
+              </div>
+              <div class="history-details">
+                <h4>Reciclaje de papel</h4>
+                <p>Ayer, 11:15 - Punto Verde #1</p>
+              </div>
+            </div>
+            <div class="history-points">+30 pts</div>
+          </div>
+          
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-icon">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div class="history-details">
+                <h4>Canje de beneficio</h4>
+                <p>5 oct - Café gratis en Cafetería Central</p>
+              </div>
+            </div>
+            <div class="history-points">-100 pts</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Map Section -->
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h2 class="section-title">Ubicación INACAP Santiago Centro</h2>
+          <a href="mapa.html" class="section-link">Ver mapa completo</a>
+        </div>
+        
+        <div class="map-container" id="inacapMap"></div>
+      </div>
+      
+<!-- Available Benefits -->
+<div class="dashboard-section">
+  <div class="section-header">
+    <h2 class="section-title">Beneficios Disponibles</h2>
+    <a href="#" class="section-link" id="toggle-benefits">Ver todos</a>
+  </div>
+  
+  <div class="benefits-grid">
+    <!-- Beneficio 1 - Siempre visible -->
+    <div class="benefit-card">
+      <div class="benefit-image">
+        <i class="fas fa-coffee"></i>
+      </div>
+      <div class="benefit-content">
+        <h4 class="benefit-title">Café gratis</h4>
+        <div class="benefit-price">
+          <span class="benefit-points">100 pts</span>
+          <button class="redeem-btn">Canjear</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Beneficio 2 - Siempre visible -->
+    <div class="benefit-card">
+      <div class="benefit-image">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="benefit-content">
+        <h4 class="benefit-title">Libro de apuntes</h4>
+        <div class="benefit-price">
+          <span class="benefit-points">250 pts</span>
+          <button class="redeem-btn">Canjear</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Beneficio 3 - Oculto inicialmente -->
+    <div class="benefit-card hidden-benefit">
+      <div class="benefit-image">
+        <i class="fas fa-tshirt"></i>
+      </div>
+      <div class="benefit-content">
+        <h4 class="benefit-title">Polera EcoINACAP</h4>
+        <div class="benefit-price">
+          <span class="benefit-points">500 pts</span>
+          <button class="redeem-btn" disabled>Faltan 150 pts</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Beneficio 4 - Oculto inicialmente -->
+    <div class="benefit-card hidden-benefit">
+      <div class="benefit-image">
+        <i class="fas fa-ticket-alt"></i>
+      </div>
+      <div class="benefit-content">
+        <h4 class="benefit-title">Entrada cine</h4>
+        <div class="benefit-price">
+          <span class="benefit-points">300 pts</span>
+          <button class="redeem-btn">Canjear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Leaflet JS for map -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('ecoUserLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem('ecoUserData')) || {
+      name: 'Juan Díaz',
+      email: 'juan.diaz@inacapmail.cl',
+      career: 'Ing. en Medio Ambiente',
+      points: 1250,
+      level: 3
+    };
+    
+    // Display user data
+    document.getElementById('userName').textContent = userData.name;
+    document.getElementById('userCareer').textContent = userData.career;
+    document.getElementById('totalPoints').textContent = userData.points.toLocaleString();
+    
+    // Generate avatar initials
+    const initials = userData.name.split(' ').map(n => n[0]).join('');
+    document.getElementById('userAvatar').textContent = initials;
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('ecoUserLoggedIn');
+      window.location.href = 'login.html';
+    });
+
+    // Home button functionality
+    document.getElementById('homeBtn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+    
+    // Initialize map
+    const map = L.map('inacapMap').setView([-33.45694, -70.64827], 16);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Add INACAP marker
+    const inacapIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+    });
+    
+    L.marker([-33.443469, -70.661982], {icon: inacapIcon}).addTo(map)
+      .bindPopup('<b>INACAP Santiago Centro</b><br>Almirante Barroso 76, Santiago')
+      .openPopup();
+    
+    // Add user location if available
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        
+        L.marker([userLat, userLng], {
+          icon: L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
+            iconSize: [25, 25],
+            iconAnchor: [12, 25],
+          })
+        }).addTo(map).bindPopup('<b>Tu ubicación</b>');
+        
+        // Add line between user and INACAP
+        L.polyline([
+          [userLat, userLng],
+          [-33.45694, -70.64827]
+        ], {
+          color: '#2e7d32',
+          weight: 3,
+          dashArray: '5, 5'
+        }).addTo(map);
+      });
+    }
+
+  document.getElementById('toggle-benefits').addEventListener('click', function(e) {
+    e.preventDefault();
+    const benefitsGrid = this.closest('.dashboard-section').querySelector('.benefits-grid');
+    const isShowingAll = benefitsGrid.classList.contains('show-benefits');
+    
+    if(isShowingAll) {
+      benefitsGrid.classList.remove('show-benefits');
+      this.textContent = 'Ver todos';
+    } else {
+      benefitsGrid.classList.add('show-benefits');
+      this.textContent = 'Ver menos';
+      // Desplazamiento suave a la sección
+      this.closest('.dashboard-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+    
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('Oportunidades laborales')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'oportunidades-laborales.html';
+    });
+  }
+});
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('EcoPuntos')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'ecopuntos.html';
+    });
+  }
+});
+
+    // Redeem buttons functionality
+    document.querySelectorAll('.redeem-btn').forEach(btn => {
+      if (!btn.disabled) {
+        btn.addEventListener('click', function() {
+          const pointsNeeded = parseInt(this.parentElement.querySelector('.benefit-points').textContent);
+          
+          if (userData.points >= pointsNeeded) {
+            if (confirm('¿Confirmar canje de beneficio?')) {
+              userData.points -= pointsNeeded;
+              localStorage.setItem('ecoUserData', JSON.stringify(userData));
+              document.getElementById('totalPoints').textContent = userData.points.toLocaleString();
+              
+              // Add to activity
+              const benefitName = this.closest('.benefit-card').querySelector('.benefit-title').textContent;
+              const activityList = document.getElementById('activityList');
+              const newActivity = document.createElement('div');
+              newActivity.className = 'history-item';
+              newActivity.innerHTML = `
+                <div class="history-info">
+                  <div class="history-icon">
+                    <i class="fas fa-gift"></i>
+                  </div>
+                  <div class="history-details">
+                    <h4>Canje: ${benefitName}</h4>
+                    <p>Hoy, ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                  </div>
+                </div>
+                <div class="history-points">-${pointsNeeded} pts</div>
+              `;
+              activityList.prepend(newActivity);
+              
+              alert('¡Beneficio canjeado con éxito!');
+            }
+          } else {
+            alert('No tienes suficientes EcoPuntos para este beneficio');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>EcoINACAP ♻️ | Sustentabilidad en Santiago Centro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Cabecera con efecto parallax -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="logo">Eco<span>INACAP</span></h1>
+      <p class="slogan">Transformando residuos en oportunidades</p>
+      <div class="hero-buttons">
+        <a href="#proyecto" class="btn btn-primary">Conoce el proyecto</a>
+        <a href="#beneficios" class="btn btn-secondary">Beneficios para ti</a>
+      </div>
+    </div>
+    <div class="scroll-down">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </header>
+
+  <!-- Barra de navegación sticky -->
+<nav id="navbar">
+  <div class="container">
+    <a href="#" class="nav-logo">Eco<span>INACAP</span></a>
+    <ul class="nav-links">
+      <li><a href="#proyecto">Proyecto</a></li>
+      <li><a href="#beneficios">Beneficios</a></li>
+      <li><a href="#tecnologia">Tecnología</a></li>
+      <li><a href="#equipo">Equipo</a></li>
+      <li><a href="#puntos">Puntos Verdes</a></li>
+      <li><a href="#contacto" class="btn-nav">Únete</a></li>
+      <!-- Solo un botón de login o panel -->
+      <li id="auth-button-container">
+        <a href="login.html" class="btn-nav btn-login"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
+        <a href="login.html?tab=register" class="btn-nav btn-register"><i class="fas fa-user-plus"></i> Registrarse</a>
+      </li>
+    </ul>
+    <div class="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+  </div>
+</nav>
+
+  <!-- Sección del proyecto -->
+  <section id="proyecto" class="section">
+    <div class="container">
+      <h2 class="section-title">Nuestra <span>Propuesta</span></h2>
+      <div class="proyecto-grid">
+        <div class="proyecto-card">
+          <div class="proyecto-icon">
+            <i class="fas fa-recycle"></i>
+          </div>
+          <h3>Sistema Inteligente de Reciclaje</h3>
+          <p>Contenedores con sensores IoT que monitorean el nivel de llenado y optimizan las rutas de recolección.</p>
+        </div>
+        <div class="proyecto-card">
+          <div class="proyecto-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <h3>EcoPuntos Canjeables</h3>
+          <p>Acumula puntos por reciclar que puedes canjear por beneficios en la sede y comercios asociados.</p>
+        </div>
+        <div class="proyecto-card">
+          <div class="proyecto-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h3>Educación Continua</h3>
+          <p>Talleres, charlas y material educativo para fomentar la cultura del reciclaje en toda la comunidad.</p>
+        </div>
+      </div>
+      <div class="video-presentacion">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/placeholder" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="video-text">
+          <h3>Innovación al servicio del medio ambiente</h3>
+          <p>EcoINACAP no es solo un sistema de reciclaje, es una solución integral que combina tecnología, incentivos y educación para crear un cambio real en nuestros hábitos de consumo y disposición de residuos.</p>
+          <a href="#" class="btn btn-primary">Descarga nuestro dossier</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de beneficios -->
+  <section id="beneficios" class="section bg-light">
+    <div class="container">
+      <h2 class="section-title">Beneficios <span>Tangibles</span></h2>
+      <div class="beneficios-tabs">
+        <div class="tab-header">
+          <div class="tab-btn active" data-tab="estudiantes">Para Estudiantes</div>
+          <div class="tab-btn" data-tab="inacap">Para INACAP</div>
+          <div class="tab-btn" data-tab="comunidad">Para la Comunidad</div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-pane active" id="estudiantes">
+            <div class="beneficio-item">
+              <i class="fas fa-graduation-cap"></i>
+              <div>
+                <h4>Descuentos en materiales</h4>
+                <p>Canjea tus EcoPuntos por descuentos en librería, fotocopias y materiales de estudio.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-utensils"></i>
+              <div>
+                <h4>Beneficios en cafetería</h4>
+                <p>Obtén descuentos y promociones especiales en los locales de comida de la sede.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-briefcase"></i>
+              <div>
+                <h4>Oportunidades laborales</h4>
+                <p>Acceso preferencial a prácticas y trabajos en empresas sustentables asociadas.</p>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="inacap">
+            <div class="beneficio-item">
+              <i class="fas fa-chart-line"></i>
+              <div>
+                <h4>Reducción de costos</h4>
+                <p>Disminución hasta en un 40% en gastos de gestión de residuos.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-trophy"></i>
+              <div>
+                <h4>Posicionamiento institucional</h4>
+                <p>Refuerza el compromiso de INACAP con la sustentabilidad y responsabilidad social.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-handshake"></i>
+              <div>
+                <h4>Alianzas estratégicas</h4>
+                <p>Vinculación con empresas y organizaciones líderes en economía circular.</p>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="comunidad">
+            <div class="beneficio-item">
+              <i class="fas fa-leaf"></i>
+              <div>
+                <h4>Entorno más limpio</h4>
+                <p>Reducción de basura en el barrio y espacios comunes de la sede.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-heart"></i>
+              <div>
+                <h4>Salud pública</h4>
+                <p>Menor contaminación y riesgos sanitarios asociados a residuos mal gestionados.</p>
+              </div>
+            </div>
+            <div class="beneficio-item">
+              <i class="fas fa-city"></i>
+              <div>
+                <h4>Modelo replicable</h4>
+                <p>Posibilidad de extender el sistema a otras sedes y organizaciones del sector.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de tecnología -->
+  <section id="tecnologia" class="section">
+    <div class="container">
+      <h2 class="section-title">Tecnología <span>EcoINACAP</span></h2>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-img">
+            <img src="img/sensor-iot.jpg" alt="Sensor IoT">
+          </div>
+          <div class="tech-content">
+            <h3>Sensores Inteligentes</h3>
+            <p>Dispositivos IoT que monitorean en tiempo real el nivel de llenado, temperatura y humedad de los contenedores.</p>
+            <ul class="tech-features">
+              <li><i class="fas fa-check-circle"></i> Alertas automáticas cuando están llenos</li>
+              <li><i class="fas fa-check-circle"></i> Datos históricos para análisis</li>
+              <li><i class="fas fa-check-circle"></i> Bajo consumo energético</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reverse">
+          <div class="tech-img">
+            <img src="img/app-movil.jpg" alt="App móvil">
+          </div>
+          <div class="tech-content">
+            <h3>App EcoINACAP</h3>
+            <p>Aplicación móvil para estudiantes y personal con todas las funcionalidades del sistema.</p>
+            <ul class="tech-features">
+              <li><i class="fas fa-check-circle"></i> Mapa interactivo de puntos verdes</li>
+              <li><i class="fas fa-check-circle"></i> Control de EcoPuntos acumulados</li>
+              <li><i class="fas fa-check-circle"></i> Notificaciones personalizadas</li>
+              <li><i class="fas fa-check-circle"></i> Gamificación y retos ecológicos</li>
+            </ul>
+            <div class="app-download">
+              <a href="#"><img src="img/google-play.png" alt="Google Play"></a>
+              <a href="#"><img src="img/app-store.png" alt="App Store"></a>
+            </div>
+          </div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-img">
+            <img src="img/dashboard.jpg" alt="Dashboard">
+          </div>
+          <div class="tech-content">
+            <h3>Panel de Control</h3>
+            <p>Plataforma web para la administración centralizada del sistema por parte de INACAP.</p>
+            <ul class="tech-features">
+              <li><i class="fas fa-check-circle"></i> Visualización de datos en tiempo real</li>
+              <li><i class="fas fa-check-circle"></i> Generación de reportes automáticos</li>
+              <li><i class="fas fa-check-circle"></i> Optimización de rutas de recolección</li>
+              <li><i class="fas fa-check-circle"></i> Gestión de usuarios y beneficios</li>
+            </ul>
+            <a href="#" class="btn btn-outline">Ver demostración</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de impacto -->
+  <section class="impacto-section">
+    <div class="container">
+      <h2>Nuestro Impacto en Números</h2>
+      <div class="impacto-grid">
+        <div class="impacto-item">
+          <div class="impacto-number" data-count="85">0</div>
+          <div class="impacto-text">% de reducción en residuos enviados a vertederos</div>
+        </div>
+        <div class="impacto-item">
+          <div class="impacto-number" data-count="1200">0</div>
+          <div class="impacto-text">Kg de material reciclado mensualmente</div>
+        </div>
+        <div class="impacto-item">
+          <div class="impacto-number" data-count="1500">0</div>
+          <div class="impacto-text">Estudiantes activos en el programa</div>
+        </div>
+        <div class="impacto-item">
+          <div class="impacto-number" data-count="25">0</div>
+          <div class="impacto-text">Comercios locales asociados</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección del equipo -->
+  <section id="equipo" class="section bg-light">
+    <div class="container">
+      <h2 class="section-title">Nuestro <span>Equipo</span></h2>
+      <p class="section-subtitle">Profesionales y estudiantes comprometidos con la sustentabilidad</p>
+      <div class="equipo-grid">
+        <div class="equipo-card">
+          <div class="equipo-img">
+            <img src="img/equipo1.jpg" alt="Miembro del equipo">
+            <div class="equipo-social">
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <h3>Lancelot Castro</h3>
+          <p class="equipo-cargo">Líder del Proyecto</p>
+          <p class="equipo-bio">Ingeniera Ambiental con 5 años de experiencia en gestión de residuos.</p>
+        </div>
+        <div class="equipo-card">
+          <div class="equipo-img">
+            <img src="img/equipo2.jpg" alt="Miembro del equipo">
+            <div class="equipo-social">
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <h3>Josue Villaroel</h3>
+          <p class="equipo-cargo">Desarrollador IoT</p>
+          <p class="equipo-bio">Especialista en sistemas embebidos y tecnologías limpias.</p>
+        </div>
+        <div class="equipo-card">
+          <div class="equipo-img">
+            <img src="img/equipo3.jpg" alt="Miembro del equipo">
+            <div class="equipo-social">
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <h3>Ignacia Durán</h3>
+          <p class="equipo-cargo">Diseñadora UX/UI</p>
+          <p class="equipo-bio">Experta en diseño centrado en el usuario y experiencias digitales.</p>
+        </div>
+        <div class="equipo-card">
+          <div class="equipo-img">
+            <img src="img/equipo4.jpg" alt="Miembro del equipo">
+            <div class="equipo-social">
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+          </div>
+          <h3>Daniel Rivera</h3>
+          <p class="equipo-cargo">Coordinador Académico</p>
+          <p class="equipo-bio">Encargado de vincular el proyecto con las carreras de INACAP.</p>
+        </div>
+      </div>
+      <div class="equipo-cta">
+        <p>¿Quieres unirte a nuestro equipo o ser voluntario?</p>
+        <a href="#contacto" class="btn btn-primary">Contáctanos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de puntos verdes (adaptada de tu plantilla) -->
+  <section id="puntos" class="section">
+    <div class="container">
+      <h2 class="section-title">Puntos <span>EcoINACAP</span></h2>
+      <div class="puntos-intro">
+        <p>Encuentra nuestros contenedores inteligentes distribuidos estratégicamente en la sede Santiago Centro:</p>
+      </div>
+      
+      <div class="puntos-grid">
+        <div class="punto-card">
+          <div class="punto-icon">
+            <i class="fas fa-bottle-water"></i>
+          </div>
+          <h3>Plásticos</h3>
+          <p>Botellas, envases y otros plásticos PET</p>
+          <div class="punto-status">
+            <span class="status-dot"></span>
+            <span>Contenedor 65% lleno</span>
+          </div>
+          <a href="mapa.html" class="btn btn-small">Ver ubicación</a>
+        </div>
+        <div class="punto-card">
+          <div class="punto-icon">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <h3>Papel y Cartón</h3>
+          <p>Revistas, cuadernos, cajas limpias</p>
+          <div class="punto-status">
+            <span class="status-dot"></span>
+            <span>Contenedor 30% lleno</span>
+          </div>
+          <a href="mapa.html" class="btn btn-small">Ver ubicación</a>
+        </div>
+        <div class="punto-card">
+          <div class="punto-icon">
+            <i class="fas fa-wine-bottle"></i>
+          </div>
+          <h3>Vidrio</h3>
+          <p>Botellas y frascos de vidrio</p>
+          <div class="punto-status">
+            <span class="status-dot"></span>
+            <span>Contenedor 45% lleno</span>
+          </div>
+          <a href="mapa.html" class="btn btn-small">Ver ubicación</a>
+        </div>
+        <div class="punto-card">
+          <div class="punto-icon">
+            <i class="fas fa-battery-full"></i>
+          </div>
+          <h3>Electrónicos</h3>
+          <p>Pilas, baterías y pequeños dispositivos</p>
+          <div class="punto-status">
+            <span class="status-dot"></span>
+            <span>Contenedor 20% lleno</span>
+          </div>
+          <a href="mapa.html" class="btn btn-small">Ver ubicación</a>
+        </div>
+      </div>
+      
+      <div class="puntos-cta">
+        <a href="mapa.html" class="btn btn-primary">
+          <i class="fas fa-map-marked-alt"></i> Ver Mapa Completo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de testimonios -->
+  <section class="testimonios-section">
+    <div class="container">
+      <h2>Lo que dicen sobre EcoINACAP</h2>
+      <div class="testimonios-slider">
+        <div class="testimonio">
+          <div class="testimonio-content">
+            <p>"Gracias a los EcoPuntos he podido ahorrar en materiales de estudio. Además, me siento parte de un cambio real en la sede."</p>
+          </div>
+          <div class="testimonio-author">
+            <img src="img/testimonio1.jpg" alt="Estudiante">
+            <div>
+              <h4>Martín Fernández</h4>
+              <p>Estudiante de Ingeniería</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonio">
+          <div class="testimonio-content">
+            <p>"Como docente, valoro mucho la iniciativa. Integramos el proyecto en varias asignaturas y los estudiantes están muy motivados."</p>
+          </div>
+          <div class="testimonio-author">
+            <img src="img/testimonio2.jpg" alt="Docente">
+            <div>
+              <h4>Prof. Andrea Muñoz</h4>
+              <p>Área Medio Ambiente</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonio">
+          <div class="testimonio-content">
+            <p>"Nuestra cafetería se unió al programa y ha sido excelente. Atrae más clientes y nos posiciona como un negocio responsable."</p>
+          </div>
+          <div class="testimonio-author">
+            <img src="img/testimonio3.jpg" alt="Comerciante">
+            <div>
+              <h4>Carlos Jiménez</h4>
+              <p>Cafetería "El Rincón"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de contacto -->
+  <section id="contacto" class="section bg-light">
+    <div class="container">
+      <h2 class="section-title">Únete al <span>Cambio</span></h2>
+      <div class="contacto-grid">
+        <div class="contacto-form">
+          <h3>¿Interesado en EcoINACAP?</h3>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Correo electrónico</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="rol">¿Qué describes mejor?</label>
+              <select id="rol" name="rol">
+                <option value="estudiante">Estudiante INACAP</option>
+                <option value="docente">Docente INACAP</option>
+                <option value="personal">Personal INACAP</option>
+                <option value="comercio">Comercio asociado</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mensaje">Tu mensaje</label>
+              <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+          </form>
+        </div>
+        <div class="contacto-info">
+          <h3>Otras formas de contacto</h3>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Correo electrónico</h4>
+              <a href="mailto:contacto@ecoinacap.cl">contacto@ecoinacap.cl</a>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4>Oficina EcoINACAP</h4>
+              <p>INACAP Santiago Centro, 3er piso, Oficina 302</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <h4>Horario de atención</h4>
+              <p>Lunes a Viernes: 9:00 - 18:00 hrs</p>
+            </div>
+          </div>
+          <div class="contacto-social">
+            <h4>Síguenos en redes</h4>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de partners -->
+  <section class="partners-section">
+    <div class="container">
+      <h2>Nuestros Aliados</h2>
+      <div class="partners-grid">
+        <img src="img/partner1.png" alt="Partner 1">
+        <img src="img/partner2.png" alt="Partner 2">
+        <img src="img/partner3.png" alt="Partner 3">
+        <img src="img/partner4.png" alt="Partner 4">
+        <img src="img/partner5.png" alt="Partner 5">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>EcoINACAP</h3>
+          <p>Transformando residuos en oportunidades para una sede más sustentable.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="#proyecto">Nuestro Proyecto</a></li>
+            <li><a href="#beneficios">Beneficios</a></li>
+            <li><a href="#tecnologia">Tecnología</a></li>
+            <li><a href="#puntos">Puntos Verdes</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Recursos</h3>
+          <ul>
+            <li><a href="#">Guía de Reciclaje</a></li>
+            <li><a href="#">Preguntas Frecuentes</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Términos y Condiciones</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Boletín informativo</h3>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Tu correo electrónico" required>
+            <button type="submit">Suscribirse</button>
+          </form>
+          <p>Recibe las últimas novedades sobre EcoINACAP.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EcoINACAP - Todos los derechos reservados</p>
+        <p>Proyecto desarrollado por estudiantes de INACAP Santiago Centro</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="https://wa.me/56912345678" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/scripts.js"></script>
+  <script>
+    // Verificar si el usuario está logueado al cargar la página
+  document.addEventListener('DOMContentLoaded', function() {
+    const authContainer = document.getElementById('auth-button-container');
+    
+    if(localStorage.getItem('ecoUserLoggedIn') === 'true') {
+      // Si está logueado, mostrar solo el botón de Mi Panel
+      authContainer.innerHTML = `
+        <a href="dashboard.html" class="btn-nav btn-profile">
+          <i class="fas fa-user"></i> Mi Panel
+        </a>
+      `;
+    } else {
+      // Si no está logueado, mostrar botones de login/registro
+      authContainer.innerHTML = `
+        <a href="login.html" class="btn-nav btn-login"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
+        <a href="login.html?tab=register" class="btn-nav btn-register"><i class="fas fa-user-plus"></i> Registrarse</a>
+      `;
+    }
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoPuntos | EcoINACAP</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .dashboard {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 30px 20px;
+      position: relative;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'Raleway', sans-serif;
+      color: white;
+    }
+    
+    .sidebar-logo span {
+      color: var(--primary-light);
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 10px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-link.active {
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .logout-btn i {
+      margin-right: 10px;
+    }
+
+    .ecopoints-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+    
+    .ecopoints-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    
+    .back-to-dashboard {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .back-to-dashboard i {
+      margin-right: 5px;
+    }
+    
+    .back-to-dashboard:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .ecopoints-intro {
+      background-color: #f0f8f0;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      border-left: 5px solid var(--primary-color);
+    }
+    
+    .ways-to-earn {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .earn-method {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .earn-method:hover {
+      transform: translateY(-5px);
+    }
+    
+    .method-icon {
+      height: 120px;
+      background-color: #e8f5e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 3rem;
+    }
+    
+    .method-content {
+      padding: 25px;
+    }
+    
+    .method-title {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+    }
+    
+    .method-points {
+      color: var(--primary-color);
+      font-weight: bold;
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+    
+    .method-description {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .action-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+    
+    .action-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .points-system {
+      margin-top: 40px;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    
+    .points-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .points-table th, .points-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .points-table th {
+      background-color: #f5f5f5;
+      font-weight: 600;
+    }
+    
+    .points-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-right: 15px;
+      color: var(--primary-dark);
+    }
+    
+    .user-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+    
+    .user-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar (igual que en dashboard.html) -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">Eco<span>INACAP</span></div>
+      </div>
+      
+  <div class="user-profile">
+    <div class="user-avatar" id="userAvatar"></div>
+    <div class="user-info">
+      <h3 id="userName"></h3>
+      <p id="userCareer"></p>
+    </div>
+  </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-coins"></i>
+            <span>EcoPuntos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="oportunidades-laborales.html" class="nav-link">
+            <i class="fas fa-briefcase"></i>
+            <span>Oportunidades laborales</span>
+          </a>
+        </li>
+        <!-- Otros elementos del menú -->
+      </ul>
+      
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="ecopoints-container">
+        <div class="ecopoints-header">
+          <a href="dashboard.html" class="back-to-dashboard">
+            <i class="fas fa-arrow-left"></i>
+            Volver al Panel
+          </a>
+          <h1>EcoPuntos</h1>
+          <p>Gana puntos por tus acciones sustentables y canjéalos por beneficios</p>
+        </div>
+        
+        <div class="ecopoints-intro">
+          <h2>¿Qué son los EcoPuntos?</h2>
+          <p>Los EcoPuntos son nuestro sistema de recompensas por participar en actividades sustentables. Cuantos más puntos acumules, mayores beneficios podrás obtener. Tu contribución ayuda a crear un campus más ecológico y sostenible.</p>
+          <p class="method-points">Tu saldo actual: <span id="currentPoints">1,250</span> EcoPuntos</p>
+        </div>
+        
+        <h2>Cómo ganar EcoPuntos</h2>
+        <div class="ways-to-earn">
+          <!-- Método 1 -->
+          <div class="earn-method">
+            <div class="method-icon">
+              <i class="fas fa-recycle"></i>
+            </div>
+            <div class="method-content">
+              <h3 class="method-title">Reciclaje</h3>
+              <p class="method-points">+50 a +200 puntos</p>
+              <p class="method-description">Deposita materiales reciclables en nuestros puntos verdes inteligentes. Más puntos por mayores cantidades y materiales especiales.</p>
+              <button class="action-btn" onclick="location.href='#puntos'">
+                <i class="fas fa-map-marker-alt"></i> Ver puntos de reciclaje
+              </button>
+            </div>
+          </div>
+          
+          <!-- Método 2 -->
+          <div class="earn-method">
+            <div class="method-icon">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="method-content">
+              <h3 class="method-title">Talleres y Eventos</h3>
+              <p class="method-points">+100 a +300 puntos</p>
+              <p class="method-description">Participa en nuestros talleres de sustentabilidad, charlas ecológicas y eventos comunitarios.</p>
+              <button class="action-btn" onclick="location.href='#eventos'">
+                <i class="fas fa-calendar-alt"></i> Ver calendario
+              </button>
+            </div>
+          </div>
+          
+          <!-- Método 3 -->
+          <div class="earn-method">
+            <div class="method-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="method-content">
+              <h3 class="method-title">Ideas Sustentables</h3>
+              <p class="method-points">+50 a +500 puntos</p>
+              <p class="method-description">Envía tus ideas para hacer el campus más sustentable. Las mejores ideas reciben bonos extras.</p>
+              <button class="action-btn" onclick="showIdeaForm()">
+                <i class="fas fa-paper-plane"></i> Enviar idea
+              </button>
+            </div>
+          </div>
+          
+          <!-- Método 4 -->
+          <div class="earn-method">
+            <div class="method-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="method-content">
+              <h3 class="method-title">Voluntariado</h3>
+              <p class="method-points">+200 a +500 puntos</p>
+              <p class="method-description">Participa en nuestras jornadas de limpieza, reforestación u otras actividades de voluntariado.</p>
+              <button class="action-btn" onclick="location.href='#voluntariado'">
+                <i class="fas fa-hands-helping"></i> Unirse
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="points-system">
+          <h2>Sistema de Puntos</h2>
+          <p>Consulta cuántos puntos recibes por cada actividad:</p>
+          
+          <table class="points-table">
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Puntos Base</th>
+                <th>Bonos Disponibles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Reciclaje básico (plástico, vidrio, papel)</td>
+                <td>50 puntos/kg</td>
+                <td>+50 por primera vez en semana</td>
+              </tr>
+              <tr>
+                <td>Reciclaje especial (electrónicos, baterías)</td>
+                <td>100-200 puntos/unidad</td>
+                <td>+100 por materiales peligrosos</td>
+              </tr>
+              <tr>
+                <td>Asistencia a talleres</td>
+                <td>100 puntos</td>
+                <td>+50 por taller adicional en el mes</td>
+              </tr>
+              <tr>
+                <td>Participación en eventos</td>
+                <td>150-300 puntos</td>
+                <td>+100 por traer un compañero</td>
+              </tr>
+              <tr>
+                <td>Voluntariado</td>
+                <td>200 puntos/hora</td>
+                <td>+100 por liderar actividad</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Verificar sesión
+    if (!localStorage.getItem('ecoUserLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Obtener datos del usuario desde LocalStorage
+    const userData = JSON.parse(localStorage.getItem('ecoUserData'));
+    
+    // Mostrar información del usuario
+  if (userData) {
+    // Mostrar nombre
+    document.getElementById('userName').textContent = userData.name || 'Usuario EcoINACAP';
+    
+    // Mostrar carrera si existe en los datos
+    document.getElementById('userCareer').textContent = userData.career || 'Miembro de la comunidad';
+    
+    // Generar avatar con iniciales
+    const nameParts = userData.name.split(' ');
+    let initials = '';
+    
+    if (nameParts.length > 0) {
+      initials += nameParts[0][0].toUpperCase();
+      if (nameParts.length > 1) {
+        initials += nameParts[nameParts.length - 1][0].toUpperCase();
+      }
+    } else {
+      initials = 'EU'; // EcoUsuario como fallback
+    }
+    
+    document.getElementById('userAvatar').textContent = initials;
+  } else {
+    // Datos por defecto si no hay información
+    document.getElementById('userName').textContent = 'Usuario EcoINACAP';
+    document.getElementById('userCareer').textContent = 'Miembro de la comunidad';
+    document.getElementById('userAvatar').textContent = 'EU';
+  }
+
+    // Mostrar puntos actuales
+    document.getElementById('currentPoints').textContent = userData.points.toLocaleString();
+    
+    // Mostrar formulario para enviar ideas
+    function showIdeaForm() {
+      const idea = prompt("Describe tu idea sustentable (máx. 200 caracteres):");
+      if (idea && idea.length > 10) {
+        alert("¡Gracias por tu idea! Hemos recibido tu propuesta y la evaluaremos pronto. Si es aprobada, recibirás tus EcoPuntos.");
+        // Aquí podrías agregar lógica para enviar la idea al servidor
+      } else if (idea) {
+        alert("Por favor describe tu idea con más detalle.");
+      }
+    }
+    
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('ecoUserLoggedIn');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

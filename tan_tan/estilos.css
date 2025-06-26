@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(270deg, #f4c2c2, #f8d3da, #f4c2c2);
+  background-size: 600% 600%;
+  animation: fondoMovimiento 20s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Olas animadas */
+.olas {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 0;
+}
+
+.ola {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="rgba(255,255,255,0.2)"/></svg>');
+  animation: olaAnimacion 15s linear infinite;
+}
+
+.ola:nth-child(1) {
+  animation-delay: 0s;
+  opacity: 0.7;
+}
+
+.ola:nth-child(2) {
+  animation-delay: -5s;
+  opacity: 0.5;
+}
+
+.ola:nth-child(3) {
+  animation-delay: -10s;
+  opacity: 0.3;
+}
+
+/* Imagen redonda */
+.imagen-circular {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 4px 20px rgba(128, 0, 64, 0.4);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.imagen-circular img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Animación de flotar */
+.flotar {
+  animation: flotar 6s ease-in-out infinite;
+}
+
+.contenedor-botones {
+  width: 90%;
+  max-width: 400px;
+  background: rgba(248, 211, 218, 0.8);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(128, 0, 64, 0.2);
+  backdrop-filter: blur(5px);
+  position: relative;
+  z-index: 1;
+}
+
+.botones {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.boton {
+  padding: 16px;
+  font-size: 17px;
+  background-color: #e48b9c;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(228, 139, 156, 0.4);
+}
+
+.boton:hover {
+  background-color: #d77286;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(215, 114, 134, 0.6);
+}
+
+/* Efecto neón al pasar el mouse */
+.boton:hover::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff);
+  z-index: -1;
+  animation: neon 1.5s linear infinite;
+}
+
+/* Latido de los botones */
+.latido {
+  animation: latido 2s infinite;
+}
+
+/* Animaciones */
+@keyframes fondoMovimiento {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes saltito {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15) translateY(-10px); }
+  50% { transform: scale(1.1) translateY(-5px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes flotar {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes olaAnimacion {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes latido {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.03); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes neón {
+  0% { filter: blur(5px); opacity: 0.7; }
+  50% { filter: blur(8px); opacity: 1; }
+  100% { filter: blur(5px); opacity: 0.7; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .imagen-circular.saltar {
+    animation: saltito 0.6s ease;
+  }
+}
+
+@media (min-width: 769px) {
+  .imagen-circular:hover {
+    animation: saltito 0.6s ease;
+  }
+}
+
+
+/*el monito animado*/
+
+
+/* Estilos del Shimeji */
+/* Estilos del Shimeji */
+#shimeji {
+  position: fixed;
+  bottom: 30px; /* Posición inicial, será ajustada por JS */
+  left: 0;
+  z-index: 5; /* Por debajo de los botones (asegúrate que los botones tengan z-index > 5) */
+  will-change: transform;
+}
+
+#shimeji-img {
+  width: 80px;
+  height: auto;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+/* Animación de caminar */
+.shimeji-caminando {
+  animation: caminar 20s linear infinite;
+}
+
+@keyframes caminar {
+  0% { transform: translateX(-100px); }
+  100% { transform: translateX(calc(100vw + 100px)); }
+}
+
+/* Asegúrate que el contenedor de botones tenga posición relativa */
+.contenedor-botones {
+  position: relative;
+  z-index: 10; /* Mayor que el shimeji */
+}

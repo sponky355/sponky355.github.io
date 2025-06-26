@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   background: linear-gradient(270deg, #f4c2c2, #f8d3da, #f4c2c2);
   background-size: 600% 600%;
   animation: fondoMovimiento 20s ease infinite;
@@ -9,7 +9,7 @@ body {
   align-items: center;
   min-height: 100vh;
   padding-top: 30px;
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -47,7 +47,7 @@ body {
   opacity: 0.3;
 }
 
-/* Imagen redonda */
+/* Imagen circular */
 .imagen-circular {
   width: 150px;
   height: 150px;
@@ -71,6 +71,7 @@ body {
   animation: flotar 6s ease-in-out infinite;
 }
 
+/* Contenedor de botones */
 .contenedor-botones {
   width: 90%;
   max-width: 400px;
@@ -80,7 +81,7 @@ body {
   box-shadow: 0 8px 20px rgba(128, 0, 64, 0.2);
   backdrop-filter: blur(5px);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .botones {
@@ -100,8 +101,6 @@ body {
   text-align: center;
   text-decoration: none;
   transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
   box-shadow: 0 4px 15px rgba(228, 139, 156, 0.4);
 }
 
@@ -111,37 +110,40 @@ body {
   box-shadow: 0 8px 25px rgba(215, 114, 134, 0.6);
 }
 
-/* Efecto neón al pasar el mouse */
-.boton:hover::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 14px;
-  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff);
-  z-index: -1;
-  animation: neon 1.5s linear infinite;
-}
-
-/* Latido de los botones */
+/* Latido de botones */
 .latido {
   animation: latido 2s infinite;
 }
 
-/* Animaciones */
+/* Zona del Shimeji - CORRECCIÓN PRINCIPAL */
+#shimeji-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px; /* Aumentado para que quepa completo */
+  z-index: 1;
+}
+
+#shimeji {
+  position: absolute;
+  bottom: 20px; /* Posición más alta dentro del contenedor */
+  left: 0;
+}
+
+#shimeji-img {
+  width: auto;
+  height: 100px; /* Altura fija para mantener proporciones */
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+  transition: all 0.3s ease;
+}
+
+/* Animaciones clave */
 @keyframes fondoMovimiento {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-@keyframes saltito {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.15) translateY(-10px); }
-  50% { transform: scale(1.1) translateY(-5px); }
-  100% { transform: scale(1); }
 }
 
 @keyframes flotar {
@@ -163,60 +165,140 @@ body {
   100% { transform: scale(1); }
 }
 
-@keyframes neón {
-  0% { filter: blur(5px); opacity: 0.7; }
-  50% { filter: blur(8px); opacity: 1; }
-  100% { filter: blur(5px); opacity: 0.7; }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .imagen-circular.saltar {
-    animation: saltito 0.6s ease;
-  }
-}
-
-@media (min-width: 769px) {
-  .imagen-circular:hover {
-    animation: saltito 0.6s ease;
-  }
-}
-
-
-/*el monito animado*/
-
-
-/* Estilos del Shimeji */
-/* Estilos del Shimeji */
-#shimeji {
-  position: fixed;
-  bottom: 30px; /* Posición inicial, será ajustada por JS */
-  left: 0;
-  z-index: 5; /* Por debajo de los botones (asegúrate que los botones tengan z-index > 5) */
-  will-change: transform;
-}
-
-#shimeji-img {
-  width: 80px;
-  height: auto;
-  image-rendering: crisp-edges;
-  cursor: pointer;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
-  transition: transform 0.3s ease;
-}
-
-/* Animación de caminar */
-.shimeji-caminando {
-  animation: caminar 20s linear infinite;
-}
-
 @keyframes caminar {
   0% { transform: translateX(-100px); }
   100% { transform: translateX(calc(100vw + 100px)); }
 }
 
-/* Asegúrate que el contenedor de botones tenga posición relativa */
-.contenedor-botones {
+.shimeji-caminando {
+  animation: caminar 18s linear infinite;
+}
+
+.shimeji-volteado {
+  transform: scaleX(-1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .imagen-circular {
+    width: 120px;
+    height: 120px;
+  }
+  
+  #shimeji-img {
+    height: 80px; /* Más pequeño en móviles */
+  }
+  
+  #shimeji-container {
+    height: 100px; /* Contenedor más compacto en móviles */
+  }
+}
+
+/* ANIMACIONES PARA BOTONES */
+.boton {
   position: relative;
-  z-index: 10; /* Mayor que el shimeji */
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Efecto de luz neón al pasar el mouse */
+.boton:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(215, 114, 134, 0.8),
+              0 0 15px rgba(255, 255, 255, 0.8);
+  animation: neon-pulse 1.5s infinite alternate;
+}
+
+/* Onda expansiva al hacer clic */
+.boton:active {
+  animation: click-wave 0.4s ease-out;
+}
+
+/* Partículas flotantes (pseudo-elementos) */
+.boton::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.6s;
+  z-index: -1;
+}
+
+.boton:hover::before {
+  opacity: 0.6;
+}
+
+/* Latido mejorado */
+@keyframes latido {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.05); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.03); }
+  80% { transform: scale(1); }
+  100% { transform: scale(1.02); }
+}
+
+.latido {
+  animation: latido 2.5s infinite ease-in-out;
+}
+
+/* Nuevas animaciones */
+@keyframes neon-pulse {
+  0% {
+    box-shadow: 0 10px 30px rgba(215, 114, 134, 0.8),
+                0 0 15px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 10px 40px rgba(215, 114, 134, 1),
+                0 0 25px rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes click-wave {
+  0% {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    transform: translateY(-5px) scale(1);
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* Efecto de partículas al hacer hover */
+.boton:hover::after {
+  content: "✦✦✦";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: white;
+  animation: particles 2s infinite linear;
+  opacity: 0.8;
+}
+
+@keyframes particles {
+  0% { transform: translateY(0) translateX(-50%) scale(0.5); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-30px) translateX(-50%) scale(1.2); opacity: 0; }
+}
+
+/* Efecto de texto flotante */
+.boton:hover span {
+  display: inline-block;
+  animation: text-float 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes text-float {
+  to { transform: translateY(-2px); }
 }

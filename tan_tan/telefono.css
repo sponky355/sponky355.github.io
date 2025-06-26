@@ -1,0 +1,135 @@
+/* CSS MÓVIL SIN SCROLL - Ajuste perfecto al viewport */
+:root {
+  --rosa-principal: #e48b9c;
+  --rosa-claro: #f8d3da;
+  --altura-shimeji: 80px; /* Reducido para pantallas pequeñas */
+}
+
+/* Reset esencial para móvil */
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #f4c2c2, #f8d3da);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Contenedor principal ajustado */
+.contenedor-principal {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  overflow: hidden;
+}
+
+/* Imagen circular responsive */
+.imagen-circular {
+  width: 25vh;
+  height: 25vh;
+  max-width: 150px;
+  max-height: 150px;
+  min-width: 100px;
+  min-height: 100px;
+  margin-bottom: 2vh;
+}
+
+/* Contenedor de botones ajustado */
+.contenedor-botones {
+  width: 90%;
+  max-width: 350px;
+  padding: 15px;
+  margin: 0 auto 2vh;
+}
+
+/* Botones optimizados */
+.boton {
+  padding: 12px;
+  margin: 10px 0;
+  font-size: clamp(14px, 4vw, 16px);
+}
+
+/* Shimeji ajustado */
+#shimeji-container {
+  height: var(--altura-shimeji);
+  position: fixed;
+  bottom: 0;
+}
+
+#shimeji-img {
+  height: calc(var(--altura-shimeji) - 15px);
+}
+
+/* Animaciones optimizadas */
+.flotar {
+  animation: flotar-mobile 4s ease-in-out infinite;
+}
+
+@keyframes flotar-mobile {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.03); }
+}
+
+/* Olas ajustadas */
+.olas {
+  height: 50px;
+  bottom: var(--altura-shimeji);
+}
+
+/* Media Queries para ajustes finos */
+@media (max-height: 700px) {
+  .imagen-circular {
+    width: 22vh;
+    height: 22vh;
+    margin-bottom: 1vh;
+  }
+  
+  .contenedor-botones {
+    margin-bottom: 1vh;
+  }
+}
+
+@media (max-height: 600px) {
+  :root {
+    --altura-shimeji: 70px;
+  }
+  
+  .imagen-circular {
+    width: 20vh;
+    height: 20vh;
+  }
+  
+  .boton {
+    padding: 10px;
+    margin: 8px 0;
+  }
+}
+
+/* Corrección para iOS */
+@supports (-webkit-touch-callout: none) {
+  body {
+    height: -webkit-fill-available;
+  }
+}

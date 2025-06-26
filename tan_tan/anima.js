@@ -108,3 +108,36 @@ function createParticle(button) {
   
   animate();
 }
+
+
+
+// Detección de características móviles
+const isMobile = {
+  Android: () => navigator.userAgent.match(/Android/i),
+  iOS: () => navigator.userAgent.match(/iPhone|iPad|iPod/i),
+  any: () => (isMobile.Android() || isMobile.iOS())
+};
+
+// Ajustar viewport para iOS
+if (isMobile.iOS()) {
+  document.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+  
+  // Fix para la altura en iOS
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  window.addEventListener('resize', () => {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  });
+}
+
+// Optimización para evitar zoom en inputs
+document.addEventListener('touchstart', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+    document.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=10";
+  }
+});
+
+document.addEventListener('touchend', function() {
+  setTimeout(() => {
+    document.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+  }, 500);
+});

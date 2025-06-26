@@ -461,10 +461,10 @@
       </div>
       
       <div class="user-profile">
-        <div class="user-avatar" id="userAvatar">JD</div>
+        <div class="user-avatar" id="userAvatar"></div>
         <div class="user-info">
-          <h3 id="userName">Juan Díaz</h3>
-          <p id="userCareer">Ing. en Medio Ambiente</p>
+          <h3 id="userName"></h3>
+          <p id="userCareer"></p>
         </div>
       </div>
       
@@ -836,6 +836,42 @@
     link.addEventListener('click', function(e) {
       e.preventDefault();
       window.location.href = 'ecopuntos.html';
+    });
+  }
+});
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('Puntos de Reciclaje')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'mapa.html';
+    });
+  }
+});
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('Configuración')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'config.html';
+    });
+  }
+});
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('Beneficios')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'beneficios.html';
+    });
+  }
+});
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+  if(link.textContent.includes('Mi Progreso')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'progreso.html';
     });
   }
 });

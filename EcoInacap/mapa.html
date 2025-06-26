@@ -2,212 +2,148 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mapa de Puntos Verdes | EcoINACAP</title>
+  <title>Mapa de Puntos Verdes | INACAP Recicla</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- CSS y fuentes -->
-  <link rel="stylesheet" href="css/estilos.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  
-  <style>
-    /* Estructura principal */
-    .mapa-page {
-      display: flex;
-      min-height: 100vh;
-      font-family: 'Montserrat', sans-serif;
-    }
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-polylinedecorator@1.7.0/dist/leaflet.polylineDecorator.min.js"></script>
 
-    /* Estilos para los grupos de filtros */
-    .filtro-group {
-      margin-bottom: 25px;
+  <style>
+    /* Estilos generales */
+    :root {
+      --primary-color: #4CAF50;
+      --primary-dark: #388E3C;
+      --primary-light: #C8E6C9;
+      --text-dark: #333;
     }
     
-    .filtro-group h3 {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #a5d6a7;
-    }
-    
-    .filtro-group h3 i {
-      font-size: 1rem;
-    }
-    
-    /* Botones de filtro */
-    .filtro-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 12px 15px;
-      margin-bottom: 10px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: left;
-    }
-    
-    .filtro-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateX(5px);
-    }
-    
-    .filtro-btn.active {
-      background: #4caf50;
-      font-weight: 600;
-    }
-    
-    .filtro-btn i {
-      font-size: 1.1rem;
-      width: 20px;
-      text-align: center;
-    }
-    
-    /* Sidebar de filtros */
-    .filtros-sidebar {
-      width: 280px;
-      background: #2e7d32;
-      color: white;
-      padding: 25px 20px;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    
-    .filtros-sidebar h2 {
-      font-size: 1.5rem;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .filtros-sidebar h2 i {
-      font-size: 1.3rem;
-    }
-    
-    /* Contenedor del mapa */
-    .mapa-main {
-      flex: 1;
-      padding: 20px;
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
       background: #f5f5f5;
     }
     
-    #map {
-      height: calc(100vh - 40px);
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      border: 2px solid #81c784;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
     
-    /* Estilos para los marcadores personalizados */
-    .custom-marker {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+    /* Estilos para el botón de volver */
+    .back-to-dashboard {
+      position: absolute;
+      top: 20px;
+      right: 20px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      background-color: var(--primary-color);
       color: white;
-      font-size: 16px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      border: 2px solid white;
-      transition: all 0.3s ease;
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      z-index: 1000;
     }
     
-    .custom-marker:hover {
-      transform: scale(1.2);
-      z-index: 1000 !important;
+    .back-to-dashboard i {
+      margin-right: 5px;
     }
     
-    /* Colores según tipo de material */
-    .marker-papel {
-      background: #2196F3; /* Azul para papel */
+    .back-to-dashboard:hover {
+      background-color: var(--primary-dark);
     }
     
-    .marker-plastico {
-      background: #FF5722; /* Naranja para plástico */
+    /* Estilos para el título */
+    .page-title {
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
     }
     
-    .marker-vidrio {
-      background: #4CAF50; /* Verde para vidrio */
+    .page-description {
+      color: var(--text-dark);
+      margin-bottom: 25px;
     }
     
-    .marker-metal {
-      background: #607D8B; /* Gris azulado para metal */
+    /* Estilos específicos para el mapa */
+    .map-container {
+      height: 600px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
     
-    .marker-electronico {
-      background: #9C27B0; /* Morado para electrónicos */
+    .filters-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     }
     
-    .marker-inacap {
-      background: #1B5E20; /* Verde oscuro para INACAP */
-      width: 42px;
-      height: 42px;
-      font-size: 18px;
+    .filter-group {
+      margin-bottom: 0;
     }
     
-    .marker-user {
-      background: #E91E63; /* Rosa para ubicación usuario */
+    .filter-group h3 {
+      font-size: 1rem;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      font-weight: 600;
     }
     
-    /* Popup estilizado */
-    .leaflet-popup-content {
-      min-width: 250px;
-      font-family: 'Montserrat', sans-serif;
-    }
-    
-    .leaflet-popup-content h3 {
-      color: #2e7d32;
-      margin-top: 0;
-      font-size: 1.2rem;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 8px;
-    }
-    
-    .leaflet-popup-content p {
-      margin: 8px 0;
+    .filter-options {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
     }
     
-    .leaflet-popup-content i {
-      width: 16px;
-      color: #2e7d32;
-      text-align: center;
+    .filter-btn {
+      padding: 8px 12px;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
     
-    /* Leyenda */
-    .map-legend {
+    .filter-btn:hover {
+      background: #e0e0e0;
+    }
+    
+    .filter-btn.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .marker-emoji {
+      font-size: 30px;
+      line-height: 30px;
+      text-align: center;
+      user-select: none;
+    }
+    
+    .legend {
       position: absolute;
       bottom: 30px;
       right: 30px;
       background: white;
       padding: 15px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
       z-index: 1000;
-    }
-    
-    .map-legend h4 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      color: #2e7d32;
     }
     
     .legend-item {
@@ -221,269 +157,438 @@
       height: 20px;
       border-radius: 50%;
       margin-right: 10px;
-      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .filters-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .map-container {
+        height: 400px;
+      }
+      
+      .back-to-dashboard {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="mapa-page">
-    <!-- Sidebar de filtros -->
-    <div class="filtros-sidebar">
-      <h2><i class="fas fa-filter"></i> Filtros</h2>
-
-    <div class="filtro-group">
-      <h3><i class="fas fa-layer-group"></i> Tipo de Material</h3>
-      <button class="filtro-btn active" data-tipo="todos">
-        <i class="fas fa-th-list"></i> Todos
-      </button>
-      <button class="filtro-btn" data-tipo="papel">
-        <i class="fas fa-newspaper"></i> Papel/Cartón
-      </button>
-      <button class="filtro-btn" data-tipo="plastico">
-        <i class="fas fa-bottle-water"></i> Plástico
-      </button>
-      <button class="filtro-btn" data-tipo="vidrio">
-        <i class="fas fa-wine-bottle"></i> Vidrio
-      </button>
-      <button class="filtro-btn" data-tipo="metal">
-        <i class="fas fa-cubes"></i> Metal
-      </button>
-      <button class="filtro-btn" data-tipo="electronico">
-        <i class="fas fa-battery-full"></i> Electrónicos
-      </button>
-    </div>
-  </div>
-      
-<div class="filtro-group">
-  <h3><i class="fas fa-clock"></i> Horario</h3>
-  <button class="filtro-btn" data-tipo="manana">
-    <i class="fas fa-sun"></i> Mañana (8:00-12:00)
-  </button>
-  <button class="filtro-btn" data-tipo="tarde">
-    <i class="fas fa-cloud-sun"></i> Tarde (12:00-18:00)
-  </button>
-  <button class="filtro-btn" data-tipo="finde">
-    <i class="fas fa-calendar-weekend"></i> Fin de semana
-  </button>
-</div>
-
-<div class="filtro-group">
-  <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
-  <button class="filtro-btn" data-tipo="inacap">
-    <i class="fas fa-school"></i> Dentro de INACAP
-  </button>
-  <button class="filtro-btn" data-tipo="cercano">
-    <i class="fas fa-location-arrow"></i> Más cercanos
-  </button>
-</div>
+  <div class="container">
+    <a href="dashboard.html" class="back-to-dashboard">
+      <i class="fas fa-arrow-left"></i>
+      Volver al Panel
+    </a>
     
-    <!-- Contenido principal -->
-    <div class="mapa-main">
-      <div id="map"></div>
-    </div>
-  </div>
+    <h1 class="page-title">Mapa de Puntos Verdes</h1>
+    <p class="page-description">Encuentra el lugar más cercano para llevar tus reciclables, incluyendo dentro de INACAP Santiago Centro.</p>
+    
+    <!-- Filtros -->
+    <div class="filters-container">
+      <div class="filter-group">
+        <h3>Tipo de material</h3>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="todos">Todos</button>
+          <button class="filter-btn" data-filter="papel">Papel/Cartón</button>
+          <button class="filter-btn" data-filter="plastico">Plástico</button>
+          <button class="filter-btn" data-filter="vidrio">Vidrio</button>
+          <button class="filter-btn" data-filter="metal">Metal</button>
+          <button class="filter-btn" data-filter="electronicos">Electrónicos</button>
+        </div>
+      </div>
       
-      <!-- Leyenda -->
-      <div class="map-legend">
-        <h4><i class="fas fa-key"></i> Leyenda</h4>
-        <div class="legend-item">
-          <div class="legend-color marker-inacap"></div>
-          <span>INACAP</span>
+      <div class="filter-group">
+        <h3>Horario</h3>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="todos">Todos</button>
+          <button class="filter-btn" data-filter="manana">Mañana</button>
+          <button class="filter-btn" data-filter="tarde">Tarde</button>
+          <button class="filter-btn" data-filter="noche">Noche</button>
         </div>
-        <div class="legend-item">
-          <div class="legend-color marker-papel"></div>
-          <span>Papel/Cartón</span>
+      </div>
+      
+      <div class="filter-group">
+        <h3>Ubicación</h3>
+        <div class="filter-options">
+          <button class="filter-btn active" data-filter="todos">Todos</button>
+          <button class="filter-btn" data-filter="inacap">INACAP</button>
+          <button class="filter-btn" data-filter="cercanos">Zonas cercanas</button>
         </div>
-        <div class="legend-item">
-          <div class="legend-color marker-plastico"></div>
-          <span>Plástico</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color marker-vidrio"></div>
-          <span>Vidrio</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color marker-metal"></div>
-          <span>Metal</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color marker-electronico"></div>
-          <span>Electrónicos</span>
-        </div>
+      </div>
+    </div>
+    
+    <!-- Mapa -->
+    <div class="map-container" id="map"></div>
+    
+    <!-- Leyenda -->
+    <div class="legend">
+      <h4>Leyenda</h4>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #4CAF50;">♻️</div>
+        <span>Punto Verde</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #2196F3;">📍</div>
+        <span>Tu ubicación</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #FFC107;">🏫</div>
+        <span>INACAP</span>
       </div>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  
   <script>
-// Inicializar mapa centrado en INACAP Santiago Centro
-const map = L.map('map').setView([-33.45694, -70.64827], 15);
+    // Inicializar mapa centrado en INACAP Santiago Centro
+    const map = L.map('map').setView([-33.45694, -70.64827], 16);
 
-// Capa base del mapa
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+    // Capa base de mapa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-// Función para crear marcadores personalizados
-function crearMarcador(tipo, esInacap = false) {
-  const iconos = {
-    'papel': 'fas fa-newspaper',
-    'plastico': 'fas fa-bottle-water',
-    'vidrio': 'fas fa-wine-bottle',
-    'metal': 'fas fa-cubes',
-    'electronico': 'fas fa-battery-full',
-    'default': 'fas fa-trash-alt'
-  };
-
-  const clase = esInacap ? 'marker-inacap' : `marker-${tipo}`;
-  const icono = iconos[tipo] || iconos.default;
-
-  return L.divIcon({
-    className: '',
-    html: `
-      <div class="custom-marker ${clase}">
-        <i class="${icono}"></i>
-      </div>
-    `,
-    iconSize: esInacap ? [42, 42] : [36, 36],
-    iconAnchor: esInacap ? [21, 42] : [18, 36],
-    popupAnchor: [0, -30]
-  });
-}
-
-// Puntos de reciclaje de ejemplo
-const puntosVerdes = [{
-    nombre: "INACAP Santiago Centro - Punto Principal",
-    coords: [-33.45694, -70.64827],
-    tipo: 'papel', // Mantener 'papel' para consistencia en el filtro
-    emoji: "🏫",
-    horario: "Lunes a Viernes 8:00-20:00",
-    direccion: "Av. Vitacura 10.151, Vitacura",
-    contacto: "sustentabilidad@inacap.cl",
-    dentroInacap: true
-  },
-  {
-    nombre: "Punto Verde Plaza de Armas",
-    coords: [-33.4372, -70.6506],
-    tipo: 'plastico',
-    horario: "Lunes a Domingo 9:00-18:00",
-    direccion: "Plaza de Armas, Santiago Centro",
-    dentroInacap: false
-  },
-  {
-    nombre: "Punto Verde Parque Forestal",
-    coords: [-33.4359, -70.6422],
-    tipo: 'vidrio',
-    horario: "Martes a Domingo 10:00-19:00",
-    direccion: "Parque Forestal, Santiago",
-    dentroInacap: false
-  },
-  {
-    nombre: "Punto Verde Reciclaje Electrónico",
-    coords: [-33.4465, -70.6358],
-    tipo: 'electronico',
-    horario: "Lunes a Viernes 10:00-16:00",
-    direccion: "Av. Libertador Bernardo O'Higgins 123",
-    dentroInacap: false
-  },
-  {
-    nombre: "INACAP Santiago Centro - Punto Secundario",
-    coords: [-33.4572, -70.6471],
-    tipo: 'metal', // Mantener 'metal' para consistencia
-    horario: "Lunes a Viernes 9:00-19:00",
-    direccion: "Av. Vitacura 10.151, Vitacura",
-    contacto: "sustentabilidad@inacap.cl",
-    dentroInacap: true
-  }
-];
-
-let marcadores = [];
-
-// Función para mostrar puntos en el mapa
-function mostrarPuntos(tipo = 'todos') {
-  // Limpiar marcadores existentes
-  marcadores.forEach(marker => map.removeLayer(marker));
-  marcadores = [];
-
-  // Filtrar y agregar marcadores
-  puntosVerdes.forEach(punto => {
-    // Si el tipo es 'todos' O el tipo del punto coincide con el tipo seleccionado
-    if (tipo === 'todos' || punto.tipo === tipo) {
-      const marker = L.marker(punto.coords, {
-        icon: crearMarcador(punto.tipo, punto.dentroInacap)
-      }).addTo(map);
-
-      // Popup con información
-      marker.bindPopup(`
-        <h3>${punto.nombre}</h3>
-        <p><i class="fas fa-trash-alt"></i> <b>Tipo:</b> ${obtenerNombreTipo(punto.tipo)}</p>
-        <p><i class="fas fa-clock"></i> <b>Horario:</b> ${punto.horario}</p>
-        <p><i class="fas fa-map-marker-alt"></i> <b>Dirección:</b> ${punto.direccion}</p>
-        ${punto.contacto ? `<p><i class="fas fa-envelope"></i> <b>Contacto:</b> ${punto.contacto}</p>` : ''}
-      `);
-
-      marcadores.push(marker);
+    // Crear icono emoji para marker
+    function crearIconoEmoji(emoji) {
+      return L.divIcon({
+        className: 'marker-emoji',
+        html: emoji,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+      });
     }
-  });
-}
 
-// Función para obtener nombre completo del tipo (para mostrar en el popup)
-function obtenerNombreTipo(tipo) {
-  const nombres = {
-    'papel': 'Papel/Cartón',
-    'plastico': 'Plástico',
-    'vidrio': 'Vidrio',
-    'metal': 'Metal',
-    'electronico': 'Electrónicos'
-  };
-  return nombres[tipo] || tipo;
-}
+    // Lista de puntos verdes (incluyendo INACAP)
+    const puntosVerdes = [
+      {
+        nombre: "INACAP Santiago Centro",
+        coords: [-33.443469, -70.661982],
+        tipo: ['papel', 'plastico', 'vidrio', 'metal', 'electronicos'],
+        emoji: "🏫",
+        horario: "Lunes a Viernes 8:00-20:00",
+        direccion: "Ubicado entre calles Moneda, Erasmo Escala y Almirante Barroso (cerca Estación Los Héroes L1-L2)",
+        contacto: "reciclaje@inacap.cl",
+        sitio: "https://www.inacap.cl",
+        descripcion: "Sede principal de INACAP en Santiago Centro. Puntos de reciclaje distribuidos en el campus. Acceso cercano al metro Los Héroes.",
+        ubicacion: "inacap"
+      },
+      {
+        nombre: "Punto Verde - Plaza de Armas",
+        coords: [-33.4372, -70.6506],
+        tipo: ['papel', 'plastico'],
+        emoji: "♻️",
+        horario: "Lunes a Viernes 9:00-17:00",
+        direccion: "Plaza de Armas, Santiago Centro",
+        contacto: "plaza@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/plaza",
+        descripcion: "Ubicado en el corazón de Santiago. Ideal para reciclaje rápido con buena conectividad.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - Parque Forestal",
+        coords: [-33.4359, -70.6422],
+        tipo: ['vidrio'],
+        emoji: "🌳",
+        horario: "Todos los días 10:00-18:00",
+        direccion: "Av. Cardenal José María Caro, Santiago",
+        contacto: "forestal@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/forestal",
+        descripcion: "Rodeado de naturaleza. Perfecto para reciclaje de vidrio en un ambiente tranquilo.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - Estación Central",
+        coords: [-33.4562, -70.6812],
+        tipo: ['papel', 'electronicos'],
+        emoji: "🚉",
+        horario: "Lunes a Sábado 8:00-16:00",
+        direccion: "Alameda 3500, Estación Central",
+        contacto: "central@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/central",
+        descripcion: "Alta afluencia de público. Perfecto para estudiantes y trabajadores.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - Ñuñoa",
+        coords: [-33.4568, -70.6046],
+        tipo: ['plastico', 'vidrio', 'metal'],
+        emoji: "🏞️",
+        horario: "Lunes a Viernes 9:00-17:00, Sábado 10:00-14:00",
+        direccion: "Av. Irarrázaval 2400, Ñuñoa",
+        contacto: "nunoa@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/nunoa",
+        descripcion: "Punto moderno con contenedores bien señalizados. Zona segura y accesible.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - La Reina",
+        coords: [-33.4410, -70.5390],
+        tipo: ['papel', 'plastico'],
+        emoji: "🏡",
+        horario: "Sábado y Domingo 11:00-15:00",
+        direccion: "Av. Príncipe de Gales 6000, La Reina",
+        contacto: "lareina@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/lareina",
+        descripcion: "Zona residencial ideal para llevar reciclaje familiar durante el fin de semana.",
+        ubicacion: "cercanos",
+        horarioTipo: "tarde"
+      },
+      {
+        nombre: "Punto Verde - Providencia",
+        coords: [-33.4253, -70.6171],
+        tipo: ['vidrio', 'metal'],
+        emoji: "🏙️",
+        horario: "Lunes a Viernes 10:00-17:00, Jueves hasta 20:00",
+        direccion: "Av. Providencia 1500, Providencia",
+        contacto: "providencia@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/providencia",
+        descripcion: "Zona comercial con buen acceso en transporte público.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde,noche"
+      },
+      {
+        nombre: "Punto Verde - Las Condes",
+        coords: [-33.4085, -70.5707],
+        tipo: ['plastico', 'electronicos'],
+        emoji: "🏢",
+        horario: "Todos los días 9:00-18:00",
+        direccion: "Av. Apoquindo 5000, Las Condes",
+        contacto: "lascondes@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/lascondes",
+        descripcion: "Espacio moderno con servicios digitales y zona tech-friendly.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - Maipú",
+        coords: [-33.5152, -70.7566],
+        tipo: ['papel', 'plastico', 'vidrio', 'metal', 'electronicos'],
+        emoji: "🌆",
+        horario: "Lunes a Domingo 9:00-19:00",
+        direccion: "Av. Pajaritos 3500, Maipú",
+        contacto: "maipu@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/maipu",
+        descripcion: "Centro de reciclaje integral para toda la comuna de Maipú.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      },
+      {
+        nombre: "Punto Verde - Recoleta",
+        coords: [-33.4128, -70.6414],
+        tipo: ['vidrio', 'papel', 'metal'],
+        emoji: "🏛️",
+        horario: "Miércoles a Domingo 10:00-18:00",
+        direccion: "Av. Recoleta 2500, Recoleta",
+        contacto: "recoleta@puntosverdes.cl",
+        sitio: "https://www.puntosverdes.cl/recoleta",
+        descripcion: "Sector histórico con compromiso comunitario con el reciclaje.",
+        ubicacion: "cercanos",
+        horarioTipo: "manana,tarde"
+      }
+    ];
 
-// Mostrar todos los puntos al cargar
-mostrarPuntos('todos');
+    let marcadores = [];
+    let userMarker = null;
+    let inacapMarker = null;
+    let routingControl = null;
 
-// Geolocalización del usuario
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(pos => {
-    const userLat = pos.coords.latitude;
-    const userLng = pos.coords.longitude;
+    // Función para mostrar puntos según filtros
+    function mostrarPuntos() {
+      // Obtener filtros activos
+      const materialFilter = document.querySelector('.filter-options button[data-filter].active[data-filter-group="material"]')?.dataset.filter || 'todos';
+      const horarioFilter = document.querySelector('.filter-options button[data-filter].active[data-filter-group="horario"]')?.dataset.filter || 'todos';
+      const ubicacionFilter = document.querySelector('.filter-options button[data-filter].active[data-filter-group="ubicacion"]')?.dataset.filter || 'todos';
+      
+      // Eliminar marcadores anteriores (excepto INACAP y usuario)
+      marcadores.forEach(m => {
+        if (m !== inacapMarker && m !== userMarker) {
+          map.removeLayer(m);
+        }
+      });
+      marcadores = [];
+      
+      if (inacapMarker) marcadores.push(inacapMarker);
+      if (userMarker) marcadores.push(userMarker);
+      
+      // Agregar puntos según filtros
+      puntosVerdes.forEach(p => {
+        // Verificar filtros
+        const materialMatch = materialFilter === 'todos' || p.tipo.includes(materialFilter);
+        const horarioMatch = horarioFilter === 'todos' || (p.horarioTipo && p.horarioTipo.includes(horarioFilter));
+        const ubicacionMatch = ubicacionFilter === 'todos' || p.ubicacion === ubicacionFilter;
+        
+        if (materialMatch && horarioMatch && ubicacionMatch) {
+          const marker = L.marker(p.coords, {icon: crearIconoEmoji(p.emoji)}).addTo(map)
+            .bindPopup(`
+              <strong>${p.emoji} ${p.nombre}</strong><br>
+              🗑️ <b>Materiales:</b> ${p.tipo.map(t => {
+                switch(t) {
+                  case 'papel': return 'Papel/Cartón';
+                  case 'plastico': return 'Plástico';
+                  case 'vidrio': return 'Vidrio';
+                  case 'metal': return 'Metal';
+                  case 'electronicos': return 'Electrónicos';
+                  default: return t;
+                }
+              }).join(', ')}<br>
+              🕓 <b>Horario:</b> ${p.horario}<br>
+              📍 <b>Dirección:</b> ${p.direccion}<br>
+              📞 <b>Contacto:</b> ${p.contacto}<br>
+              🌐 <a href="${p.sitio}" target="_blank">Visitar sitio</a><br>
+              📝 <em>${p.descripcion}</em>
+              <div style="margin-top: 10px;">
+                <button onclick="calcularRuta(${p.coords[0]}, ${p.coords[1]})" style="background: var(--primary-color); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                  🚶‍♂️ Cómo llegar
+                </button>
+              </div>
+            `);
+          marcadores.push(marker);
+        }
+      });
+    }
 
-    // Marcador para la ubicación del usuario
-    const userIcon = L.divIcon({
-      className: '',
-      html: `
-        <div class="custom-marker marker-user">
-          <i class="fas fa-user"></i>
-        </div>
-      `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32]
+    // Función para calcular ruta
+    function calcularRuta(lat, lng) {
+      if (!userMarker) {
+        alert("No se ha detectado tu ubicación. Asegúrate de permitir el acceso a tu ubicación.");
+        return;
+      }
+      
+      // Eliminar ruta anterior
+      if (routingControl) {
+        map.removeControl(routingControl);
+      }
+      
+      // Obtener coordenadas del usuario
+      const userCoords = userMarker.getLatLng();
+      
+      // Configurar el control de ruteo
+      routingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(userCoords.lat, userCoords.lng),
+          L.latLng(lat, lng)
+        ],
+        routeWhileDragging: true,
+        showAlternatives: true,
+        collapsible: true,
+        fitSelectedRoutes: 'smart',
+        lineOptions: {
+          styles: [{color: '#009688', opacity: 0.7, weight: 5}]
+        },
+        createMarker: function() { return null; } // No mostrar marcadores adicionales
+      }).addTo(map);
+    }
+
+    // Inicializar filtros
+    function initFilters() {
+      // Agrupar botones por tipo de filtro
+      const materialButtons = document.querySelectorAll('.filter-options button[data-filter]:nth-child(1), .filter-options button[data-filter]:nth-child(2), .filter-options button[data-filter]:nth-child(3), .filter-options button[data-filter]:nth-child(4), .filter-options button[data-filter]:nth-child(5), .filter-options button[data-filter]:nth-child(6)');
+      const horarioButtons = document.querySelectorAll('.filter-options button[data-filter]:nth-child(7), .filter-options button[data-filter]:nth-child(8), .filter-options button[data-filter]:nth-child(9), .filter-options button[data-filter]:nth-child(10)');
+      const ubicacionButtons = document.querySelectorAll('.filter-options button[data-filter]:nth-child(11), .filter-options button[data-filter]:nth-child(12), .filter-options button[data-filter]:nth-child(13)');
+      
+      // Agregar atributos data-filter-group
+      materialButtons.forEach(btn => btn.dataset.filterGroup = 'material');
+      horarioButtons.forEach(btn => btn.dataset.filterGroup = 'horario');
+      ubicacionButtons.forEach(btn => btn.dataset.filterGroup = 'ubicacion');
+      
+      // Manejar clics en los botones de filtro
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filterGroup = this.dataset.filterGroup;
+          
+          // Desactivar otros botones del mismo grupo
+          document.querySelectorAll(`.filter-btn[data-filter-group="${filterGroup}"]`).forEach(b => {
+            b.classList.remove('active');
+          });
+          
+          // Activar este botón
+          this.classList.add('active');
+          
+          // Actualizar puntos
+          mostrarPuntos();
+        });
+      });
+    }
+
+    // Cargar Leaflet Routing Machine dinámicamente
+    function loadLeafletRoutingMachine() {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
+      script.onload = function() {
+        // También necesitamos el CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
+        document.head.appendChild(link);
+        
+        // Inicializar mapa completamente
+        initMap();
+      };
+      document.head.appendChild(script);
+    }
+
+    // Inicializar mapa completamente
+    function initMap() {
+      // Agregar marcador de INACAP Santiago Centro con ubicación exacta
+      inacapMarker = L.marker([-33.443469, -70.661982], {
+        icon: L.icon({
+          iconUrl: 'https://cdn-icons-png.flaticon.com/512/197/197586.png',
+          iconSize: [30, 30],
+          iconAnchor: [15, 30],
+        })
+      }).addTo(map).bindPopup(`
+        <strong>🏫 INACAP Santiago Centro</strong><br>
+        🗑️ <b>Materiales:</b> Papel/Cartón, Plástico, Vidrio, Metal, Electrónicos<br>
+        🕓 <b>Horario:</b> Lunes a Viernes 8:00-20:00<br>
+        📍 <b>Dirección:</b> Ubicado entre calles Moneda, Erasmo Escala y Almirante Barroso (cerca Estación Los Héroes L1-L2)<br>
+        📞 <b>Contacto:</b> reciclaje@inacap.cl<br>
+        🌐 <a href="https://www.inacap.cl" target="_blank">Visitar sitio</a><br>
+        📝 <em>Sede principal de INACAP en Santiago Centro. Puntos de reciclaje distribuidos en el campus. Acceso cercano al metro Los Héroes.</em>
+      `);
+      marcadores.push(inacapMarker);
+      
+      // Intentar geolocalización del usuario
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        
+        userMarker = L.marker([lat, lng], {
+          icon: L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/447/447031.png',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+          })
+        }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
+        marcadores.push(userMarker);
+        
+        // Ajustar vista para mostrar INACAP y usuario
+        const group = new L.featureGroup([inacapMarker, userMarker]);
+        map.fitBounds(group.getBounds().pad(0.5));
+      }, err => {
+        console.warn("Ubicación no detectada:", err.message);
+      });
+      
+      // Mostrar todos los puntos inicialmente
+      mostrarPuntos();
+    }
+
+    // Inicializar la aplicación
+    document.addEventListener('DOMContentLoaded', function() {
+      initFilters();
+      loadLeafletRoutingMachine();
     });
-
-    L.marker([userLat, userLng], {
-      icon: userIcon
-    }).addTo(map).bindPopup("<b>Tu ubicación actual</b>");
-
-    // Centrar mapa en la ubicación del usuario (con zoom intermedio)
-    map.setView([userLat, userLng], 14);
-  }, () => {
-    console.log("No se pudo obtener la ubicación del usuario");
-  });
-}
-
-// Event listeners para los filtros
-document.querySelectorAll('.filtro-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const tipo = this.getAttribute('data-tipo');
-    mostrarPuntos(tipo);
-
-    // Actualizar clase activa
-    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
   </script>
 </body>
 </html>

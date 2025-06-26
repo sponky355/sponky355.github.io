@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoINACAP - Beneficios</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos base del dashboard (igual que en el código original) */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 30px 20px;
+      position: relative;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'Raleway', sans-serif;
+      color: white;
+    }
+    
+    .sidebar-logo span {
+      color: var(--primary-light);
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-right: 15px;
+      color: var(--primary-dark);
+    }
+    
+    .user-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+    
+    .user-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 10px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-link.active {
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .logout-btn i {
+      margin-right: 10px;
+    }
+    
+    .main-content {
+      padding: 30px;
+      background: #f5f5f5;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .dashboard-title {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+    }
+    
+    /* Estilos específicos para Beneficios */
+    .benefits-tabs {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 30px;
+    }
+    
+    .benefits-tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-dark);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .benefits-tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    .benefits-tab:hover:not(.active) {
+      color: var(--primary-dark);
+      border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .benefits-content {
+      display: none;
+    }
+    
+    .benefits-content.active {
+      display: block;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+    
+    .benefit-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .benefit-image {
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    .benefit-category {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .benefit-content {
+      padding: 20px;
+    }
+    
+    .benefit-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+    }
+    
+    .benefit-description {
+      font-size: 0.9rem;
+      color: #757575;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    
+    .benefit-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+    
+    .benefit-points {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    .redeem-btn {
+      padding: 8px 15px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .redeem-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .redeem-btn:disabled {
+      background: #e0e0e0;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    
+    .featured-benefits {
+      margin-bottom: 40px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 1.3rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    
+    .section-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .my-benefits {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+    
+    .benefit-list {
+      list-style: none;
+    }
+    
+    .benefit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .benefit-item:last-child {
+      border-bottom: none;
+    }
+    
+    .benefit-item-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .benefit-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e3f2fd;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1rem;
+    }
+    
+    .benefit-item-details h4 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: var(--text-dark);
+    }
+    
+    .benefit-item-details p {
+      font-size: 0.8rem;
+      color: #757575;
+    }
+    
+    .benefit-item-code {
+      font-weight: 600;
+      color: var(--primary-color);
+      background: #f5f5f5;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    
+    .no-benefits {
+      text-align: center;
+      padding: 40px 0;
+      color: #757575;
+    }
+    
+    .no-benefits i {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #e0e0e0;
+    }
+    
+    @media (max-width: 992px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .benefits-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar Navigation (igual que en el original) -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">Eco<span>INACAP</span></div>
+      </div>
+      
+      <div class="user-profile">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-info">
+          <h3 id="userName"></h3>
+          <p id="userCareer"></p>
+        </div>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="ecopuntos.html" class="nav-link">
+            <i class="fas fa-coins"></i>
+            <span>EcoPuntos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="mapa.html" class="nav-link">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Puntos de Reciclaje</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="beneficios.html" class="nav-link active">
+            <i class="fas fa-gift"></i>
+            <span>Beneficios</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="oportunidades-laborales.html" class="nav-link">
+            <i class="fas fa-briefcase"></i>
+            <span>Oportunidades laborales</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="progreso.html" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Mi Progreso</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+      
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Beneficios EcoINACAP</h1>
+        <div class="header-actions">
+          <button class="home-btn" id="homeBtn" title="Volver al inicio">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Pestañas de Beneficios -->
+      <div class="benefits-tabs">
+        <div class="benefits-tab active" data-tab="available">Disponibles</div>
+        <div class="benefits-tab" data-tab="my-benefits">Mis Beneficios</div>
+        <div class="benefits-tab" data-tab="history">Historial</div>
+      </div>
+      
+      <!-- Contenido de Beneficios Disponibles -->
+      <div class="benefits-content active" id="available-tab">
+        <div class="featured-benefits">
+          <div class="section-header">
+            <h2 class="section-title">Destacados</h2>
+            <a href="#" class="section-link">Ver todos</a>
+          </div>
+          
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');">
+                <span class="benefit-category">Cafetería</span>
+              </div>
+              <div class="benefit-content">
+                <h3 class="benefit-title">Café + Sandwich</h3>
+                <p class="benefit-description">Disfruta de un café americano y un sandwich de jamón y queso en la cafetería central.</p>
+                <div class="benefit-footer">
+                  <span class="benefit-points">150 pts</span>
+                  <button class="redeem-btn">Canjear</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="benefit-card">
+              <div class="benefit-image" style="background-image: url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');">
+                <span class="benefit-category">Libros</span>
+              </div>
+              <div class="benefit-content">
+                <h3 class="benefit-title">Libro de Apuntes</h3>
+                <p class="benefit-description">Canjea este cupón por un libro de apuntes de 100 hojas en la biblioteca.</p>
+                <div class="benefit-footer">
+                  <span class="benefit-points">250 pts</span>
+                  <button class="redeem-btn">Canjear</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="benefit-card">
+              <div class="benefit-image" style="background-image: url('https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');">
+                <span class="benefit-category">Merchandising</span>
+              </div>
+              <div class="benefit-content">
+                <h3 class="benefit-title">Polera EcoINACAP</h3>
+                <p class="benefit-description">Polera oficial de EcoINACAP, disponible en tallas S a XL.</p>
+                <div class="benefit-footer">
+                  <span class="benefit-points">500 pts</span>
+                  <button class="redeem-btn" disabled>Faltan 150 pts</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section-header">
+          <h2 class="section-title">Todos los Beneficios</h2>
+          <div class="filter-group">
+            <select class="form-control" style="width: 200px; padding: 8px;">
+              <option>Filtrar por categoría</option>
+              <option>Cafetería</option>
+              <option>Libros</option>
+              <option>Merchandising</option>
+              <option>Descuentos</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #e3f2fd; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-coffee" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Café Americano</h3>
+              <p class="benefit-description">Un café americano gratis en cualquier cafetería INACAP.</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">100 pts</span>
+                <button class="redeem-btn">Canjear</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #e8f5e9; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-ticket-alt" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Entrada de Cine</h3>
+              <p class="benefit-description">Entrada 2D para cualquier película en CineHoyts.</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">300 pts</span>
+                <button class="redeem-btn">Canjear</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #fff8e1; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-tshirt" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Polera Ecológica</h3>
+              <p class="benefit-description">Polera hecha de materiales reciclados, talla única.</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">400 pts</span>
+                <button class="redeem-btn">Canjear</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #f3e5f5; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-book" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Libro Sustentabilidad</h3>
+              <p class="benefit-description">Libro "Guía de Sustentabilidad para Principiantes".</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">350 pts</span>
+                <button class="redeem-btn">Canjear</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #e0f7fa; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-mug-hot" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Taza Térmica</h3>
+              <p class="benefit-description">Taza térmica reusable con logo de EcoINACAP.</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">450 pts</span>
+                <button class="redeem-btn" disabled>Faltan 50 pts</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-image" style="background-color: #e8eaf6; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-headphones" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-title">Descuento Spotify</h3>
+              <p class="benefit-description">3 meses de Spotify Premium con 50% de descuento.</p>
+              <div class="benefit-footer">
+                <span class="benefit-points">200 pts</span>
+                <button class="redeem-btn">Canjear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Contenido de Mis Beneficios -->
+      <div class="benefits-content" id="my-benefits-tab">
+        <div class="my-benefits">
+          <h2 class="section-title">Mis Beneficios Activos</h2>
+          
+          <ul class="benefit-list">
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-coffee"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Café Americano</h4>
+                  <p>Canjeado el 15/06/2023</p>
+                </div>
+              </div>
+              <div class="benefit-item-code">CAFE-2023-15</div>
+            </li>
+            
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Entrada de Cine</h4>
+                  <p>Canjeado el 05/06/2023 - Vence el 05/09/2023</p>
+                </div>
+              </div>
+              <div class="benefit-item-code">CINE-5678</div>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="my-benefits">
+          <h2 class="section-title">Beneficios Expirados</h2>
+          
+          <ul class="benefit-list">
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon" style="background: #e0e0e0; color: #9e9e9e;">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Libro de Apuntes</h4>
+                  <p>Canjeado el 20/05/2023 - Expirado</p>
+                </div>
+              </div>
+              <div class="benefit-item-code" style="color: #9e9e9e;">LIB-2023-20</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Contenido de Historial -->
+      <div class="benefits-content" id="history-tab">
+        <div class="my-benefits">
+          <h2 class="section-title">Historial de Canjes</h2>
+          
+          <ul class="benefit-list">
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-coffee"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Café Americano</h4>
+                  <p>Canjeado el 15/06/2023 - 100 pts</p>
+                </div>
+              </div>
+              <div class="benefit-points">-100 pts</div>
+            </li>
+            
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Entrada de Cine</h4>
+                  <p>Canjeado el 05/06/2023 - 300 pts</p>
+                </div>
+              </div>
+              <div class="benefit-points">-300 pts</div>
+            </li>
+            
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Libro de Apuntes</h4>
+                  <p>Canjeado el 20/05/2023 - 250 pts</p>
+                </div>
+              </div>
+              <div class="benefit-points">-250 pts</div>
+            </li>
+            
+            <li class="benefit-item">
+              <div class="benefit-item-info">
+                <div class="benefit-item-icon">
+                  <i class="fas fa-coffee"></i>
+                </div>
+                <div class="benefit-item-details">
+                  <h4>Café + Sandwich</h4>
+                  <p>Canjeado el 10/04/2023 - 150 pts</p>
+                </div>
+              </div>
+              <div class="benefit-points">-150 pts</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('ecoUserLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem('ecoUserData')) || {
+      name: 'Juan Díaz',
+      email: 'juan.diaz@inacapmail.cl',
+      career: 'Ing. en Medio Ambiente',
+      points: 1250,
+      level: 3
+    };
+    
+    // Display user data
+    document.getElementById('userName').textContent = userData.name;
+    document.getElementById('userCareer').textContent = userData.career;
+    
+    // Generate avatar initials
+    const initials = userData.name.split(' ').map(n => n[0]).join('');
+    document.getElementById('userAvatar').textContent = initials;
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('ecoUserLoggedIn');
+      window.location.href = 'login.html';
+    });
+
+    // Home button functionality
+    document.getElementById('homeBtn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+    
+    // Tab functionality
+    document.querySelectorAll('.benefits-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.benefits-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.benefits-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked tab and corresponding content
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(`${tabId}-tab`).classList.add('active');
+      });
+    });
+    
+    // Redeem functionality
+    document.querySelectorAll('.redeem-btn').forEach(btn => {
+      if (!btn.disabled) {
+        btn.addEventListener('click', function() {
+          const pointsNeeded = parseInt(this.parentElement.querySelector('.benefit-points').textContent);
+          const benefitTitle = this.closest('.benefit-card').querySelector('.benefit-title').textContent;
+          
+          if (userData.points >= pointsNeeded) {
+            if (confirm(`¿Confirmar canje de "${benefitTitle}" por ${pointsNeeded} EcoPuntos?`)) {
+              userData.points -= pointsNeeded;
+              localStorage.setItem('ecoUserData', JSON.stringify(userData));
+              
+              // Show success message
+              alert(`¡Beneficio canjeado con éxito! Código: ${benefitTitle.toUpperCase().substr(0,4)}-${Math.floor(1000 + Math.random() * 9000)}`);
+              
+              // In a real app, you would redirect to "My Benefits" or update the UI
+            }
+          } else {
+            alert('No tienes suficientes EcoPuntos para este beneficio');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

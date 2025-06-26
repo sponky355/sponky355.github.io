@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoINACAP - Configuración de Cuenta</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .dashboard {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 30px 20px;
+      position: relative;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'Raleway', sans-serif;
+      color: white;
+    }
+    
+    .sidebar-logo span {
+      color: var(--primary-light);
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-right: 15px;
+      color: var(--primary-dark);
+    }
+    
+    .user-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+    
+    .user-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 10px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-link.active {
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .logout-btn i {
+      margin-right: 10px;
+    }
+    
+    .main-content {
+      padding: 30px;
+      background: #f5f5f5;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .dashboard-title {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+    }
+    
+    .notification-btn {
+      position: relative;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      cursor: pointer;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary-color);
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Configuración específica */
+    .settings-container {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .settings-tabs {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 30px;
+    }
+    
+    .settings-tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-dark);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .settings-tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    .settings-tab:hover:not(.active) {
+      color: var(--primary-dark);
+      border-bottom-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .settings-content {
+      display: none;
+    }
+    
+    .settings-content.active {
+      display: block;
+    }
+    
+    .settings-section {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .avatar-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .avatar-preview .initials {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-dark);
+    }
+    
+    .avatar-upload-btn {
+      padding: 10px 15px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .avatar-upload-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary {
+      padding: 12px 25px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      padding: 12px 25px;
+      background: #f5f5f5;
+      color: var(--text-dark);
+      border: none;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 10px;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    .privacy-options {
+      margin-top: 20px;
+    }
+    
+    .privacy-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .privacy-option input {
+      margin-right: 10px;
+    }
+    
+    .privacy-option label {
+      cursor: pointer;
+    }
+    
+    .danger-zone {
+      border: 1px solid #ffcdd2;
+      border-radius: 6px;
+      padding: 20px;
+      background: #ffebee;
+      margin-top: 40px;
+    }
+    
+    .danger-zone-title {
+      color: #c62828;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+    
+    .danger-zone-text {
+      color: #b71c1c;
+      margin-bottom: 20px;
+    }
+    
+    .btn-danger {
+      padding: 12px 25px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+      background: #b71c1c;
+    }
+    
+    @media (max-width: 992px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: none;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">Eco<span>INACAP</span></div>
+      </div>
+      
+      <div class="user-profile">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-info">
+          <h3 id="userName"></h3>
+          <p id="userCareer"></p>
+        </div>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="ecopuntos.html" class="nav-link">
+            <i class="fas fa-coins"></i>
+            <span>EcoPuntos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="mapa.html" class="nav-link">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Puntos de Reciclaje</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="beneficios.html" class="nav-link">
+            <i class="fas fa-gift"></i>
+            <span>Beneficios</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="oportunidades-laborales.html" class="nav-link">
+            <i class="fas fa-briefcase"></i>
+            <span>Oportunidades laborales</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="progreso.html" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Mi Progreso</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="config.html" class="nav-link active">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+      
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Configuración de Cuenta</h1>
+        <div class="header-actions">
+          <button class="home-btn" id="homeBtn" title="Volver al inicio">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="settings-container">
+        <div class="settings-tabs">
+          <div class="settings-tab active" data-tab="profile">Perfil</div>
+          <div class="settings-tab" data-tab="privacy">Privacidad</div>
+          <div class="settings-tab" data-tab="notifications">Notificaciones</div>
+          <div class="settings-tab" data-tab="security">Seguridad</div>
+        </div>
+        
+        <!-- Perfil Tab -->
+        <div class="settings-content active" id="profile-tab">
+          <div class="settings-section">
+            <h3 class="section-title">Información Personal</h3>
+            
+            <div class="avatar-upload">
+              <div class="avatar-preview" id="avatarPreview">
+                <div class="initials" id="avatarInitials"></div>
+                <img id="avatarImage" style="display: none;">
+              </div>
+              <div>
+                <button class="avatar-upload-btn" id="uploadAvatarBtn">Cambiar foto</button>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                <p class="text-muted" style="margin-top: 10px; font-size: 0.8rem;">Formatos permitidos: JPG, PNG (Max. 2MB)</p>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName" class="form-label">Nombre</label>
+                <input type="text" id="firstName" class="form-control" value="Juan">
+              </div>
+              <div class="form-group">
+                <label for="lastName" class="form-label">Apellido</label>
+                <input type="text" id="lastName" class="form-control" value="Díaz">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" id="email" class="form-control" value="juan.diaz@inacapmail.cl" disabled>
+              <p class="text-muted" style="margin-top: 5px; font-size: 0.8rem;">Para cambiar tu correo electrónico, contacta al soporte.</p>
+            </div>
+            
+            <div class="form-group">
+              <label for="career" class="form-label">Carrera</label>
+              <select id="career" class="form-control">
+                <option value="Ing. en Medio Ambiente">Ing. en Medio Ambiente</option>
+                <option value="Ing. en Energías Renovables">Ing. en Energías Renovables</option>
+                <option value="Téc. en Reciclaje">Téc. en Reciclaje</option>
+                <option value="Téc. en Sustentabilidad">Téc. en Sustentabilidad</option>
+                <option value="Otro">Otra carrera</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="bio" class="form-label">Biografía (Opcional)</label>
+              <textarea id="bio" class="form-control" rows="3" placeholder="Cuéntanos sobre ti y tu interés por el medio ambiente...">Apasionado por la sustentabilidad y el reciclaje. Participante activo en iniciativas ecológicas.</textarea>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3 class="section-title">Preferencias</h3>
+            
+            <div class="form-group">
+              <label for="theme" class="form-label">Tema de la aplicación</label>
+              <select id="theme" class="form-control">
+                <option value="light">Claro</option>
+                <option value="dark">Oscuro</option>
+                <option value="system">Sistema</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="language" class="form-label">Idioma</label>
+              <select id="language" class="form-control">
+                <option value="es">Español</option>
+                <option value="en">Inglés</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <button class="btn-primary" id="saveProfileBtn">Guardar cambios</button>
+            <button class="btn-secondary" id="cancelProfileBtn">Cancelar</button>
+          </div>
+        </div>
+        
+        <!-- Privacidad Tab -->
+        <div class="settings-content" id="privacy-tab">
+          <div class="settings-section">
+            <h3 class="section-title">Configuración de Privacidad</h3>
+            
+            <div class="privacy-options">
+              <h4>Visibilidad del perfil</h4>
+              <div class="privacy-option">
+                <input type="radio" id="privacy-public" name="privacy" checked>
+                <label for="privacy-public">Público (cualquier usuario puede ver tu perfil)</label>
+              </div>
+              <div class="privacy-option">
+                <input type="radio" id="privacy-friends" name="privacy">
+                <label for="privacy-friends">Solo amigos (usuarios que sigues)</label>
+              </div>
+              <div class="privacy-option">
+                <input type="radio" id="privacy-private" name="privacy">
+                <label for="privacy-private">Privado (solo tú puedes ver tu perfil)</label>
+              </div>
+            </div>
+            
+            <div class="privacy-options" style="margin-top: 30px;">
+              <h4>Actividad</h4>
+              <div class="privacy-option">
+                <input type="checkbox" id="show-recycling" checked>
+                <label for="show-recycling">Mostrar mis actividades de reciclaje</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="show-benefits" checked>
+                <label for="show-benefits">Mostrar beneficios que he canjeado</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="show-ranking" checked>
+                <label for="show-ranking">Mostrar mi posición en el ranking</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <button class="btn-primary" id="savePrivacyBtn">Guardar configuración</button>
+          </div>
+        </div>
+        
+        <!-- Notificaciones Tab -->
+        <div class="settings-content" id="notifications-tab">
+          <div class="settings-section">
+            <h3 class="section-title">Preferencias de Notificaciones</h3>
+            
+            <div class="privacy-options">
+              <h4>Notificaciones por correo</h4>
+              <div class="privacy-option">
+                <input type="checkbox" id="email-activity" checked>
+                <label for="email-activity">Actividad reciente</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="email-benefits" checked>
+                <label for="email-benefits">Nuevos beneficios disponibles</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="email-events">
+                <label for="email-events">Eventos y talleres</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="email-newsletter" checked>
+                <label for="email-newsletter">Boletín mensual EcoINACAP</label>
+              </div>
+            </div>
+            
+            <div class="privacy-options" style="margin-top: 30px;">
+              <h4>Notificaciones en la aplicación</h4>
+              <div class="privacy-option">
+                <input type="checkbox" id="app-activity" checked>
+                <label for="app-activity">Actividad reciente</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="app-benefits" checked>
+                <label for="app-benefits">Nuevos beneficios disponibles</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="app-ranking" checked>
+                <label for="app-ranking">Cambios en el ranking</label>
+              </div>
+              <div class="privacy-option">
+                <input type="checkbox" id="app-events" checked>
+                <label for="app-events">Eventos y talleres</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <button class="btn-primary" id="saveNotificationsBtn">Guardar preferencias</button>
+          </div>
+        </div>
+        
+        <!-- Seguridad Tab -->
+        <div class="settings-content" id="security-tab">
+          <div class="settings-section">
+            <h3 class="section-title">Seguridad de la Cuenta</h3>
+            
+            <div class="form-group">
+              <label for="currentPassword" class="form-label">Contraseña Actual</label>
+              <input type="password" id="currentPassword" class="form-control" placeholder="Ingresa tu contraseña actual">
+            </div>
+            
+            <div class="form-group">
+              <label for="newPassword" class="form-label">Nueva Contraseña</label>
+              <input type="password" id="newPassword" class="form-control" placeholder="Ingresa tu nueva contraseña">
+              <p class="text-muted" style="margin-top: 5px; font-size: 0.8rem;">La contraseña debe tener al menos 8 caracteres, incluyendo números y letras.</p>
+            </div>
+            
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+              <input type="password" id="confirmPassword" class="form-control" placeholder="Confirma tu nueva contraseña">
+            </div>
+            
+            <div class="form-group">
+              <button class="btn-primary" id="changePasswordBtn">Cambiar contraseña</button>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3 class="section-title">Sesiones Activas</h3>
+            <p>Estás conectado desde los siguientes dispositivos:</p>
+            
+            <div style="background: #f9f9f9; border-radius: 6px; padding: 15px; margin-top: 15px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                  <strong>Chrome - Windows 10</strong>
+                  <p style="margin: 5px 0 0; font-size: 0.9rem;">Santiago, Chile - Esta sesión</p>
+                </div>
+                <button class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;" disabled>Actual</button>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid #eee;">
+                <div>
+                  <strong>Safari - iPhone</strong>
+                  <p style="margin: 5px 0 0; font-size: 0.9rem;">Santiago, Chile - Hace 2 días</p>
+                </div>
+                <button class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Cerrar sesión</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="danger-zone">
+            <h4 class="danger-zone-title">Zona de Peligro</h4>
+            <p class="danger-zone-text">Eliminar tu cuenta es una acción permanente. Todos tus datos, incluyendo EcoPuntos y beneficios, serán eliminados y no podrán recuperarse.</p>
+            <button class="btn-danger" id="deleteAccountBtn">Eliminar mi cuenta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('ecoUserLoggedIn')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem('ecoUserData')) || {
+      name: 'Juan Díaz',
+      email: 'juan.diaz@inacapmail.cl',
+      career: 'Ing. en Medio Ambiente',
+      points: 1250,
+      level: 3
+    };
+    
+    // Display user data
+    document.getElementById('userName').textContent = userData.name;
+    document.getElementById('userCareer').textContent = userData.career;
+    
+    // Generate avatar initials
+    const initials = userData.name.split(' ').map(n => n[0]).join('');
+    document.getElementById('userAvatar').textContent = initials;
+    document.getElementById('avatarInitials').textContent = initials;
+    
+    // Tab functionality
+    document.querySelectorAll('.settings-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.settings-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked tab and corresponding content
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(`${tabId}-tab`).classList.add('active');
+      });
+    });
+    
+    // Avatar upload functionality
+    document.getElementById('uploadAvatarBtn').addEventListener('click', function() {
+      document.getElementById('avatarInput').click();
+    });
+    
+    document.getElementById('avatarInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById('avatarImage').src = event.target.result;
+          document.getElementById('avatarImage').style.display = 'block';
+          document.getElementById('avatarInitials').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('ecoUserLoggedIn');
+      window.location.href = 'login.html';
+    });
+
+    // Home button functionality
+    document.getElementById('homeBtn').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+    
+    // Save profile functionality
+    document.getElementById('saveProfileBtn').addEventListener('click', function() {
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const career = document.getElementById('career').value;
+      const bio = document.getElementById('bio').value;
+      
+      // Update user data
+      userData.name = `${firstName} ${lastName}`;
+      userData.career = career;
+      userData.bio = bio;
+      
+      // Save to localStorage
+      localStorage.setItem('ecoUserData', JSON.stringify(userData));
+      
+      // Update UI
+      document.getElementById('userName').textContent = userData.name;
+      document.getElementById('userCareer').textContent = userData.career;
+      document.getElementById('avatarInitials').textContent = firstName[0] + lastName[0];
+      document.getElementById('userAvatar').textContent = firstName[0] + lastName[0];
+      
+      alert('¡Tus cambios se han guardado correctamente!');
+    });
+    
+    // Cancel profile changes
+    document.getElementById('cancelProfileBtn').addEventListener('click', function() {
+      document.getElementById('firstName').value = userData.name.split(' ')[0];
+      document.getElementById('lastName').value = userData.name.split(' ')[1] || '';
+      document.getElementById('career').value = userData.career;
+      document.getElementById('bio').value = userData.bio || '';
+    });
+    
+    // Change password functionality
+    document.getElementById('changePasswordBtn').addEventListener('click', function() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('Por favor completa todos los campos');
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        alert('Las nuevas contraseñas no coinciden');
+        return;
+      }
+      
+      if (newPassword.length < 8) {
+        alert('La nueva contraseña debe tener al menos 8 caracteres');
+        return;
+      }
+      
+      // In a real app, you would verify the current password with the server
+      alert('¡Contraseña cambiada con éxito!');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    });
+    
+    // Delete account functionality
+    document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+      if (confirm('¿Estás seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+        localStorage.removeItem('ecoUserLoggedIn');
+        localStorage.removeItem('ecoUserData');
+        window.location.href = 'login.html';
+      }
+    });
+    
+    // Initialize form with user data
+    if (userData.name) {
+      const nameParts = userData.name.split(' ');
+      document.getElementById('firstName').value = nameParts[0];
+      document.getElementById('lastName').value = nameParts.slice(1).join(' ');
+    }
+    
+    if (userData.career) {
+      document.getElementById('career').value = userData.career;
+    }
+    
+    if (userData.bio) {
+      document.getElementById('bio').value = userData.bio;
+    }
+    
+    if (userData.email) {
+      document.getElementById('email').value = userData.email;
+    }
+  </script>
+</body>
+</html>

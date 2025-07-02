@@ -2,29 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Bot con JSON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Bot ♻️</title>
+  <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <h1>Mini Bot</h1>
-  <input type="text" id="entrada" placeholder="Escribe algo...">
-  <button onclick="responder()">Enviar</button>
-  <p id="respuesta"></p>
+  <h1>Mini Bot ♻️</h1>
 
-  <script>
-    let respuestas = {};
+  <div id="chat-container">
+    <!-- Mensajes aparecerán aquí -->
+  </div>
 
-    // Cargar el JSON (esto funciona solo si lo sirves con un servidor como Live Server o en hosting)
-    fetch('respuestas.json')
-      .then(res => res.json())
-      .then(data => {
-        respuestas = data;
-      });
+  <div id="entrada-container">
+    <input type="text" id="entrada" placeholder="Escribe algo..." onkeypress="if(event.key === 'Enter') responder()">
+    <button onclick="responder()">Enviar</button>
+  </div>
 
-    function responder() {
-      const mensaje = document.getElementById("entrada").value.toLowerCase();
-      const salida = respuestas[mensaje] || "No entiendo lo que dices, bro.";
-      document.getElementById("respuesta").innerText = salida;
-    }
-  </script>
+  <!-- Carga del archivo JavaScript -->
+  <script src="log.js"></script>
 </body>
 </html>

@@ -1,0 +1,117 @@
+:root {
+  --primary-color: #2e7d32;
+  --primary-dark: #1b5e20;
+  --primary-light: #81c784;
+  --secondary-color: #00796b;
+  --secondary-dark: #004d40;
+  --secondary-light: #4db6ac;
+  --accent-color: #ffc107;
+  --text-dark: #263238;
+  --text-light: #eceff1;
+  --bg-light: #e8f5e9;
+  --bg-dark: #c8e6c9;
+  --white: #ffffff;
+  --gray: #cfd8dc;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-light);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text-dark);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+#chat-container {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  background-color: var(--white);
+  border: 2px solid var(--gray);
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  box-shadow: var(--shadow);
+}
+
+.mensaje {
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease;
+}
+
+.usuario {
+  background-color: var(--primary-light);
+  align-self: flex-end;
+  color: var(--white);
+}
+
+.bot {
+  background-color: var(--secondary-light);
+  align-self: flex-start;
+  color: var(--text-dark);
+}
+
+#entrada-container {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  padding: 0.6rem;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: var(--shadow);
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  background-color: var(--secondary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+button:hover {
+  background-color: var(--secondary-dark);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bot con JSON</title>
+</head>
+<body>
+  <h1>Mini Bot</h1>
+  <input type="text" id="entrada" placeholder="Escribe algo...">
+  <button onclick="responder()">Enviar</button>
+  <p id="respuesta"></p>
+
+  <script>
+    let respuestas = {};
+
+    // Cargar el JSON (esto funciona solo si lo sirves con un servidor como Live Server o en hosting)
+    fetch('respuestas.json')
+      .then(res => res.json())
+      .then(data => {
+        respuestas = data;
+      });
+
+    function responder() {
+      const mensaje = document.getElementById("entrada").value.toLowerCase();
+      const salida = respuestas[mensaje] || "No entiendo lo que dices, bro.";
+      document.getElementById("respuesta").innerText = salida;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "hola": "¡Hola eco-amig@! Dime: ¿Plásticos? ¿Vidrio? ¿Orgánikos? ¿Dónde reciclar? Te ayudo ♻️",
+  "adios": "¡Adiós! *Guía rápida*: Azul=papel, Verde=vidrio, Amarillo=plástikos, Marrón=orgánikos. ¡Hasta pronto!",
+  "como estas": "¡Al 100%! Sabías que... ¿Reciclar 1 tonelada de papel salva 17 árboles? 🌳 Pregúntame algo más!",
+  "gracias": "¡Denada! Pro tip: Lava los envases antes de reciclar. ¡Así ayudas al proceso! ;)",
+
+  "plasticos": "♻️ *Plásticos*: Botellas (1-PET), envases (2-HDPE), tuppers (5-PP). ¡Lávalos! ✨ No: bolsas, film, pajitas.",
+  "vidrio": "🔴 *Ojo*: Solo botellas/tarros van al VERDE. No metas: cristales, espejos, bombillas. ¡Quita tapones!",
+  "organicos": "⚠️ *Orgánikos*: Restos de comida, césped, hojas → COMPOST. No: pañales, colillas, pelo. ¡Abono natural!",
+  "papel": "📦 *Papel/cartón*: Cajas plegadas, periódicos, revistas → AZUL. No: papel sucio, briks, fotos.",
+  "peligrosos": "☢️ *Peligrosos*: Pilas, medicinas, aceite, electrónicos → Puntos limpios. ¡Nunca a la basura normal!",
+  "errores": "❌ *Errores comunes*: 1) Envases sucios 2) Mezclar materiales 3) Bolsas plásticas dentro contenedores.",
+  "beneficios": "🌎 *Beneficios*: 1 botella reciclada = energía para 1 bombilla 3h. ¡1 lata = ahorrar 1 TV encendida 3h!",
+  "donde": "📍 *Ubicación*: Usa apps como 'ReciclaYa' o googlea 'Punto limpio + tu ciudad'. ¡Hay más de lo que crees!",
+  "basura": "🗑️ *Basura normal*: Pañales, colillas, pañuelos usados, cerámica, juguetes rotos. ¡Reduce lo que puedas!",
+  "reutilizar": "✨ *Reusa*: Frascos de vidrio → almacenaje. Cajas → juguetes. Botellas PET → macetas. ¡Sé creativ@!",
+  "compost": "🌱 *Compost casero*: Capas de: restos vegetales, hojas secas, tierra. Revuelve cada 2 semanas. ¡En 3 meses tendrás abono!",
+  "dudas": "🤔 *¿No estás seguro?*: 1) Revisa símbolos ♻️ 2) Si es mezcla, va a basura normal 3) Cuando dudes, mejor no recicles.",
+
+  "hola_2": "¡Buenas! ¿Ke material te trae dolores de cabeza pa reciclar? Dime y te guío paso a paso :D",
+  "adios_2": "Chao! Recuerda: 'No es basura, son recursos en el lugar equivokado'. ¡Nos vemos!",
+  "como_2": "¡Pipirisnais! *Dato curioso*: ¿Sabías que el 90% del plástiko no se recicla? Hagamos la diferencia.",
+  "gracias_2": "¡Grasias a ti! *Impacto real*: Si reciclas 1 lata, ahorras energía para cargar un celular 2 días. 💪",
+
+  "confusiones": "🔍 *Confusiones típicas*: Briks (envase amarillo), vasos de cartón (basura normal), corcho (compost o basura).",
+  "numeros": "🔢 *Números plásticos*: 1/2/5 = bien. 3/4/6/7 = mal. ¿No tiene número? Mejor tíralo (suele ser no reciclable).",
+  "aceite": "🛢️ *Aceite usado*: 1 litro contamina 1,000L de agua. Guárdalo en botella y llévalo a punto limpio. ¡No al fregadero!",
+  "ropa": "👕 *Ropa vieja*: ¡No al contenedor! Llévala a contenedores textiles o tiendas de segunda mano. Hasta los calcetines rotos sirven.",
+  "pilas": "🔋 *Pilas/baterías*: 1 pila de reloj contamina 600,000L de agua. Usa puntos limpios o tiendas de electrónica.",
+  "electro": "📱 *Electrónicos*: Desde cables hasta licuadoras → Puntos RAEE. ¡El 95% de sus materiales son reutilizables!",
+  "quimicos": "☣️ *Químicos*: Pinturas, insecticidas, medicinas → Puntos SIGRE o limpios. ¡Nunca los quemes o entierres!",
+  "metal": "🥫 *Latas/metales*: ¡Sí al amarillo! Lávalas para evitar olores. Incluso tapas de frascos y chapas son reciclables.",
+  "sanitario": "🧻 *Sanitarios*: Pañales, toallitas, algodón → basura normal. ¡Aunque digan 'biodegradable', no son compostables!",
+  "playa": "🏖️ *En la playa*: ¿Ves colillas? 1 sola contamina 8L de agua. Usa ceniceros portátiles. ¡El vidrio bajo la arena quema!",
+  "trucos": "🎯 *Trucos*: 1) Ten mini-cubos en casa 2) Etiqueta contenedores 3) Usa apps como 'A.I.R-e' para dudas al momento.",
+  "mitos": "🧐 *Mitos*: 1) 'Da igual mezclar' → FALSO 2) 'Se recicla todo' → FALSO 3) 'Lavar gasta más agua' → FALSO (usa agua fría/reusada).",
+  "emergencia": "🚨 *Emergencia*: ¿Roto un termómetro de mercurio? 1) Ventila 2) Usa guantes 3) Recoge con cartón 4) Llama a emergencias."
+}

@@ -1,47 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sponky_web</title>
-    <link rel="stylesheet" href="css/css.css">
-    <link rel="stylesheet" href="css/contac.css">
-    <link rel="stylesheet" href="css/sociales_casillas.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sponky_web</title>
+  <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
 
-    <!-- Barra de navegación -->
-    <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="contacto.html">Contacto</a>
-    </div>
+  <!-- Barra de navegación -->
+  <div class="navbar">
+    <a href="#" id="nav-home"></a>
+    <a href="#" id="nav-contacto"></a>
+  </div>
 
-    <!-- Instagram -->
-    <div class="social-container">
-        <h1>Instagram</h1>
-        <h4>Este es mi Instagram, acá subo cosas personales y cosas que pasan o que hago en mi vida cotidiana.</h4>
-        <a href="https://www.instagram.com/sponky_7w7/" target="_blank" class="img-button">
-            <img src="icon/depositphotos_219349048-stock-illustration-chisinau-moldova-september-2018-instagram.jpg" alt="Instagram">
-        </a>
-    </div>
+  <!-- Instagram -->
+  <div class="social-container">
+    <h1>Instagram</h1>
+    <h4 id="desc-instagram"></h4>
+    <a href="https://www.instagram.com/sponky_7w7/" target="_blank" class="img-button">
+      <img src="icon/depositphotos_219349048-stock-illustration-chisinau-moldova-september-2018-instagram.jpg" alt="Instagram">
+    </a>
+  </div>
 
-    <!-- Amino -->
-    <div class="social-container">
-        <h1>Amino</h1>
-        <h4>Esta es mi red social favorita, aunque la utilizo para practicar mi ruso e incluso tengo amigos rusos.</h4>
-        <a href="http://aminoapps.com/p/qyh99q" target="_blank" class="img-button">
-            <img src="icon/The_logo_of_Amino_(app)_since_2023.png" alt="Amino">
-        </a>
-    </div>
+  <!-- Amino -->
+  <div class="social-container">
+    <h1>Amino</h1>
+    <h4 id="desc-amino"></h4>
+    <a href="http://aminoapps.com/p/qyh99q" target="_blank" class="img-button">
+      <img src="icon/The_logo_of_Amino_(app)_since_2023.png" alt="Amino">
+    </a>
+  </div>
 
-    <!-- YouTube -->
-    <div class="social-container">
-        <h1>YouTube</h1>
-        <h4>Acá subo algunos proyectos o trabajos relacionados con programación.</h4>
-        <a href="https://www.youtube.com/@sok_dark9603" target="_blank" class="img-button">
-            <img src="icon/YouTube_social_white_square_(2017).svg.png" alt="YouTube">
-        </a>
-    </div>
+  <!-- YouTube -->
+  <div class="social-container">
+    <h1>YouTube</h1>
+    <h4 id="desc-youtube"></h4>
+    <a href="https://www.youtube.com/@sok_dark9603" target="_blank" class="img-button">
+      <img src="icon/YouTube_social_white_square_(2017).svg.png" alt="YouTube">
+    </a>
+  </div>
+
+  <!-- Script para idioma -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get("lang") || "es";
+    const jsonPath = `funciones_index/base_${lang}.json`;
+
+    fetch(jsonPath)
+      .then(response => response.json())
+      .then(data => {
+        // Navbar
+        document.getElementById("nav-home").textContent = data.navbar.home;
+        document.getElementById("nav-contacto").textContent = data.navbar.contacto;
+
+        // Mantener idioma en los enlaces
+        document.getElementById("nav-home").href = `index.html?lang=${lang}`;
+        document.getElementById("nav-contacto").href = `contacto.html?lang=${lang}`;
+
+        // Descripciones de redes
+        document.getElementById("desc-instagram").textContent = data.contacto.instagram;
+        document.getElementById("desc-amino").textContent = data.contacto.amino;
+        document.getElementById("desc-youtube").textContent = data.contacto.youtube;
+      })
+      .catch(error => {
+        console.error("❌ Error al cargar el archivo JSON del idioma:", error);
+      });
+  </script>
 
 </body>
 </html>

@@ -1,117 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sponky_web</title>
-    <link rel="stylesheet" href="css/css.css">
-    <script>
-        // Función para calcular la edad
-        function mostrarEdad() {
-            const fechaNacimiento = new Date(2003, 7, 19); // Mes en base 0 (0=enero, 7=agosto)
-            const fechaActual = new Date();
-            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-            const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
-            
-            // Ajuste si aún no ha llegado el mes o el día del cumpleaños de este año
-            if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
-            document.getElementById("edad").textContent = edad;
-        }
-
-        // Ejecutar la función al cargar la página
-        window.onload = mostrarEdad;
-    </script>
-    <style>
-        /* Estilo para que los enlaces se vean como botones */
-        .language-buttons a {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            color: white;
-            background-color: #7e0e0e; /* Fondo rojo */
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .language-buttons a:hover {
-            background-color: #5e0b0b; /* Cambio de color al pasar el cursor */
-        }
-
-
-
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sponky_web</title>
+  <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
-    <!-- Barra de navegación -->
-    <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="contacto.html">Contactos</a>
+      <!-- Barra de navegación -->
+   <div class="navbar">
+     <a href="#" id="nav-home"></a>
+      <a href="#" id="nav-contacto"></a>
     </div>
+  <main class="textto centrado">
 
-    <!-- Contenido principal
-                                      esta es la pagina base, esta es la que voy a usar para poder crear las otras paginas de los otros idiomas  
-    -->
+
     <main class="textto">
-        <div class="language-dropdown">
-            <button class="dropdown-button">Idioma / язык / language</button>
-            <div class="dropdown-menu">
-                <a href="index.html">Español</a>
-                <a href="ruso/R_home.html">Русский</a>
-                <a href="ingles/in_home.html">English</a>
-            </div>
+      <!-- Menú de idiomas -->
+      <div class="language-dropdown">
+       <button class="dropdown-toggle" id="idioma-titulo"></button>
+        <div class="dropdown-menu">
+          <a href="#" id="idioma-es"></a>
+         <a href="#" id="idioma-ru"></a>
+         <a href="#" id="idioma-en"></a>
         </div>
-        <h1> Sponky.web</h1>
-        <img src="icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="gato negro" width="150" class="cat">
-        <div style="border: 1px solid #8B0000; padding: 20px; background-color: #660000; border-radius: 10px; max-width: 500px; margin: 20px auto; display: flex; flex-direction: column; align-items: center;">
-            <h3 style="text-align: center; color: #fff;" id="title">Habilidades y Gustos</h3>
-            <ul style="list-style-type: none; padding: 0; font-size: 16px; color: #fff;" id="list">
-                <li><strong>Experiencia en programación:</strong> Desarrollo web, Python, básico en Java.</li>
-                <li><strong>Aprendizaje continuo:</strong> Siempre en busca de mejorar y aprender nuevas habilidades.</li>
-                <li><strong>Autodidacta:</strong> Me enseño a mí mismo a través de la práctica y la curiosidad.</li>
-                <li><strong>Edad:</strong> <span id="edad"></span> años.</li>
-                <li><strong>Músico:</strong> Toco varios instrumentos, especializado en piano y guitarra.</li>
-                <li><strong>Estudios de idiomas:</strong> Aprendiendo ruso, ocasionalmente estudio inglés.</li>
-                <li><strong>Idioma favorito:</strong> El ruso es el idioma en el que más me gusta pensar.</li>
-            </ul>
+      </div>
 
-        </div>  <!-- bueno este apartado es un nuevio agregado  -->
-        <h2> Recomendados </h2>
-        <a href="libreria/libro.html" >
-            <button class="dropdown-button">
-                Biblioteca
-            </button>
-            <p> la Biblioteca aun esta en veta</p>
-        </a>
-        <a href="biblioteca de recomendados/users.html">
-            <button class="dropdown-button"> usuarios recomendados</button>
-        </a>
+       <!-- Título principal -->
+       <h1 id="titulo-principal"></h1>
 
-        
-        
-        <style>
-            @media (max-width: 600px) {
-                /* Hacemos el contenedor más flexible */
-                #content {
-                    width: 100%; /* Ancho completo en pantallas pequeñas */
-                    padding: 20px;
-                    box-sizing: border-box; /* Incluye el padding en el cálculo del ancho */
-                }
-                
-                #title {
-                    display: none; /* Ocultamos el título en pantallas pequeñas */
-                }
-        
-                #list {
-                    font-size: 14px; /* Ajustamos el tamaño de la lista */
-                    padding-left: 20px; /* Agregamos espacio a la izquierda para mayor legibilidad */
-                }
-            }
-        </style>
-    </main>
-    <script src="java/botones.js"></script>
+       <!-- Imagen -->
+        <img src="icon/e6316aa5bf11074b54c9ec722c52b927.jpg" alt="gato negro" class="cat"/>
+
+        <!-- Cuadro de información -->
+        <div class="info-box">
+         <h3 id="habilidades-gustos"></h3>
+           <ul id="lista-habilidades"></ul>
+        </div>
+
+        <!-- Sección de recomendados -->
+        <h2 id="titulo-recomendados"></h2>
+           <a href="libreria/libro.html">
+           <button class="dropdown-button" id="btn-biblioteca"></button>
+           <p id="texto-biblioteca"></p>
+          </a>
+          <a href="biblioteca de recomendados/users.html">
+          <button class="dropdown-button" id="btn-usuarios"></button>
+         </a>
+         </main>
+   </main>
+  <!-- Script para abrir/cerrar menú -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleButton = document.querySelector(".dropdown-toggle");
+      const dropdownMenu = document.querySelector(".dropdown-menu");
+      let abierto = false;
+
+      toggleButton.addEventListener("click", () => {
+        abierto = !abierto;
+        if (abierto) dropdownMenu.classList.add("show");
+        else dropdownMenu.classList.remove("show");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!toggleButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.remove("show");
+          abierto = false;
+        }
+      });
+    });
+  </script>
+
+  <!-- Script para idioma -->
+  <script>
+    // Detectar idioma actual
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get("lang") || "es";
+    const jsonPath = `funciones_index/base_${lang}.json`;
+
+    // Cargar traducciones
+    fetch(jsonPath)
+      .then(res => res.json())
+      .then(data => {
+        // Navbar
+        document.getElementById("nav-home").textContent = data.navbar.home;
+        document.getElementById("nav-contacto").textContent = data.navbar.contacto;
+        document.getElementById("nav-home").href = `index.html?lang=${lang}`;
+        document.getElementById("nav-contacto").href = `contacto.html?lang=${lang}`;
+
+        // Idiomas
+        document.getElementById("idioma-titulo").textContent = data.idiomas.titulo;
+        document.getElementById("idioma-es").textContent = data.idiomas.es;
+        document.getElementById("idioma-ru").textContent = data.idiomas.ru;
+        document.getElementById("idioma-en").textContent = data.idiomas.en;
+
+        // Enlaces dinámicos con idioma actual
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+        document.getElementById("idioma-es").href = `${currentPage}?lang=es`;
+        document.getElementById("idioma-ru").href = `${currentPage}?lang=ru`;
+        document.getElementById("idioma-en").href = `${currentPage}?lang=en`;
+
+        // Contenido principal
+        document.getElementById("titulo-principal").textContent = data.titulo_principal;
+        document.getElementById("habilidades-gustos").textContent = data.habilidades_gustos;
+
+        // Lista de habilidades
+        const ul = document.getElementById("lista-habilidades");
+        ul.innerHTML = "";
+        data.lista.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item.toLowerCase().includes("edad")
+            ? mostrarEdadTexto("Edad:")
+            : item;
+          ul.appendChild(li);
+        });
+
+        // Recomendados
+        document.getElementById("titulo-recomendados").textContent = data.recomendados.titulo;
+        document.getElementById("btn-biblioteca").textContent = data.recomendados.biblioteca;
+        document.getElementById("texto-biblioteca").textContent = data.recomendados.biblioteca_texto;
+        document.getElementById("btn-usuarios").textContent = data.recomendados.usuarios;
+      })
+      .catch(err => {
+        console.error("❌ Error al cargar JSON de idioma:", err);
+      });
+
+    function mostrarEdadTexto(base) {
+      const nacimiento = new Date(2003, 7, 19); // agosto es 7
+      const hoy = new Date();
+      let edad = hoy.getFullYear() - nacimiento.getFullYear();
+      const m = hoy.getMonth() - nacimiento.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+      return `${base} ${edad} años.`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const gato = document.querySelector(".cat");
+      gato.classList.add("cat-animada");
+    });
+
+
+  </script>
 </body>
-
 </html>

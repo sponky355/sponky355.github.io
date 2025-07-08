@@ -1,0 +1,34 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "contacto": "Contacto"
+  },
+  "idiomas": {
+    "titulo": "Idioma / язык / language",
+    "es": "Español",
+    "ru": "Ruso",
+    "en": "Inglés"
+  },
+  "titulo_principal": "Sponky.web",
+  "habilidades_gustos": "Habilidades e intereses",
+  "lista": [
+    "Experiencia en programación: Desarrollo web, Python, Java básico.",
+    "Aprendizaje continuo: Siempre buscando mejorar y aprender nuevas habilidades.",
+    "Autodidacta: Aprendo por mi cuenta a través de la práctica y la curiosidad.",
+    "Edad: ",
+    "Músico: Toco varios instrumentos, principalmente piano y guitarra.",
+    "Aprendizaje de idiomas: Estoy aprendiendo ruso y a veces practico inglés.",
+    "Idioma favorito: El ruso, me gusta pensar en ese idioma."
+  ],
+  "recomendados": {
+    "titulo": "Recomendados",
+    "biblioteca": "Biblioteca",
+    "biblioteca_texto": "La biblioteca aún está en desarrollo",
+    "usuarios": "Usuarios recomendados"
+  },
+  "contacto": {
+    "instagram": "Este es mi Instagram, acá subo cosas personales y cosas que pasan o que hago en mi vida cotidiana.",
+    "amino": "Esta es mi red social favorita, aunque la utilizo para practicar mi ruso e incluso tengo amigos rusos.",
+    "youtube": "Acá subo algunos proyectos o trabajos relacionados con programación."
+  }
+}

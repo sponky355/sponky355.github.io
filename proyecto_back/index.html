@@ -1,95 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muro Comunitario</title>
-<style>
-
-body{
-font-family:Arial;
-background:#f4f4f4;
-margin:0;
-padding:20px;
-}
-
-.hidden{
-display:none;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-max-width:400px;
-margin:auto;
-}
-
-#feed{
-margin-top:30px;
-display:grid;
-gap:20px;
-}
-
-.post{
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.post img{
-width:100%;
-border-radius:8px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="auth">
+<div id="auth-section">
+<div class="card">
 
-<h2>Login</h2>
+<h2>Acceso</h2>
 
-<input id="email" placeholder="correo">
-<input id="password" type="password" placeholder="contraseña">
+<input type="email" id="email" placeholder="Correo">
+<input type="password" id="password" placeholder="Contraseña">
 
-<button id="login">Entrar</button>
-<button id="register">Registrar</button>
+<button id="btn-login">Entrar</button>
+<button id="btn-register" class="btn-secondary">Crear Cuenta</button>
 
 </div>
+</div>
 
+<div id="app-section" class="hidden">
 
-<div id="app" class="hidden">
+<header class="main-header">
+<span>Usuario: <b id="user-display"></b></span>
+<button id="btn-logout" class="btn-danger">Salir</button>
+</header>
 
-<h3 id="user"></h3>
+<div class="upload-container">
 
-<input id="texto" placeholder="descripcion">
-<input type="file" id="imagen">
+<h3>Nueva Foto</h3>
 
-<button id="subir">Publicar</button>
+<input type="text" id="photo-text" placeholder="Descripción">
+<input type="file" id="photo-file" accept="image/*">
 
-<div id="estado"></div>
+<button id="btn-upload">Publicar</button>
+
+<div id="upload-status"></div>
+
+</div>
 
 <div id="feed"></div>
 
-<button id="logout">Salir</button>
-
 </div>
-
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
-import {
+import { 
 getAuth,
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword,
 onAuthStateChanged,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 import {
 getFirestore,
@@ -101,51 +76,44 @@ orderBy,
 Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-
 
 const firebaseConfig = {
-
-apiKey:"TU_API_KEY",
-authDomain:"proyectnrabitcia.firebaseapp.com",
-projectId:"proyectnrabitcia",
-storageBucket:"proyectnrabitcia.appspot.com",
-appId:"TU_APP_ID"
-
+apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+authDomain: "proyectnrabitcia.firebaseapp.com",
+projectId: "proyectnrabitcia",
+storageBucket: "proyectnrabitcia.firebasestorage.app",
+messagingSenderId: "1027517841438",
+appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
 };
-
 
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-
+const storage = getStorage(app);
 const db = getFirestore(app);
 
-const storage = getStorage(app);
+
+const emailInput = document.getElementById("email");
+const passInput = document.getElementById("password");
+const feed = document.getElementById("feed");
 
 
+document.getElementById("btn-register").onclick = async () => {
 
-const email=document.getElementById("email");
-const pass=document.getElementById("password");
-const feed=document.getElementById("feed");
-const estado=document.getElementById("estado");
+const email = emailInput.value.trim();
+const pass = passInput.value.trim();
 
-
-
-document.getElementById("register").onclick=async()=>{
+if(!email || !pass){
+alert("Completa todos los campos");
+return;
+}
 
 try{
 
-await createUserWithEmailAndPassword(auth,email.value,pass.value);
+await createUserWithEmailAndPassword(auth,email,pass);
 
-alert("usuario creado");
+alert("Cuenta creada");
 
 }catch(e){
 
@@ -156,46 +124,47 @@ alert(e.message);
 };
 
 
-
-document.getElementById("login").onclick=async()=>{
+document.getElementById("btn-login").onclick = async () => {
 
 try{
 
-await signInWithEmailAndPassword(auth,email.value,pass.value);
+await signInWithEmailAndPassword(
+auth,
+emailInput.value,
+passInput.value
+);
 
 }catch(e){
 
-alert(e.message);
+alert("Error login: "+e.message);
 
 }
 
 };
 
 
-
-document.getElementById("logout").onclick=()=>{
-
-signOut(auth);
-
-};
+document.getElementById("btn-logout").onclick = () => signOut(auth);
 
 
 
 onAuthStateChanged(auth,user=>{
 
+const authDiv=document.getElementById("auth-section");
+const appDiv=document.getElementById("app-section");
+
 if(user){
 
-document.getElementById("auth").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
+authDiv.classList.add("hidden");
+appDiv.classList.remove("hidden");
 
-document.getElementById("user").innerText=user.email;
+document.getElementById("user-display").innerText=user.email;
 
 cargarFeed();
 
 }else{
 
-document.getElementById("auth").classList.remove("hidden");
-document.getElementById("app").classList.add("hidden");
+authDiv.classList.remove("hidden");
+appDiv.classList.add("hidden");
 
 }
 
@@ -203,53 +172,68 @@ document.getElementById("app").classList.add("hidden");
 
 
 
-document.getElementById("subir").onclick=async()=>{
+document.getElementById("btn-upload").onclick = async ()=>{
 
-const file=document.getElementById("imagen").files[0];
-const texto=document.getElementById("texto").value;
+const fileInput=document.getElementById("photo-file");
+const textInput=document.getElementById("photo-text");
+const status=document.getElementById("upload-status");
 
-if(!file){
-alert("elige imagen");
+if(!auth.currentUser){
+alert("Debes iniciar sesión");
 return;
 }
 
-estado.innerText="subiendo imagen...";
+const file=fileInput.files[0];
+
+if(!file){
+alert("Selecciona una imagen");
+return;
+}
+
+if(file.size>5*1024*1024){
+alert("Imagen muy grande (máx 5MB)");
+return;
+}
 
 try{
 
-const ruta="fotos/"+Date.now()+"_"+file.name;
+status.innerText="Subiendo imagen...";
 
-const storageRef=ref(storage,ruta);
+const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
 
-const subida=await uploadBytes(storageRef,file);
+const storageRef=ref(storage,fileName);
 
-const url=await getDownloadURL(subida.ref);
+const snap=await uploadBytes(storageRef,file);
 
-console.log("URL imagen:",url);
+const url=await getDownloadURL(snap.ref);
+
+const expira=new Date();
+
+expira.setDate(expira.getDate()+10);
 
 
 await addDoc(collection(db,"posts"),{
 
 imageUrl:url,
-descripcion:texto,
+descripcion:textInput.value,
 autor:auth.currentUser.email,
-creado:Timestamp.now()
+creado:Timestamp.now(),
+expira:Timestamp.fromDate(expira)
 
 });
 
 
-estado.innerText="publicado";
+status.innerText="Publicado ✔";
 
-document.getElementById("imagen").value="";
-document.getElementById("texto").value="";
+fileInput.value="";
+textInput.value="";
 
 cargarFeed();
 
 }catch(e){
 
 console.error(e);
-
-estado.innerText="error subiendo";
+alert("Error: "+e.code);
 
 }
 
@@ -259,27 +243,52 @@ estado.innerText="error subiendo";
 
 async function cargarFeed(){
 
-feed.innerHTML="cargando...";
+feed.innerHTML="<p>Cargando...</p>";
 
-const q=query(collection(db,"posts"),orderBy("creado","desc"));
+const ahora=new Date();
 
-const snap=await getDocs(q);
+try{
+
+const q=query(
+collection(db,"posts"),
+orderBy("creado","desc")
+);
+
+const snapshot=await getDocs(q);
 
 feed.innerHTML="";
 
-snap.forEach(doc=>{
+snapshot.forEach(doc=>{
 
-const d=doc.data();
+const data=doc.data();
+
+const fechaExpira=data.expira.toDate();
+
+if(ahora<fechaExpira){
 
 const html=`
 
-<div class="post">
+<div class="post-card">
 
-<img src="${d.imageUrl}" loading="lazy">
+<div class="post-header">
+<strong>${data.autor}</strong>
+</div>
 
-<p>${d.descripcion || ""}</p>
+<img src="${data.imageUrl}">
 
-<small>${d.autor}</small>
+<div class="post-body">
+
+<p>${data.descripcion}</p>
+
+<small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
+
+<br>
+
+<small class="expira">
+Expira: ${fechaExpira.toLocaleDateString()}
+</small>
+
+</div>
 
 </div>
 
@@ -287,7 +296,15 @@ const html=`
 
 feed.insertAdjacentHTML("beforeend",html);
 
+}
+
 });
+
+}catch(e){
+
+feed.innerHTML="Error cargando posts";
+
+}
 
 }
 

@@ -81,7 +81,7 @@ const firebaseConfig = {
 apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
 authDomain: "proyectnrabitcia.firebaseapp.com",
 projectId: "proyectnrabitcia",
-storageBucket: "proyectnrabitcia.firebasestorage.app",
+storageBucket: "proyectnrabitcia.appspot.com",
 messagingSenderId: "1027517841438",
 appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
 };
@@ -208,9 +208,7 @@ const snap=await uploadBytes(storageRef,file);
 const url=await getDownloadURL(snap.ref);
 
 const expira=new Date();
-
 expira.setDate(expira.getDate()+10);
-
 
 await addDoc(collection(db,"posts"),{
 
@@ -221,7 +219,6 @@ creado:Timestamp.now(),
 expira:Timestamp.fromDate(expira)
 
 });
-
 
 status.innerText="Publicado ✔";
 
@@ -262,7 +259,16 @@ snapshot.forEach(doc=>{
 
 const data=doc.data();
 
-const fechaExpira=data.expira.toDate();
+if(!data.imageUrl) return;
+
+let fechaExpira;
+
+if(data.expira){
+fechaExpira=data.expira.toDate();
+}else{
+fechaExpira=new Date();
+fechaExpira.setDate(fechaExpira.getDate()+10);
+}
 
 if(ahora<fechaExpira){
 
@@ -271,16 +277,18 @@ const html=`
 <div class="post-card">
 
 <div class="post-header">
-<strong>${data.autor}</strong>
+<strong>${data.autor || "Usuario"}</strong>
 </div>
 
-<img src="${data.imageUrl}">
+<img src="${data.imageUrl}" loading="lazy">
 
 <div class="post-body">
 
-<p>${data.descripcion}</p>
+<p>${data.descripcion || ""}</p>
 
-<small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
+<small>Publicado: ${
+data.creado ? data.creado.toDate().toLocaleDateString() : ""
+}</small>
 
 <br>
 
@@ -303,6 +311,7 @@ feed.insertAdjacentHTML("beforeend",html);
 }catch(e){
 
 feed.innerHTML="Error cargando posts";
+console.error(e);
 
 }
 

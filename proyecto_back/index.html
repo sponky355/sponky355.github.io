@@ -1,180 +1,314 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muro de Fotos Comunitario</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muro Comunitario</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div id="auth-section">
-        <div class="card">
-            <h2>Acceso al Sistema</h2>
-            <input type="email" id="email" placeholder="Correo electrónico">
-            <input type="password" id="password" placeholder="Contraseña">
-            <div class="auth-buttons">
-                <button id="btn-login">Entrar</button>
-                <button id="btn-register" class="btn-secondary">Crear Cuenta</button>
-            </div>
-        </div>
-    </div>
+<div id="auth-section">
+<div class="card">
 
-    <div id="app-section" class="hidden">
-        <header class="main-header">
-            <span>Conectado como: <b id="user-display"></b></span>
-            <button id="btn-logout" class="btn-danger">Cerrar Sesión</button>
-        </header>
+<h2>Acceso</h2>
 
-        <div class="upload-container">
-            <h3>Nueva Publicación</h3>
-            <input type="text" id="photo-text" placeholder="Escribe un pie de foto...">
-            <input type="file" id="photo-file" accept="image/*">
-            <button id="btn-upload">Publicar Foto</button>
-            <div id="upload-status"></div>
-        </div>
+<input type="email" id="email" placeholder="Correo">
+<input type="password" id="password" placeholder="Contraseña">
 
-        <div id="feed">
-            <p class="loading">Cargando publicaciones...</p>
-        </div>
-    </div>
+<button id="btn-login">Entrar</button>
+<button id="btn-register" class="btn-secondary">Crear Cuenta</button>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-        import { getFirestore, collection, addDoc, query, getDocs, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+</div>
+</div>
 
-        // CONFIGURACIÓN DE TU PROYECTO
-        const firebaseConfig = {
-            apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
-            authDomain: "proyectnrabitcia.firebaseapp.com",
-            projectId: "proyectnrabitcia",
-            storageBucket: "proyectnrabitcia.firebasestorage.app", // Verificado: corregido a .firebasestorage.app
-            messagingSenderId: "1027517841438",
-            appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
-        };
+<div id="app-section" class="hidden">
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
-        const db = getFirestore(app);
+<header class="main-header">
+<span>Usuario: <b id="user-display"></b></span>
+<button id="btn-logout" class="btn-danger">Salir</button>
+</header>
 
-        // --- GESTIÓN DE USUARIOS ---
-        
-        document.getElementById("btn-register").onclick = () => {
-            const email = document.getElementById("email").value;
-            const pass = document.getElementById("password").value;
-            if(!email || !pass) return alert("Completa los datos");
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then(() => alert("¡Cuenta creada!"))
-                .catch(e => alert("Error: " + e.message));
-        };
+<div class="upload-container">
 
-        document.getElementById("btn-login").onclick = () => {
-            const email = document.getElementById("email").value;
-            const pass = document.getElementById("password").value;
-            signInWithEmailAndPassword(auth, email, pass)
-                .catch(e => alert("Error de acceso: " + e.message));
-        };
+<h3>Nueva Foto</h3>
 
-        document.getElementById("btn-logout").onclick = () => signOut(auth);
+<input type="text" id="photo-text" placeholder="Descripción">
+<input type="file" id="photo-file" accept="image/*">
 
-        onAuthStateChanged(auth, user => {
-            const authDiv = document.getElementById("auth-section");
-            const appDiv = document.getElementById("app-section");
-            if (user) {
-                authDiv.classList.add("hidden");
-                appDiv.classList.remove("hidden");
-                document.getElementById("user-display").innerText = user.email;
-                cargarFeed();
-            } else {
-                authDiv.classList.remove("hidden");
-                appDiv.classList.add("hidden");
-            }
-        });
+<button id="btn-upload">Publicar</button>
 
-        // --- GESTIÓN DE SUBIDAS Y FEED ---
+<div id="upload-status"></div>
 
-        document.getElementById("btn-upload").onclick = async () => {
-            const fileInput = document.getElementById("photo-file");
-            const textInput = document.getElementById("photo-text");
-            const status = document.getElementById("upload-status");
-            
-            if (!fileInput.files[0]) return alert("Selecciona un archivo");
+</div>
 
-            try {
-                status.innerText = "Subiendo archivo...";
-                document.getElementById("btn-upload").disabled = true;
+<div id="feed"></div>
 
-                // 1. Subir imagen a Storage
-                const fileName = `fotos/${Date.now()}_${auth.currentUser.uid}`;
-                const storageRef = ref(storage, fileName);
-                
-                const snapshot = await uploadBytes(storageRef, fileInput.files[0]);
-                const url = await getDownloadURL(snapshot.ref);
+</div>
 
-                // 2. Calcular expiración (10 días exactos)
-                const expira = new Date();
-                expira.setDate(expira.getDate() + 10);
+<script type="module">
 
-                // 3. Guardar metadatos en Firestore
-                await addDoc(collection(db, "posts"), {
-                    imageUrl: url,
-                    descripcion: textInput.value || "",
-                    autor: auth.currentUser.email,
-                    creado: Timestamp.now(),
-                    expira: Timestamp.fromDate(expira)
-                });
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
-                status.innerText = "¡Publicado!";
-                textInput.value = "";
-                fileInput.value = "";
-                cargarFeed();
-            } catch (error) {
-                console.error(error);
-                alert("Error al publicar: " + error.code);
-            } finally {
-                document.getElementById("btn-upload").disabled = false;
-            }
-        };
+import { 
+getAuth,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-        async function cargarFeed() {
-            const feed = document.getElementById("feed");
-            feed.innerHTML = "<p>Cargando fotos de la comunidad...</p>";
-            const ahora = new Date();
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-            try {
-                const q = query(collection(db, "posts"), orderBy("creado", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                feed.innerHTML = "";
-                querySnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const fechaExpira = data.expira.toDate();
+import {
+getFirestore,
+collection,
+addDoc,
+query,
+getDocs,
+orderBy,
+Timestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-                    // Lógica de 10 días: solo mostrar si no ha expirado
-                    if (ahora < fechaExpira) {
-                        const postHtml = `
-                            <div class="post-card">
-                                <div class="post-header">
-                                    <strong>${data.autor}</strong>
-                                </div>
-                                <img src="${data.imageUrl}" alt="Foto compartida">
-                                <div class="post-body">
-                                    <p>${data.descripcion}</p>
-                                    <small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
-                                    <br>
-                                    <small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
-                                </div>
-                            </div>`;
-                        feed.innerHTML += postHtml;
-                    }
-                });
-            } catch (e) {
-                feed.innerHTML = "<p>Error al cargar el feed. Revisa las reglas de Firestore.</p>";
-            }
-        }
-    </script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+authDomain: "proyectnrabitcia.firebaseapp.com",
+projectId: "proyectnrabitcia",
+storageBucket: "proyectnrabitcia.firebasestorage.app",
+messagingSenderId: "1027517841438",
+appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
+
+
+const emailInput = document.getElementById("email");
+const passInput = document.getElementById("password");
+const feed = document.getElementById("feed");
+
+
+document.getElementById("btn-register").onclick = async () => {
+
+const email = emailInput.value.trim();
+const pass = passInput.value.trim();
+
+if(!email || !pass){
+alert("Completa todos los campos");
+return;
+}
+
+try{
+
+await createUserWithEmailAndPassword(auth,email,pass);
+
+alert("Cuenta creada");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+};
+
+
+document.getElementById("btn-login").onclick = async () => {
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+emailInput.value,
+passInput.value
+);
+
+}catch(e){
+
+alert("Error login: "+e.message);
+
+}
+
+};
+
+
+document.getElementById("btn-logout").onclick = () => signOut(auth);
+
+
+
+onAuthStateChanged(auth,user=>{
+
+const authDiv=document.getElementById("auth-section");
+const appDiv=document.getElementById("app-section");
+
+if(user){
+
+authDiv.classList.add("hidden");
+appDiv.classList.remove("hidden");
+
+document.getElementById("user-display").innerText=user.email;
+
+cargarFeed();
+
+}else{
+
+authDiv.classList.remove("hidden");
+appDiv.classList.add("hidden");
+
+}
+
+});
+
+
+
+document.getElementById("btn-upload").onclick = async ()=>{
+
+const fileInput=document.getElementById("photo-file");
+const textInput=document.getElementById("photo-text");
+const status=document.getElementById("upload-status");
+
+if(!auth.currentUser){
+alert("Debes iniciar sesión");
+return;
+}
+
+const file=fileInput.files[0];
+
+if(!file){
+alert("Selecciona una imagen");
+return;
+}
+
+if(file.size>5*1024*1024){
+alert("Imagen muy grande (máx 5MB)");
+return;
+}
+
+try{
+
+status.innerText="Subiendo imagen...";
+
+const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
+
+const storageRef=ref(storage,fileName);
+
+const snap=await uploadBytes(storageRef,file);
+
+const url=await getDownloadURL(snap.ref);
+
+const expira=new Date();
+
+expira.setDate(expira.getDate()+10);
+
+
+await addDoc(collection(db,"posts"),{
+
+imageUrl:url,
+descripcion:textInput.value,
+autor:auth.currentUser.email,
+creado:Timestamp.now(),
+expira:Timestamp.fromDate(expira)
+
+});
+
+
+status.innerText="Publicado ✔";
+
+fileInput.value="";
+textInput.value="";
+
+cargarFeed();
+
+}catch(e){
+
+console.error(e);
+alert("Error: "+e.code);
+
+}
+
+};
+
+
+
+async function cargarFeed(){
+
+feed.innerHTML="<p>Cargando...</p>";
+
+const ahora=new Date();
+
+try{
+
+const q=query(
+collection(db,"posts"),
+orderBy("creado","desc")
+);
+
+const snapshot=await getDocs(q);
+
+feed.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+const fechaExpira=data.expira.toDate();
+
+if(ahora<fechaExpira){
+
+const html=`
+
+<div class="post-card">
+
+<div class="post-header">
+<strong>${data.autor}</strong>
+</div>
+
+<img src="${data.imageUrl}">
+
+<div class="post-body">
+
+<p>${data.descripcion}</p>
+
+<small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
+
+<br>
+
+<small class="expira">
+Expira: ${fechaExpira.toLocaleDateString()}
+</small>
+
+</div>
+
+</div>
+
+`;
+
+feed.insertAdjacentHTML("beforeend",html);
+
+}
+
+});
+
+}catch(e){
+
+feed.innerHTML="Error cargando posts";
+
+}
+
+}
+
+</script>
+
 </body>
 </html>

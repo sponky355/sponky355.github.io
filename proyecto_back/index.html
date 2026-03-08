@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login Firebase</title>
+</head>
+
+<body>
+
+<h2>Login</h2>
+
+<input type="email" id="email" placeholder="Correo">
+<br><br>
+
+<input type="password" id="password" placeholder="Contraseña">
+<br><br>
+
+<button id="login">Iniciar sesión</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+
+import { 
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+  authDomain: "proyectnrabitcia.firebaseapp.com",
+  projectId: "proyectnrabitcia",
+  storageBucket: "proyectnrabitcia.firebasestorage.app",
+  messagingSenderId: "1027517841438",
+  appId: "1:1027517841438:web:e38d64106c2e79b390ee0f",
+  measurementId: "G-W1Y4N59WEM"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+document.getElementById("login").onclick = function(){
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+signInWithEmailAndPassword(auth, email, password)
+
+.then((userCredential) => {
+
+alert("Login correcto");
+
+})
+
+.catch((error) => {
+
+alert(error.message);
+
+});
+
+};
+
+</script>
+
+</body>
+</html>

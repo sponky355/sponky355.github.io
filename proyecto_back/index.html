@@ -1,70 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Login Firebase</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muro de Fotos - Proyecto</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>Login</h2>
+    <div id="auth-section">
+        <h2>Ingreso a la Comunidad</h2>
+        <input type="email" id="email" placeholder="Correo">
+        <input type="password" id="password" placeholder="Contraseña">
+        <div class="buttons">
+            <button id="btn-login">Iniciar Sesión</button>
+            <button id="btn-register" class="alt">Registrarse</button>
+        </div>
+    </div>
 
-<input type="email" id="email" placeholder="Correo">
-<br><br>
+    <div id="app-section" class="hidden">
+        <div class="header-app">
+            <span>Usuario: <b id="user-display"></b></span>
+            <button id="btn-logout">Cerrar Sesión</button>
+        </div>
 
-<input type="password" id="password" placeholder="Contraseña">
-<br><br>
+        <div class="upload-area">
+            <h3>Nueva Publicación</h3>
+            <input type="text" id="photo-text" placeholder="¿Qué quieres decir sobre esta foto?">
+            <input type="file" id="photo-file" accept="image/*">
+            <button id="btn-upload">Publicar ahora</button>
+        </div>
 
-<button id="login">Iniciar sesión</button>
+        <div id="feed">
+            </div>
+    </div>
 
-<script type="module">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+        import { getFirestore, collection, addDoc, query, getDocs, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+            authDomain: "proyectnrabitcia.firebaseapp.com",
+            projectId: "proyectnrabitcia",
+            storageBucket: "proyectnrabitcia.appspot.com",
+            messagingSenderId: "1027517841438",
+            appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
+        };
 
-import { 
-getAuth,
-signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const db = getFirestore(app);
 
+        // --- FUNCIONES DE CUENTA ---
+        document.getElementById("btn-register").onclick = () => {
+            const m = document.getElementById("email").value;
+            const p = document.getElementById("password").value;
+            createUserWithEmailAndPassword(auth, m, p).catch(e => alert(e.message));
+        };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
-  authDomain: "proyectnrabitcia.firebaseapp.com",
-  projectId: "proyectnrabitcia",
-  storageBucket: "proyectnrabitcia.firebasestorage.app",
-  messagingSenderId: "1027517841438",
-  appId: "1:1027517841438:web:e38d64106c2e79b390ee0f",
-  measurementId: "G-W1Y4N59WEM"
-};
+        document.getElementById("btn-login").onclick = () => {
+            const m = document.getElementById("email").value;
+            const p = document.getElementById("password").value;
+            signInWithEmailAndPassword(auth, m, p).catch(e => alert(e.message));
+        };
 
+        document.getElementById("btn-logout").onclick = () => signOut(auth);
 
-const app = initializeApp(firebaseConfig);
+        onAuthStateChanged(auth, user => {
+            const authDiv = document.getElementById("auth-section");
+            const appDiv = document.getElementById("app-section");
+            if (user) {
+                authDiv.classList.add("hidden");
+                appDiv.classList.remove("hidden");
+                document.getElementById("user-display").innerText = user.email;
+                cargarFeed();
+            } else {
+                authDiv.classList.remove("hidden");
+                appDiv.classList.add("hidden");
+            }
+        });
 
-const auth = getAuth(app);
+        // --- FUNCIONES DE FEED (FOTOS + TEXTO) ---
+        document.getElementById("btn-upload").onclick = async () => {
+            const fileInput = document.getElementById("photo-file");
+            const textInput = document.getElementById("photo-text");
+            
+            if (!fileInput.files[0]) return alert("Selecciona una foto");
 
+            try {
+                // Subir archivo
+                const storageRef = ref(storage, `fotos/${Date.now()}`);
+                const snapshot = await uploadBytes(storageRef, fileInput.files[0]);
+                const url = await getDownloadURL(snapshot.ref);
 
-document.getElementById("login").onclick = function(){
+                // Calcular expiración (10 días)
+                const fechaExpira = new Date();
+                fechaExpira.setDate(fechaExpira.getDate() + 10);
 
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
+                // Guardar en Firestore
+                await addDoc(collection(db, "posts"), {
+                    url: url,
+                    descripcion: textInput.value,
+                    autor: auth.currentUser.email,
+                    creado: Timestamp.now(),
+                    expira: Timestamp.fromDate(fechaExpira)
+                });
 
-signInWithEmailAndPassword(auth, email, password)
+                textInput.value = "";
+                fileInput.value = "";
+                cargarFeed();
+            } catch (error) {
+                alert("Error al subir: " + error.message);
+            }
+        };
 
-.then((userCredential) => {
+        async function cargarFeed() {
+            const feed = document.getElementById("feed");
+            feed.innerHTML = "Cargando...";
+            const ahora = new Date();
 
-alert("Login correcto");
-
-})
-
-.catch((error) => {
-
-alert(error.message);
-
-});
-
-};
-
-</script>
-
+            const q = query(collection(db, "posts"), orderBy("creado", "desc"));
+            const snapshot = await getDocs(q);
+            
+            feed.innerHTML = "";
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (ahora < data.expira.toDate()) {
+                    feed.innerHTML += `
+                        <div class="post">
+                            <p class="post-meta">Publicado por: <b>${data.autor}</b></p>
+                            <p class="post-text">${data.descripcion}</p>
+                            <img src="${data.url}">
+                            <p class="post-date">Expira: ${data.expira.toDate().toLocaleDateString()}</p>
+                        </div>`;
+                }
+            });
+        }
+    </script>
 </body>
 </html>

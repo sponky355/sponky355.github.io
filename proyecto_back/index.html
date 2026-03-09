@@ -97,7 +97,7 @@ catch(e){ alert("Error login: "+e.message); }
 
 // Logout
 document.getElementById("btn-logout").onclick = () => signOut(auth);
-
+const q = query(collection(db, "posts"), orderBy("creado","desc"));
 // Cambio de estado
 onAuthStateChanged(auth,user=>{
 const authDiv=document.getElementById("auth-section");

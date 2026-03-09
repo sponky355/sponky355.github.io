@@ -57,18 +57,21 @@ button:disabled { background-color: #b2dffc; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { 
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
+  onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { getFirestore, collection, addDoc, query, getDocs, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // Config Firebase
 const firebaseConfig = {
-apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
-authDomain: "proyectnrabitcia.firebaseapp.com",
-projectId: "proyectnrabitcia",
-storageBucket: "proyectnrabitcia.firebasestorage.app",
-messagingSenderId: "1027517841438",
-appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
+  apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+  authDomain: "proyectnrabitcia.firebaseapp.com",
+  projectId: "proyectnrabitcia",
+  storageBucket: "proyectnrabitcia.firebasestorage.app",
+  messagingSenderId: "1027517841438",
+  appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -76,98 +79,114 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const db = getFirestore(app);
 
+// Inputs
 const emailInput = document.getElementById("email");
 const passInput = document.getElementById("password");
 const feed = document.getElementById("feed");
 
 // Registro
 document.getElementById("btn-register").onclick = async () => {
-const email = emailInput.value.trim();
-const pass = passInput.value.trim();
-if(!email || !pass){ alert("Completa todos los campos"); return; }
-try { await createUserWithEmailAndPassword(auth,email,pass); alert("Cuenta creada"); } 
-catch(e){ alert(e.message); }
+  const email = emailInput.value.trim();
+  const pass = passInput.value.trim();
+  if(!email || !pass) return alert("Completa todos los campos");
+  try {
+    await createUserWithEmailAndPassword(auth,email,pass);
+    alert("Cuenta creada ✔");
+  } catch(e) { alert(e.message); }
 };
 
 // Login
 document.getElementById("btn-login").onclick = async () => {
-try { await signInWithEmailAndPassword(auth,emailInput.value,passInput.value); } 
-catch(e){ alert("Error login: "+e.message); }
+  try { await signInWithEmailAndPassword(auth,emailInput.value,passInput.value); }
+  catch(e) { alert("Error login: "+e.message); }
 };
 
 // Logout
 document.getElementById("btn-logout").onclick = () => signOut(auth);
-const q = query(collection(db, "posts"), orderBy("creado","desc"));
-// Cambio de estado
+
+// Estado de sesión
 onAuthStateChanged(auth,user=>{
-const authDiv=document.getElementById("auth-section");
-const appDiv=document.getElementById("app-section");
-if(user){
-authDiv.classList.add("hidden");
-appDiv.classList.remove("hidden");
-document.getElementById("user-display").innerText=user.email;
-cargarFeed();
-}else{
-authDiv.classList.remove("hidden");
-appDiv.classList.add("hidden");
-}
+  const authDiv=document.getElementById("auth-section");
+  const appDiv=document.getElementById("app-section");
+  if(user){
+    authDiv.classList.add("hidden");
+    appDiv.classList.remove("hidden");
+    document.getElementById("user-display").innerText=user.email;
+    cargarFeed(); // FORZAR CARGA DE TODAS LAS FOTOS
+  } else {
+    authDiv.classList.remove("hidden");
+    appDiv.classList.add("hidden");
+  }
 });
 
-// Subir foto
+// Subida de fotos
 document.getElementById("btn-upload").onclick = async ()=>{
-const fileInput=document.getElementById("photo-file");
-const textInput=document.getElementById("photo-text");
-const status=document.getElementById("upload-status");
-if(!auth.currentUser){ alert("Debes iniciar sesión"); return; }
-const file=fileInput.files[0];
-if(!file){ alert("Selecciona una imagen"); return; }
-if(file.size>5*1024*1024){ alert("Imagen muy grande (máx 5MB)"); return; }
-try{
-status.innerText="Subiendo imagen...";
-const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
-const storageRef=ref(storage,fileName);
-const snap=await uploadBytes(storageRef,file);
-const url=await getDownloadURL(snap.ref); // <-- URL pública
-const expira=new Date(); expira.setDate(expira.getDate()+10);
-await addDoc(collection(db,"posts"),{
-imageUrl:url, // <-- guardar URL pública
-descripcion:textInput.value,
-autor:auth.currentUser.email,
-creado:Timestamp.now(),
-expira:Timestamp.fromDate(expira)
-});
-status.innerText="Publicado ✔";
-fileInput.value=""; textInput.value="";
-cargarFeed();
-}catch(e){ console.error(e); alert("Error: "+e.code); }
+  const fileInput=document.getElementById("photo-file");
+  const textInput=document.getElementById("photo-text");
+  const status=document.getElementById("upload-status");
+
+  if(!auth.currentUser) return alert("Debes iniciar sesión");
+  const file=fileInput.files[0];
+  if(!file) return alert("Selecciona una imagen");
+  if(file.size>5*1024*1024) return alert("Imagen muy grande (max 5MB)");
+
+  try {
+    status.innerText="Subiendo imagen...";
+    const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
+    const storageRef=ref(storage,fileName);
+    const snap=await uploadBytes(storageRef,file);
+    const url=await getDownloadURL(snap.ref);
+    const expira=new Date(); expira.setDate(expira.getDate()+10);
+
+    await addDoc(collection(db,"posts"),{
+      imageUrl:url,
+      descripcion:textInput.value || "",
+      autor:auth.currentUser.email,
+      creado:Timestamp.now(),
+      expira:Timestamp.fromDate(expira)
+    });
+
+    status.innerText="Publicado ✔";
+    fileInput.value=""; textInput.value="";
+    cargarFeed(); // actualizar feed
+  } catch(e) {
+    console.error(e);
+    alert("Error: "+e.code);
+  }
 };
 
 // Cargar feed
 async function cargarFeed(){
-feed.innerHTML="<p>Cargando...</p>";
-const ahora=new Date();
-try{
-const q=query(collection(db,"posts"),orderBy("creado","desc"));
-const snapshot=await getDocs(q);
-feed.innerHTML="";
-snapshot.forEach(doc=>{
-const data=doc.data();
-const fechaExpira=data.expira.toDate();
-if(ahora<fechaExpira){
-feed.insertAdjacentHTML("beforeend",`
-<div class="post-card">
-<div class="post-header"><strong>${data.autor}</strong></div>
-<img src="${data.imageUrl}" alt="Foto de la comunidad">
-<div class="post-body">
-<p>${data.descripcion}</p>
-<small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small><br>
-<small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
-</div></div>`);
-}
-});
-}catch(e){ feed.innerHTML="Error cargando posts"; }
+  feed.innerHTML="<p>Cargando fotos...</p>";
+  const ahora=new Date();
+  try{
+    const q=query(collection(db,"posts"),orderBy("creado","desc"));
+    const snapshot=await getDocs(q);
+    feed.innerHTML="";
+    snapshot.forEach(doc=>{
+      const data=doc.data();
+      const fechaExpira=data.expira.toDate();
+      if(ahora<fechaExpira){
+        const html=`
+          <div class="post-card">
+            <div class="post-header"><strong>${data.autor}</strong></div>
+            <img src="${data.imageUrl}" alt="Foto">
+            <div class="post-body">
+              <p>${data.descripcion}</p>
+              <small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small><br>
+              <small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
+            </div>
+          </div>
+        `;
+        feed.insertAdjacentHTML("beforeend",html);
+      }
+    });
+    if(feed.innerHTML==="") feed.innerHTML="<p>No hay fotos activas.</p>";
+  } catch(e){
+    console.error(e);
+    feed.innerHTML="<p>Error cargando fotos.</p>";
+  }
 }
 </script>
-
 </body>
 </html>

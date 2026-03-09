@@ -4,74 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muro Comunitario</title>
-<style>
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; }
-.hidden { display: none; }
-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #dbdbdb; border-radius: 4px; box-sizing: border-box; }
-button { width: 100%; padding: 10px; background-color: #0095f6; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-button:disabled { background-color: #b2dffc; }
-.btn-secondary { background-color: #34a853; margin-top: 5px; }
-.btn-danger { background-color: #ed4956; width: auto; }
-
-#auth-section, .upload-container { max-width: 400px; margin: 50px auto; background: white; padding: 20px; border: 1px solid #dbdbdb; border-radius: 8px; }
-.main-header { display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto 20px auto; }
-
-#feed { max-width: 500px; margin: 0 auto; }
-.post-card { background: white; border: 1px solid #dbdbdb; margin-bottom: 24px; border-radius: 8px; overflow: hidden; }
-.post-header { padding: 12px; border-bottom: 1px solid #efefef; }
-.post-card img { width: 100%; display: block; height: auto; }
-.post-body { padding: 12px; }
-.post-body p { margin: 0 0 10px 0; }
-.post-body small { color: #8e8e8e; font-size: 0.75em; }
-.expira { color: #ed4956 !important; font-weight: bold; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="auth-section">
-<div class="card">
-<h2>Acceso</h2>
-<input type="email" id="email" placeholder="Correo">
-<input type="password" id="password" placeholder="Contraseña">
-<button id="btn-login">Entrar</button>
-<button id="btn-register" class="btn-secondary">Crear Cuenta</button>
-</div>
+    <div class="card">
+        <h2>Acceso al Sistema</h2>
+        <input type="email" id="email" placeholder="Correo">
+        <input type="password" id="password" placeholder="Contraseña">
+        <div class="auth-buttons">
+            <button id="btn-login">Entrar</button>
+            <button id="btn-register" class="btn-secondary">Crear Cuenta</button>
+        </div>
+    </div>
 </div>
 
 <div id="app-section" class="hidden">
-<header class="main-header">
-<span>Usuario: <b id="user-display"></b></span>
-<button id="btn-logout" class="btn-danger">Salir</button>
-</header>
+    <header class="main-header">
+        <span>Usuario: <b id="user-display"></b></span>
+        <button id="btn-logout" class="btn-danger">Salir</button>
+    </header>
 
-<div class="upload-container">
-<h3>Nueva Foto</h3>
-<input type="text" id="photo-text" placeholder="Descripción">
-<input type="file" id="photo-file" accept="image/*">
-<button id="btn-upload">Publicar</button>
-<div id="upload-status"></div>
-</div>
+    <div class="upload-container">
+        <h3>Nueva Foto</h3>
+        <input type="text" id="photo-text" placeholder="Descripción">
+        <input type="file" id="photo-file" accept="image/*">
+        <button id="btn-upload">Publicar</button>
+        <div id="upload-status"></div>
+    </div>
 
-<div id="feed"></div>
+    <div id="feed"></div>
+    <button id="btn-load-more" class="btn-secondary hidden">Cargar más</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-  onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-import { getFirestore, collection, addDoc, query, getDocs, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, getDocs, orderBy, limit, startAfter, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Config Firebase
+// --- Configuración Firebase ---
 const firebaseConfig = {
-  apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
-  authDomain: "proyectnrabitcia.firebaseapp.com",
-  projectId: "proyectnrabitcia",
-  storageBucket: "proyectnrabitcia.firebasestorage.app",
-  messagingSenderId: "1027517841438",
-  appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
+    apiKey: "AIzaSyBFxiuq5VEPIE_XF6o1r_5B3M3TVID4ADM",
+    authDomain: "proyectnrabitcia.firebaseapp.com",
+    projectId: "proyectnrabitcia",
+    storageBucket: "proyectnrabitcia.firebasestorage.app",
+    messagingSenderId: "1027517841438",
+    appId: "1:1027517841438:web:e38d64106c2e79b390ee0f"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -79,114 +59,137 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const db = getFirestore(app);
 
-// Inputs
 const emailInput = document.getElementById("email");
 const passInput = document.getElementById("password");
 const feed = document.getElementById("feed");
+const btnLoadMore = document.getElementById("btn-load-more");
 
-// Registro
+let lastVisible = null;
+const PAGE_SIZE = 5; // cantidad de fotos por página
+
+// --- Registro ---
 document.getElementById("btn-register").onclick = async () => {
-  const email = emailInput.value.trim();
-  const pass = passInput.value.trim();
-  if(!email || !pass) return alert("Completa todos los campos");
-  try {
-    await createUserWithEmailAndPassword(auth,email,pass);
-    alert("Cuenta creada ✔");
-  } catch(e) { alert(e.message); }
+    const email = emailInput.value.trim();
+    const pass = passInput.value.trim();
+    if(!email || !pass){ alert("Completa todos los campos"); return; }
+    try { await createUserWithEmailAndPassword(auth,email,pass); alert("Cuenta creada ✔"); } 
+    catch(e){ alert("Error: "+e.message); }
 };
 
-// Login
+// --- Login ---
 document.getElementById("btn-login").onclick = async () => {
-  try { await signInWithEmailAndPassword(auth,emailInput.value,passInput.value); }
-  catch(e) { alert("Error login: "+e.message); }
+    try { await signInWithEmailAndPassword(auth,emailInput.value,passInput.value); } 
+    catch(e){ alert("Error login: "+e.message); }
 };
 
-// Logout
+// --- Logout ---
 document.getElementById("btn-logout").onclick = () => signOut(auth);
 
-// Estado de sesión
+// --- Detectar cambios ---
 onAuthStateChanged(auth,user=>{
-  const authDiv=document.getElementById("auth-section");
-  const appDiv=document.getElementById("app-section");
-  if(user){
-    authDiv.classList.add("hidden");
-    appDiv.classList.remove("hidden");
-    document.getElementById("user-display").innerText=user.email;
-    cargarFeed(); // FORZAR CARGA DE TODAS LAS FOTOS
-  } else {
-    authDiv.classList.remove("hidden");
-    appDiv.classList.add("hidden");
-  }
+    const authDiv=document.getElementById("auth-section");
+    const appDiv=document.getElementById("app-section");
+    if(user){
+        authDiv.classList.add("hidden");
+        appDiv.classList.remove("hidden");
+        document.getElementById("user-display").innerText=user.email;
+        feed.innerHTML = "";
+        lastVisible = null;
+        cargarFeed(true); // carga inicial
+    }else{
+        authDiv.classList.remove("hidden");
+        appDiv.classList.add("hidden");
+    }
 });
 
-// Subida de fotos
+// --- Subir foto ---
 document.getElementById("btn-upload").onclick = async ()=>{
-  const fileInput=document.getElementById("photo-file");
-  const textInput=document.getElementById("photo-text");
-  const status=document.getElementById("upload-status");
+    const fileInput=document.getElementById("photo-file");
+    const textInput=document.getElementById("photo-text");
+    const status=document.getElementById("upload-status");
 
-  if(!auth.currentUser) return alert("Debes iniciar sesión");
-  const file=fileInput.files[0];
-  if(!file) return alert("Selecciona una imagen");
-  if(file.size>5*1024*1024) return alert("Imagen muy grande (max 5MB)");
+    if(!auth.currentUser){ alert("Debes iniciar sesión"); return; }
+    const file=fileInput.files[0];
+    if(!file){ alert("Selecciona una imagen"); return; }
+    if(file.size>5*1024*1024){ alert("Imagen muy grande (máx 5MB)"); return; }
 
-  try {
-    status.innerText="Subiendo imagen...";
-    const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
-    const storageRef=ref(storage,fileName);
-    const snap=await uploadBytes(storageRef,file);
-    const url=await getDownloadURL(snap.ref);
-    const expira=new Date(); expira.setDate(expira.getDate()+10);
+    try{
+        status.innerText="Subiendo imagen...";
+        const fileName=`fotos/${Date.now()}_${auth.currentUser.uid}`;
+        const storageRef=ref(storage,fileName);
+        const snap=await uploadBytes(storageRef,file);
+        const url=await getDownloadURL(snap.ref);
 
-    await addDoc(collection(db,"posts"),{
-      imageUrl:url,
-      descripcion:textInput.value || "",
-      autor:auth.currentUser.email,
-      creado:Timestamp.now(),
-      expira:Timestamp.fromDate(expira)
-    });
+        const expira=new Date();
+        expira.setDate(expira.getDate()+10);
 
-    status.innerText="Publicado ✔";
-    fileInput.value=""; textInput.value="";
-    cargarFeed(); // actualizar feed
-  } catch(e) {
-    console.error(e);
-    alert("Error: "+e.code);
-  }
+        await addDoc(collection(db,"posts"),{
+            imageUrl:url,
+            descripcion:textInput.value,
+            autor:auth.currentUser.email,
+            creado:Timestamp.now(),
+            expira:Timestamp.fromDate(expira)
+        });
+
+        status.innerText="Publicado ✔";
+        fileInput.value="";
+        textInput.value="";
+        lastVisible = null;
+        feed.innerHTML = "";
+        cargarFeed(true); // recargar todas las fotos
+    }catch(e){
+        console.error(e);
+        alert("Error: "+e.code);
+    }
 };
 
-// Cargar feed
-async function cargarFeed(){
-  feed.innerHTML="<p>Cargando fotos...</p>";
-  const ahora=new Date();
-  try{
-    const q=query(collection(db,"posts"),orderBy("creado","desc"));
-    const snapshot=await getDocs(q);
-    feed.innerHTML="";
-    snapshot.forEach(doc=>{
-      const data=doc.data();
-      const fechaExpira=data.expira.toDate();
-      if(ahora<fechaExpira){
-        const html=`
-          <div class="post-card">
-            <div class="post-header"><strong>${data.autor}</strong></div>
-            <img src="${data.imageUrl}" alt="Foto">
-            <div class="post-body">
-              <p>${data.descripcion}</p>
-              <small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small><br>
-              <small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
-            </div>
-          </div>
-        `;
-        feed.insertAdjacentHTML("beforeend",html);
-      }
-    });
-    if(feed.innerHTML==="") feed.innerHTML="<p>No hay fotos activas.</p>";
-  } catch(e){
-    console.error(e);
-    feed.innerHTML="<p>Error cargando fotos.</p>";
-  }
+// --- Cargar feed con paginación ---
+async function cargarFeed(reset=false){
+    const ahora = new Date();
+    btnLoadMore.classList.add("hidden");
+    let q;
+
+    if(lastVisible){
+        q = query(collection(db,"posts"),orderBy("creado","desc"),startAfter(lastVisible),limit(PAGE_SIZE));
+    }else{
+        q = query(collection(db,"posts"),orderBy("creado","desc"),limit(PAGE_SIZE));
+    }
+
+    try{
+        const snapshot = await getDocs(q);
+        if(snapshot.empty){ if(reset) feed.innerHTML="<p>No hay fotos disponibles</p>"; return; }
+
+        lastVisible = snapshot.docs[snapshot.docs.length-1];
+
+        snapshot.forEach(doc=>{
+            const data=doc.data();
+            const fechaExpira=data.expira.toDate();
+            if(ahora < fechaExpira){
+                const html=`
+                <div class="post-card">
+                    <div class="post-header"><strong>${data.autor}</strong></div>
+                    <img src="${data.imageUrl}">
+                    <div class="post-body">
+                        <p>${data.descripcion}</p>
+                        <small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
+                        <br>
+                        <small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
+                    </div>
+                </div>`;
+                feed.insertAdjacentHTML("beforeend",html);
+            }
+        });
+
+        // Mostrar botón de cargar más si hay más fotos
+        if(snapshot.size === PAGE_SIZE) btnLoadMore.classList.remove("hidden");
+
+    }catch(e){
+        feed.innerHTML="<p>Error cargando posts</p>";
+    }
 }
+
+// --- Botón cargar más ---
+btnLoadMore.onclick = () => cargarFeed();
 </script>
 </body>
 </html>

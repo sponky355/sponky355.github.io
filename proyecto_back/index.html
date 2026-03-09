@@ -144,31 +144,39 @@ document.getElementById("btn-upload").onclick = async ()=>{
 };
 
 // --- Cargar feed con paginación ---
-async function cargarFeed(reset=false){
+
+async function cargarFeed() {
+    feed.innerHTML = "<p>Cargando publicaciones...</p>";
     const ahora = new Date();
-    btnLoadMore.classList.add("hidden");
-    let q;
 
-    if(lastVisible){
-        q = query(collection(db,"posts"),orderBy("creado","desc"),startAfter(lastVisible),limit(PAGE_SIZE));
-    }else{
-        q = query(collection(db,"posts"),orderBy("creado","desc"),limit(PAGE_SIZE));
-    }
-
-    try{
+    try {
+        const q = query(collection(db, "posts"), orderBy("creado", "desc"));
         const snapshot = await getDocs(q);
-        if(snapshot.empty){ if(reset) feed.innerHTML="<p>No hay fotos disponibles</p>"; return; }
 
-        lastVisible = snapshot.docs[snapshot.docs.length-1];
+        feed.innerHTML = "";
 
-        snapshot.forEach(doc=>{
-            const data=doc.data();
-            const fechaExpira=data.expira.toDate();
-            if(ahora < fechaExpira){
-                const html=`
+        snapshot.forEach(async doc => {
+            const data = doc.data();
+            const fechaExpira = data.expira.toDate();
+
+            // Solo mostrar si no ha expirado
+            if (ahora < fechaExpira) {
+                let url = data.imageUrl;
+
+                // Intentar cargar la imagen, si falla poner placeholder
+                try {
+                    url = await getDownloadURL(ref(storage, url.split('/o/')[1].split('?')[0]));
+                } catch (err) {
+                    console.warn("No se pudo cargar la imagen, usando placeholder:", err.code);
+                    url = "https://via.placeholder.com/400x300?text=Imagen+No+Disponible";
+                }
+
+                const html = `
                 <div class="post-card">
-                    <div class="post-header"><strong>${data.autor}</strong></div>
-                    <img src="${data.imageUrl}">
+                    <div class="post-header">
+                        <strong>${data.autor}</strong>
+                    </div>
+                    <img src="${url}" alt="Foto compartida">
                     <div class="post-body">
                         <p>${data.descripcion}</p>
                         <small>Publicado: ${data.creado.toDate().toLocaleDateString()}</small>
@@ -176,18 +184,15 @@ async function cargarFeed(reset=false){
                         <small class="expira">Expira: ${fechaExpira.toLocaleDateString()}</small>
                     </div>
                 </div>`;
-                feed.insertAdjacentHTML("beforeend",html);
+                feed.insertAdjacentHTML("beforeend", html);
             }
         });
 
-        // Mostrar botón de cargar más si hay más fotos
-        if(snapshot.size === PAGE_SIZE) btnLoadMore.classList.remove("hidden");
-
-    }catch(e){
-        feed.innerHTML="<p>Error cargando posts</p>";
+    } catch (e) {
+        feed.innerHTML = "<p>Error cargando posts</p>";
+        console.error(e);
     }
 }
-
 // --- Botón cargar más ---
 btnLoadMore.onclick = () => cargarFeed();
 </script>

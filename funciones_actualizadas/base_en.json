@@ -1,0 +1,25 @@
+{
+  "idiomas": {
+    "titulo": "🌐 Select language",
+    "es": "🇪🇸 Spanish",
+    "ru": "🇷🇺 Russian",
+    "en": "🇬🇧 English"
+  },
+  "titulo_principal": "🐾 Sponky",
+  "habilidades_gustos": "✨ Skills and interests",
+  "lista": [
+    "Age:",
+    "🐱 Cat lover",
+    "🎮 Video games",
+    "☕ Coffee"
+  ],
+  "redes": {
+    "titulo": "🌐 My Networks"
+  },
+  "recomendados": {
+    "titulo": "📚 Recommendations",
+    "biblioteca": "📖 Library",
+    "biblioteca_texto": "Explore our book selection",
+    "usuarios": "👥 Community"
+  }
+}

@@ -1,0 +1,117 @@
+(function() {
+  // ---- 1. DROPDOWN TOGGLE ----
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleButton = document.querySelector(".dropdown-toggle");
+    const dropdownMenu = document.querySelector(".dropdown-menu");
+    let abierto = false;
+
+    if (toggleButton && dropdownMenu) {
+      toggleButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        abierto = !abierto;
+        if (abierto) dropdownMenu.classList.add("show");
+        else dropdownMenu.classList.remove("show");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!toggleButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.remove("show");
+          abierto = false;
+        }
+      });
+    }
+  });
+
+  // ---- 2. IDIOMA / TRADUCCIONES ----
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get("lang") || "es";
+  const jsonPath = `funciones_index/base_${lang}.json`;
+
+  // Función para calcular edad automáticamente - SIEMPRE ACTUALIZADA
+  function calcularEdad() {
+    const nacimiento = new Date(2003, 7, 19); // 19 de agosto de 2003
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+
+  // Función para mostrar edad con el texto base
+  function mostrarEdadTexto(base) {
+    const edad = calcularEdad();
+    return `${base} ${edad} años.`;
+  }
+
+  // Cargar traducciones
+  fetch(jsonPath)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      // Idiomas
+      const idiomaTitulo = document.getElementById("idioma-titulo");
+      const idiomaEs = document.getElementById("idioma-es");
+      const idiomaRu = document.getElementById("idioma-ru");
+      const idiomaEn = document.getElementById("idioma-en");
+
+      if (idiomaTitulo) idiomaTitulo.textContent = data.idiomas?.titulo || "🌐 Seleccionar idioma";
+      if (idiomaEs) idiomaEs.textContent = data.idiomas?.es || "🇪🇸 Español";
+      if (idiomaRu) idiomaRu.textContent = data.idiomas?.ru || "🇷🇺 Русский";
+      if (idiomaEn) idiomaEn.textContent = data.idiomas?.en || "🇬🇧 English";
+
+      // Enlaces de idiomas con la página actual
+      const currentPage = window.location.pathname.split("/").pop() || "index.html";
+      if (idiomaEs) idiomaEs.href = `${currentPage}?lang=es`;
+      if (idiomaRu) idiomaRu.href = `${currentPage}?lang=ru`;
+      if (idiomaEn) idiomaEn.href = `${currentPage}?lang=en`;
+
+      // Contenido principal
+      const titulo = document.getElementById("titulo-principal");
+      if (titulo) titulo.textContent = data.titulo_principal || "🐾 Sponky";
+
+      const habGustos = document.getElementById("habilidades-gustos");
+      if (habGustos) habGustos.textContent = data.habilidades_gustos || "✨ Habilidades y gustos";
+
+      // Lista de habilidades (con edad SIEMPRE actualizada)
+      const ul = document.getElementById("lista-habilidades");
+      if (ul && data.lista && Array.isArray(data.lista)) {
+        ul.innerHTML = "";
+        data.lista.forEach(item => {
+          const li = document.createElement("li");
+          // Detecta si el item contiene "Edad:" o "Age:" o "Возраст:" y lo reemplaza con la edad calculada
+          if (item.includes("Edad:") || item.includes("Age:") || item.includes("Возраст:")) {
+            // Extrae el texto base sin el número
+            const baseTexto = item.replace(/\d+ años\.?$/, '').trim();
+            li.textContent = mostrarEdadTexto(baseTexto);
+          } else {
+            li.textContent = item;
+          }
+          ul.appendChild(li);
+        });
+      }
+
+      // Redes sociales - Título
+      const tituloRedes = document.getElementById("titulo-redes");
+      if (tituloRedes) tituloRedes.textContent = data.redes?.titulo || "🌐 Mis Redes";
+
+      // Recomendados
+      const tituloRecom = document.getElementById("titulo-recomendados");
+      if (tituloRecom) tituloRecom.textContent = data.recomendados?.titulo || "📚 Recomendaciones";
+
+      const btnBiblio = document.getElementById("btn-biblioteca");
+      if (btnBiblio) btnBiblio.textContent = data.recomendados?.biblioteca || "📖 Biblioteca";
+
+      const textoBiblio = document.getElementById("texto-biblioteca");
+      if (textoBiblio) textoBiblio.textContent = data.recomendados?.biblioteca_texto || "Explora nuestra selección de libros";
+
+      const btnUsers = document.getElementById("btn-usuarios");
+      if (btnUsers) btnUsers.textContent = data.recomendados?.usuarios || "👥 Comunidad";
+    })
+    .catch(err => {
+      console.warn("⚠️ No se pudo cargar el archivo de idioma. Usando valores por defecto.", err);
+    });
+})();

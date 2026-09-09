@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flor · Ensamblaje + Esporas · only you</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0b0b;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            cursor: pointer;
+        }
+
+        .container {
+            background: #0d0d0d;
+            border-radius: 2.8rem;
+            padding: 2rem 2rem 2.2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 70px rgba(255, 80, 140, 0.04);
+            border: 1px solid #1f1a16;
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .container * {
+            pointer-events: auto;
+        }
+
+        h1 {
+            color: #e4d7cc;
+            font-weight: 300;
+            font-size: 1.9rem;
+            letter-spacing: 5px;
+            margin-bottom: 0.1rem;
+            text-shadow: 0 0 30px rgba(255, 130, 180, 0.08);
+        }
+
+        .subtitulo {
+            color: #7a6b5e;
+            font-weight: 300;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #28221c;
+            padding-bottom: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            padding-inline: 1.2rem;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            border-radius: 30px;
+            background: #0a0a0a;
+            box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.8), 0 8px 32px rgba(0, 0, 0, 0.7);
+            border: 1px solid #1f1a16;
+            cursor: pointer;
+            transition: filter 0.2s;
+            pointer-events: auto;
+        }
+
+        canvas:hover {
+            filter: brightness(1.04);
+        }
+
+        .controles {
+            margin-top: 1.8rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #1a1511;
+            border: 1px solid #3a322b;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #d6c9bc;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #0f0c09;
+            pointer-events: auto;
+        }
+
+        .btn:hover {
+            background: #2f2620;
+            border-color: #6a5a4c;
+            color: #f0e3d6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0f0c09;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0f0c09;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid #b38a72;
+            outline-offset: 4px;
+        }
+
+        .info {
+            margin-top: 1.4rem;
+            font-size: 0.7rem;
+            color: #4a4038;
+            letter-spacing: 1px;
+            border-top: 1px solid #1e1915;
+            padding-top: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Overlay de "Haz clic para empezar" */
+        .click-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: opacity 0.8s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .click-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .click-message {
+            color: #e4d7cc;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-align: center;
+            padding: 2.5rem 3rem;
+            border: 1px solid #3a322b;
+            border-radius: 30px;
+            background: #0d0d0d;
+            box-shadow: 0 0 80px rgba(255, 80, 140, 0.06);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .click-message span {
+            display: block;
+            font-size: 3.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .click-message small {
+            font-size: 0.8rem;
+            color: #7a6b5e;
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @media (max-width: 520px) {
+            .container { padding: 1.2rem; }
+            h1 { font-size: 1.5rem; }
+            .btn { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
+            .click-message { font-size: 1.2rem; padding: 1.5rem; }
+            .click-message span { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay de "Haz clic para empezar" -->
+    <div class="click-overlay" id="clickOverlay">
+        <div class="click-message">
+            <span>🌸</span>
+            Haz clic para comenzar
+            <small>· solo tú ·</small>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>De Josue a Larissa</h1>
+        <div class="subtitulo">con mucho cariño de Josue </div>
+
+        <canvas id="florCanvas" width="640" height="640"></canvas>
+
+        <div class="controles">
+            <button class="btn" id="btnReconstruir">🌀 reconstruir</button>
+            <button class="btn" id="btnAnimacion">⏸ pausar</button>
+        </div>
+
+        <div class="info"></div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const canvas = document.getElementById('florCanvas');
+            const ctx = canvas.getContext('2d');
+            const W = 640, H = 640;
+            canvas.width = W;
+            canvas.height = H;
+
+            const cx = W / 2, cy = H / 2;
+
+            // ---- AUDIO ----
+            let audio = null;
+            let audioInitialized = false;
+            let fadeInInterval = null;
+            let isFadingIn = false;
+            let fadeInProgress = 0;
+            const TARGET_VOLUME = 0.7;
+            let userInteracted = false;
+
+            // ---- configuración ----
+            const CONFIG = {
+                petalCount: 8,
+                petalLength: 190,
+                petalWidth: 85,
+                innerRadius: 50,
+                particleCount: 4200,
+                spiralTurns: 4,
+                assemblySpeed: 0.004,
+                rotationSpeed: 0.0025,
+                sporeCount: 180,
+            };
+
+            // ---- paleta ----
+            const PAL = {
+                petalBase: { r: 225, g: 75, b: 135 },
+                petalMid:   { r: 200, g: 45, b: 115 },
+                petalTip:   { r: 180, g: 30, b: 100 },
+                petalGlow:  { r: 245, g: 130, b: 175 },
+                center:     { r: 255, g: 210, b: 80 },
+                centerDark: { r: 210, g: 150, b: 40 },
+                spiral:     { r: 240, g: 160, b: 200 },
+                sparkle:    { r: 255, g: 200, b: 230 },
+                spore:      { r: 180, g: 220, b: 255 },
+                spore2:     { r: 200, g: 180, b: 255 },
+            };
+
+            // ---- utilidades ----
+            function lerp(a, b, t) { return a + (b - a) * t; }
+            function clamp(v, mn, mx) { return Math.min(Math.max(v, mn), mx); }
+            function rand(min, max) { return Math.random() * (max - min) + min; }
+
+            function mixCol(c1, c2, t) {
+                return {
+                    r: lerp(c1.r, c2.r, t),
+                    g: lerp(c1.g, c2.g, t),
+                    b: lerp(c1.b, c2.b, t)
+                };
+            }
+
+            // ---- partículas ----
+            let particles = [];
+            let baseParticles = [];
+            let scatteredParticles = [];
+            let spores = [];
+
+            // ---- construir flor ----
+            function buildFlower() {
+                const { petalCount, petalLength, petalWidth, innerRadius, particleCount, spiralTurns } = CONFIG;
+                const newParticles = [];
+
+                // 1. PÉTALOS
+                const petalParticles = Math.floor(particleCount * 0.50);
+                const perPetal = Math.floor(petalParticles / petalCount);
+
+                for (let i = 0; i < petalCount; i++) {
+                    const baseAngle = (i / petalCount) * Math.PI * 2;
+                    const angleOff = rand(-0.06, 0.06);
+                    const angle = baseAngle + angleOff;
+
+                    for (let j = 0; j < perPetal; j++) {
+                        const t = Math.pow(rand(0.05, 1.0), 0.7);
+                        const lateral = rand(-0.92, 0.92);
+
+                        const widthProfile = Math.sin(t * Math.PI) * 0.9 + 0.1;
+                        const r = t * petalLength;
+                        const lateralOffset = lateral * petalWidth * 0.45 * widthProfile;
+
+                        const x = cx + Math.cos(angle) * r - Math.sin(angle) * lateralOffset;
+                        const y = cy + Math.sin(angle) * r + Math.cos(angle) * lateralOffset;
+
+                        let col;
+                        if (t < 0.3) {
+                            const p = t / 0.3;
+                            col = mixCol(PAL.petalBase, PAL.petalMid, p);
+                        } else if (t < 0.7) {
+                            const p = (t - 0.3) / 0.4;
+                            col = mixCol(PAL.petalMid, PAL.petalTip, p);
+                        } else {
+                            const p = (t - 0.7) / 0.3;
+                            col = mixCol(PAL.petalTip, PAL.petalGlow, p * 0.5);
+                        }
+                        const vR = rand(-12, 12);
+                        const vG = rand(-8, 8);
+                        const vB = rand(-8, 8);
+                        const rCol = clamp(col.r + vR, 20, 255);
+                        const gCol = clamp(col.g + vG, 10, 220);
+                        const bCol = clamp(col.b + vB, 10, 230);
+
+                        const size = rand(1.8, 5.5) * (0.6 + 0.5 * (1 - t * 0.8));
+
+                        newParticles.push({
+                            x, y,
+                            r: rCol, g: gCol, b: bCol,
+                            size: size,
+                            type: 'petal',
+                            baseX: x, baseY: y,
+                            angleOffset: angle,
+                            radius: r,
+                            lateralOff: lateralOffset,
+                            t: t,
+                            petalIndex: i,
+                        });
+                    }
+                }
+
+                // 2. CENTRO
+                const centerCount = Math.floor(particleCount * 0.18);
+                for (let i = 0; i < centerCount; i++) {
+                    const radius = rand(0, innerRadius * 1.15);
+                    const angle = rand(0, Math.PI * 2);
+                    const x = cx + Math.cos(angle) * radius;
+                    const y = cy + Math.sin(angle) * radius;
+
+                    const mixT = radius / innerRadius;
+                    const col = mixCol(PAL.center, PAL.centerDark, mixT * 0.8);
+                    const vR = rand(-15, 15);
+                    const vG = rand(-15, 15);
+                    const vB = rand(-10, 10);
+                    const rCol = clamp(col.r + vR, 40, 255);
+                    const gCol = clamp(col.g + vG, 30, 230);
+                    const bCol = clamp(col.b + vB, 10, 150);
+
+                    const size = rand(1.8, 5.0) * (0.9 - 0.3 * mixT);
+                    newParticles.push({
+                        x, y,
+                        r: rCol, g: gCol, b: bCol,
+                        size: size,
+                        type: 'center',
+                        baseX: x, baseY: y,
+                        angleOffset: angle,
+                        radius: radius,
+                    });
+                }
+
+                // 3. ESPIRAL
+                const spiralCount = Math.floor(particleCount * 0.12);
+                for (let i = 0; i < spiralCount; i++) {
+                    const t = i / spiralCount;
+                    const angle = t * Math.PI * 2 * spiralTurns + 0.3;
+                    const radius = innerRadius * 0.6 + t * 80;
+                    const x = cx + Math.cos(angle) * radius;
+                    const y = cy + Math.sin(angle) * radius;
+
+                    const col = mixCol(PAL.spiral, PAL.petalGlow, t);
+                    const rCol = clamp(col.r + rand(-10, 10), 30, 255);
+                    const gCol = clamp(col.g + rand(-10, 10), 30, 220);
+                    const bCol = clamp(col.b + rand(-10, 10), 40, 230);
+
+                    const size = rand(1.0, 3.5) * (0.8 + 0.3 * (1 - t));
+                    newParticles.push({
+                        x, y,
+                        r: rCol, g: gCol, b: bCol,
+                        size: size,
+                        type: 'spiral',
+                        baseX: x, baseY: y,
+                        angleOffset: angle,
+                        radius: radius,
+                        t: t,
+                    });
+                }
+
+                // 4. Destellos
+                const sparkleCount = Math.floor(particleCount * 0.08);
+                for (let i = 0; i < sparkleCount; i++) {
+                    const angle = rand(0, Math.PI * 2);
+                    const radius = rand(innerRadius * 0.5, petalLength * 0.85);
+                    const x = cx + Math.cos(angle) * radius;
+                    const y = cy + Math.sin(angle) * radius;
+
+                    const col = PAL.sparkle;
+                    const rCol = clamp(col.r + rand(-15, 15), 180, 255);
+                    const gCol = clamp(col.g + rand(-15, 15), 150, 240);
+                    const bCol = clamp(col.b + rand(-15, 15), 180, 255);
+
+                    const size = rand(0.6, 2.8);
+                    newParticles.push({
+                        x, y,
+                        r: rCol, g: gCol, b: bCol,
+                        size: size,
+                        type: 'sparkle',
+                        baseX: x, baseY: y,
+                        angleOffset: angle,
+                        radius: radius,
+                    });
+                }
+
+                baseParticles = newParticles.map(p => ({ ...p }));
+
+                // --- Estado desordenado ---
+                scatteredParticles = baseParticles.map(p => {
+                    const angle = rand(0, Math.PI * 2);
+                    const dist = rand(50, 300);
+                    return {
+                        ...p,
+                        x: cx + Math.cos(angle) * dist,
+                        y: cy + Math.sin(angle) * dist,
+                    };
+                });
+
+                particles = scatteredParticles.map(p => ({ ...p }));
+
+                // ---- 5. ESPORAS ----
+                buildSpores();
+            }
+
+            // ---- construir esporas ----
+            function buildSpores() {
+                const { sporeCount, petalLength } = CONFIG;
+                spores = [];
+                for (let i = 0; i < sporeCount; i++) {
+                    const angle = rand(0, Math.PI * 2);
+                    const dist = rand(petalLength * 0.7, petalLength * 1.8);
+                    const x = cx + Math.cos(angle) * dist;
+                    const y = cy + Math.sin(angle) * dist;
+
+                    const col = Math.random() > 0.5 ? PAL.spore : PAL.spore2;
+                    const rCol = clamp(col.r + rand(-20, 20), 100, 255);
+                    const gCol = clamp(col.g + rand(-20, 20), 100, 255);
+                    const bCol = clamp(col.b + rand(-20, 20), 150, 255);
+
+                    const size = rand(1.5, 5.0);
+                    const speed = rand(0.002, 0.008);
+                    const orbitRadius = rand(10, 45);
+                    const phase = rand(0, Math.PI * 2);
+
+                    spores.push({
+                        x, y,
+                        r: rCol, g: gCol, b: bCol,
+                        size: size,
+                        baseX: x,
+                        baseY: y,
+                        angle: angle,
+                        dist: dist,
+                        speed: speed,
+                        orbitRadius: orbitRadius,
+                        phase: phase,
+                        alpha: rand(0.3, 0.8),
+                    });
+                }
+            }
+
+            // ---- INICIALIZAR AUDIO con FADE-IN ----
+            function initAudio() {
+                if (audioInitialized) return;
+                if (!userInteracted) return;
+
+                audioInitialized = true;
+
+                audio = new Audio();
+                audio.src = 'only you..mp3';
+                audio.loop = false;
+                audio.volume = 0;
+                audio.preload = 'auto';
+                audio.load();
+
+                audio.addEventListener('canplaythrough', function() {
+                    startFadeIn();
+                });
+
+                audio.addEventListener('error', function(e) {
+                    console.warn('Error al cargar el audio:', e);
+                    audio.src = './only you..mp3';
+                    audio.load();
+                });
+
+                audio.addEventListener('ended', function() {});
+            }
+
+            // ---- FADE-IN del audio ----
+            function startFadeIn() {
+                if (isFadingIn) return;
+                if (!audio) return;
+
+                isFadingIn = true;
+                fadeInProgress = 0;
+                audio.volume = 0;
+
+                audio.currentTime = 0;
+                audio.play().catch(e => console.warn('Error al reproducir:', e));
+
+                if (fadeInInterval) clearInterval(fadeInInterval);
+                fadeInInterval = setInterval(function() {
+                    fadeInProgress += 0.008;
+                    if (fadeInProgress >= 1) {
+                        fadeInProgress = 1;
+                        clearInterval(fadeInInterval);
+                        fadeInInterval = null;
+                        isFadingIn = false;
+                    }
+                    const eased = 1 - Math.pow(1 - fadeInProgress, 2);
+                    audio.volume = eased * TARGET_VOLUME;
+                }, 50);
+            }
+
+            // ---- Detener y reiniciar audio ----
+            function resetAudio() {
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.volume = 0;
+                    if (fadeInInterval) {
+                        clearInterval(fadeInInterval);
+                        fadeInInterval = null;
+                    }
+                    isFadingIn = false;
+                    fadeInProgress = 0;
+                }
+                audioInitialized = false;
+            }
+
+            // ---- MANEJAR INTERACCIÓN DEL USUARIO ----
+            function handleUserInteraction() {
+                if (userInteracted) return;
+                userInteracted = true;
+
+                // Ocultar overlay
+                const overlay = document.getElementById('clickOverlay');
+                overlay.classList.add('hidden');
+
+                // REANUDAR LA ANIMACIÓN
+                animActive = true;
+                document.getElementById('btnAnimacion').textContent = '⏸ pausar';
+
+                // Si la flor ya está ensamblada, iniciar audio inmediatamente
+                if (assemblyProgress >= 1.0) {
+                    initAudio();
+                }
+            }
+
+            // ---- animación ----
+            let assemblyProgress = 0;
+            let animActive = false; // ← INICIA EN PAUSA
+            let isAssembling = true;
+            let time = 0;
+            let smoothRotation = 0;
+            let audioStarted = false;
+
+            // ---- updateParticles ----
+            function updateParticles() {
+                if (!animActive) return;
+
+                time += 1;
+
+                if (isAssembling) {
+                    assemblyProgress += CONFIG.assemblySpeed;
+                    if (assemblyProgress >= 1.0) {
+                        assemblyProgress = 1.0;
+                        isAssembling = false;
+                        // Cuando la flor está completamente ensamblada, iniciar audio
+                        if (!audioStarted && userInteracted) {
+                            audioStarted = true;
+                            initAudio();
+                        }
+                    }
+                }
+
+                const progress = assemblyProgress;
+                const eased = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                const rotSpeed = CONFIG.rotationSpeed;
+                const rotFactor = eased;
+                smoothRotation += rotSpeed * rotFactor;
+
+                // Actualizar partículas
+                for (let i = 0; i < particles.length; i++) {
+                    const base = baseParticles[i];
+                    const scattered = scatteredParticles[i];
+                    const p = particles[i];
+                    if (base && scattered) {
+                        const baseX = lerp(scattered.x, base.baseX, eased);
+                        const baseY = lerp(scattered.y, base.baseY, eased);
+
+                        const dx = baseX - cx;
+                        const dy = baseY - cy;
+                        const cosA = Math.cos(smoothRotation);
+                        const sinA = Math.sin(smoothRotation);
+                        p.x = cx + dx * cosA - dy * sinA;
+                        p.y = cy + dx * sinA + dy * cosA;
+                    }
+                }
+
+                // Actualizar esporas
+                const sporeRot = smoothRotation * 0.3;
+                for (const spore of spores) {
+                    const orbit = Math.sin(time * spore.speed + spore.phase) * spore.orbitRadius;
+                    const angleOffset = Math.cos(time * spore.speed * 0.7 + spore.phase) * 0.15;
+                    const currentAngle = spore.angle + angleOffset + sporeRot * 0.2;
+                    const currentDist = spore.dist + orbit * 0.3;
+
+                    const x = cx + Math.cos(currentAngle) * currentDist;
+                    const y = cy + Math.sin(currentAngle) * currentDist;
+
+                    const waveX = Math.sin(time * spore.speed * 0.5 + spore.phase) * 8;
+                    const waveY = Math.cos(time * spore.speed * 0.6 + spore.phase * 1.3) * 8;
+
+                    spore.x = x + waveX;
+                    spore.y = y + waveY;
+                    spore.alpha = 0.4 + 0.4 * (0.5 + 0.5 * Math.sin(time * spore.speed * 0.3 + spore.phase));
+                }
+            }
+
+            // ---- dibujar ----
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+
+                const grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 350);
+                grad.addColorStop(0, '#14100e');
+                grad.addColorStop(1, '#030303');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, W, H);
+
+                // Esporas
+                for (const spore of spores) {
+                    const { x, y, r, g, b, size, alpha } = spore;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha * 0.7})`;
+                    ctx.fill();
+
+                    ctx.shadowColor = `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha * 0.2})`;
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, size * 0.3, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.15})`;
+                    ctx.fill();
+                }
+
+                // Partículas de la flor
+                for (const p of particles) {
+                    const { x, y, r, g, b, size, type } = p;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+
+                    let alpha = 0.92;
+                    if (type === 'sparkle') alpha = 0.95;
+                    if (type === 'center') alpha = 0.98;
+
+                    ctx.fillStyle = `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`;
+                    ctx.fill();
+
+                    if (type === 'sparkle' || type === 'center') {
+                        ctx.shadowColor = `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, 0.35)`;
+                        ctx.shadowBlur = 14;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                // Líneas de luz
+                ctx.save();
+                ctx.globalCompositeOperation = 'screen';
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = 'rgba(255,150,200,0.05)';
+                const t = Date.now() * 0.001;
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2 + t * 0.08;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(cx + Math.cos(angle) * 220, cy + Math.sin(angle) * 220);
+                    ctx.strokeStyle = `rgba(255,180,220,${0.015 + 0.01 * Math.sin(t * 0.5 + i)})`;
+                    ctx.lineWidth = 1.8;
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // ---- loop ----
+            let animId = null;
+
+            function animate() {
+                updateParticles();
+                draw();
+                animId = requestAnimationFrame(animate);
+            }
+
+            // ---- reconstruir ----
+            function rebuild() {
+                if (animId) {
+                    cancelAnimationFrame(animId);
+                    animId = null;
+                }
+
+                // Reiniciar audio
+                resetAudio();
+                audioStarted = false;
+
+                buildFlower();
+                assemblyProgress = 0;
+                isAssembling = true;
+                smoothRotation = 0;
+                time = 0;
+
+                // Si el usuario ya interactuó, reactivar animación
+                if (userInteracted) {
+                    animActive = true;
+                    document.getElementById('btnAnimacion').textContent = '⏸ pausar';
+                } else {
+                    animActive = false;
+                    document.getElementById('btnAnimacion').textContent = '⏸ pausar';
+                }
+
+                animate();
+            }
+
+            // ---- toggle animación ----
+            function toggleAnim() {
+                if (!userInteracted) return; // No permitir si no ha interactuado
+
+                animActive = !animActive;
+                const btn = document.getElementById('btnAnimacion');
+                btn.textContent = animActive ? '⏸ pausar' : '▶ reanudar';
+                if (animActive && !animId) {
+                    animate();
+                }
+                if (audio) {
+                    if (animActive) {
+                        if (audio.paused && audio.currentTime > 0) {
+                            audio.play().catch(e => console.warn('Error al reanudar:', e));
+                        }
+                    } else {
+                        audio.pause();
+                    }
+                }
+            }
+
+            // ---- init ----
+            function init() {
+                buildFlower();
+                assemblyProgress = 0;
+                isAssembling = true;
+                smoothRotation = 0;
+                time = 0;
+                animActive = false; // ← PAUSADA AL INICIO
+                animate();
+
+                // Botones
+                document.getElementById('btnReconstruir').addEventListener('click', rebuild);
+                document.getElementById('btnAnimacion').addEventListener('click', toggleAnim);
+
+                // Click en canvas acelera ensamblaje
+                canvas.addEventListener('click', () => {
+                    handleUserInteraction(); // Marcar interacción
+                    if (isAssembling) {
+                        assemblyProgress = Math.min(assemblyProgress + 0.05, 1.0);
+                        if (assemblyProgress >= 1.0) {
+                            isAssembling = false;
+                            if (!audioStarted && userInteracted) {
+                                audioStarted = true;
+                                initAudio();
+                            }
+                        }
+                    }
+                });
+
+                // Clic en cualquier parte del documento para iniciar
+                document.addEventListener('click', handleUserInteraction);
+                document.addEventListener('touchstart', handleUserInteraction);
+            }
+
+            window.addEventListener('beforeunload', () => {
+                if (animId) cancelAnimationFrame(animId);
+                if (audio) {
+                    audio.pause();
+                    audio.src = '';
+                }
+            });
+
+            init();
+        })();
+    </script>
+</body>
+</html>

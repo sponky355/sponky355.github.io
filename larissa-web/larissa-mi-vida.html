@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Larissa 💐</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 40%, #1a1a2e 0%, #0a0a14 70%, #050508 100%);
+            font-family: 'Georgia', serif;
+        }
+        #info {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: rgba(255, 240, 220, 0.75);
+            background: rgba(20, 10, 20, 0.4);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 200, 180, 0.15);
+            text-transform: uppercase;
+        }
+        #replay {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 240, 220, 0.9);
+            background: rgba(40, 20, 40, 0.6);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 200, 180, 0.3);
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+        }
+        #replay:hover {
+            background: rgba(80, 40, 80, 0.8);
+            border-color: rgba(255, 200, 180, 0.6);
+            transform: translateX(-50%) scale(1.05);
+        }
+        #music-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: rgba(255, 240, 220, 0.9);
+            background: rgba(40, 20, 40, 0.6);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 200, 180, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #music-toggle:hover {
+            background: rgba(80, 40, 80, 0.8);
+            border-color: rgba(255, 200, 180, 0.6);
+            transform: scale(1.05);
+        }
+        #music-toggle .label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ====== OVERLAY DE CARTA ABIERTA ====== */
+        #letter-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 5, 15, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            cursor: pointer;
+        }
+        #letter-overlay.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        #letter-paper {
+            width: min(600px, 88vw);
+            max-height: 88vh;
+            background:
+                radial-gradient(circle at 20% 15%, rgba(200, 160, 120, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 85%, rgba(180, 140, 100, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, #fdf5e6 0%, #f5e6d3 40%, #eeddc8 100%);
+            border-radius: 6px;
+            padding: 48px 52px;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(180, 140, 100, 0.3),
+                inset 0 0 80px rgba(200, 160, 120, 0.15);
+            position: relative;
+            transform: scale(0.7) rotateX(25deg);
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+            overflow-y: auto;
+            cursor: default;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        #letter-overlay.visible #letter-paper {
+            transform: scale(1) rotateX(0deg);
+            opacity: 1;
+        }
+
+        /* Textura de líneas de cuaderno (sutiles) */
+        #letter-paper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                transparent 0px,
+                transparent 30px,
+                rgba(180, 140, 100, 0.08) 30px,
+                rgba(180, 140, 100, 0.08) 31px
+            );
+            pointer-events: none;
+            border-radius: 6px;
+        }
+
+        /* Margen rojo (como hoja de cuaderno) */
+        #letter-paper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 52px;
+            width: 1px;
+            background: rgba(200, 100, 100, 0.2);
+            pointer-events: none;
+        }
+
+        #letter-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        #letter-title {
+            font-size: 24px;
+            font-style: italic;
+            color: #8b3a3a;
+            text-align: center;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        #letter-body {
+            font-size: 19px;
+            line-height: 2.1;
+            color: #4a3525;
+            white-space: pre-line;
+            text-align: left;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        #letter-signature {
+            text-align: right;
+            margin-top: 32px;
+            font-size: 22px;
+            color: #8b3a3a;
+            font-style: italic;
+            font-family: 'Brush Script MT', cursive, 'Georgia', serif;
+            padding-right: 10px;
+        }
+
+        #letter-heart {
+            text-align: center;
+            font-size: 26px;
+            color: #c41e3c;
+            margin-top: 14px;
+            text-shadow: 0 0 12px rgba(196, 30, 60, 0.5);
+            animation: heartbeat 1.8s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        #close-letter {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 26px;
+            color: rgba(139, 58, 58, 0.6);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            user-select: none;
+            z-index: 3;
+            font-family: sans-serif;
+            font-weight: 300;
+        }
+        #close-letter:hover {
+            background: rgba(139, 58, 58, 0.15);
+            color: #8b3a3a;
+            transform: rotate(90deg);
+        }
+
+        #hint-open {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 220, 200, 0.55);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            animation: fadePulse 3s ease-in-out infinite;
+            font-family: sans-serif;
+        }
+        @keyframes fadePulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.85; }
+        }
+    </style>
+</head>
+<body>
+    <div id="info">💐 Para Larissa</div>
+    <div id="music-toggle">🔇 <span class="label">Música</span></div>
+    <div id="replay">↻ Reproducir animación</div>
+    <div id="hint-open">Haz clic en una carta para leerla</div>
+
+    <!-- Overlay para mostrar la carta abierta -->
+    <div id="letter-overlay">
+        <div id="letter-paper">
+            <div id="close-letter">✕</div>
+            <div id="letter-content">
+                <div id="letter-title">Para ti, mi amor</div>
+                <div id="letter-body"></div>
+                <div id="letter-signature"></div>
+                <div id="letter-heart">❤</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="Amar Como Tú - Steven Universe (Letra).mp3" type="audio/mpeg">
+        Tu navegador no soporta audio HTML5.
+    </audio>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+        // ============ AUDIO ============
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        let musicPlaying = false;
+        bgMusic.volume = 0.4;
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+                musicToggle.innerHTML = '🔇 <span class="label">Música</span>';
+            } else {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicToggle.innerHTML = '🔊 <span class="label">Música</span>';
+                }).catch(err => console.warn('Audio:', err));
+            }
+        }
+        musicToggle.addEventListener('click', toggleMusic);
+
+        const startMusicOnFirstInteraction = () => {
+            if (!musicPlaying) {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicToggle.innerHTML = '🔊 <span class="label">Música</span>';
+                }).catch(() => {});
+            }
+            document.removeEventListener('click', startMusicOnFirstInteraction);
+            document.removeEventListener('touchstart', startMusicOnFirstInteraction);
+        };
+        document.addEventListener('click', startMusicOnFirstInteraction);
+        document.addEventListener('touchstart', startMusicOnFirstInteraction);
+
+        // ============ MENSAJES DE LAS CARTAS ============
+        const letterMessages = [
+            {
+                title: 'Para ti, mi amor',
+                body: 'Larissa, cada día que paso contigo\nme doy cuenta de lo afortunado que soy.\nEres la luz que ilumina mis días\nmás oscuros y la razón de mi sonrisa.\n\nGracias por existir.',
+                signature: 'Con todo mi amor'
+            },
+            {
+                title: 'Mi Larissa',
+                body: 'Si pudiera regalarte algo,\nte regalaría la luna y las estrellas,\npero como no puedo,\nte regalo mi corazón entero.\n\nEres dueña de mis sueños.',
+                signature: 'Siempre tuyo'
+            },
+            {
+                title: 'Eres hermosa',
+                body: 'No hay flor más bella que tu sonrisa,\nni estrella que brille más que tus ojos.\nEres la persona más hermosa\nque he conocido,\npor dentro y por fuera.',
+                signature: 'Te admiro'
+            },
+            {
+                title: 'Mi vida es tuya',
+                body: 'Desde que te conocí,\nmi vida cambió por completo.\nCada momento a tu lado\nes un regalo que atesoro.\n\nMi vida entera es tuya.',
+                signature: 'Con amor eterno'
+            },
+            {
+                title: 'Te amo',
+                body: 'Te amo Larissa,\ncon cada latido de mi corazón,\ncon cada pensamiento,\ncon cada respiro.\n\nEres mi todo.',
+                signature: 'Tu amor'
+            },
+            {
+                title: 'Gracias',
+                body: 'Gracias por existir en mi vida,\npor cada sonrisa que me regalas,\npor cada momento compartido,\npor ser exactamente como eres.\n\nEres única.',
+                signature: 'Gracias, mi amor'
+            },
+            {
+                title: 'Siempre contigo',
+                body: 'Pase lo que pase,\nestaré siempre a tu lado.\nEn las buenas y en las malas,\nen la alegría y en la tristeza.\n\nSiempre estaré contigo.',
+                signature: 'Tu compañero'
+            },
+            {
+                title: 'Mi razón',
+                body: 'Eres mi razón de levantarme cada día,\nmi motivación para ser mejor,\nmi sueño hecho realidad.\n\nGracias por ser tú.',
+                signature: 'Por siempre'
+            },
+            {
+                title: 'Corazón mío',
+                body: 'Mi corazón late por ti,\nsolo por ti.\nEres la dueña absoluta\nde cada sentimiento que tengo.\n\nTe quiero infinitamente.',
+                signature: 'Tuyo por siempre'
+            },
+            {
+                title: 'Un secreto',
+                body: 'Te confieso algo:\ncada noche antes de dormir\npienso en ti, en tu sonrisa,\ny me duermo con la esperanza\nde verte pronto.',
+                signature: 'Con cariño'
+            },
+            {
+                title: 'Mi estrella',
+                body: 'En un cielo lleno de estrellas,\ntú eres la más brillante.\nMi guía, mi luz, mi todo.\n\nEres mi estrella favorita.',
+                signature: 'Te quiero'
+            },
+            {
+                title: 'Para siempre',
+                body: 'No sé qué me depare el futuro,\npero sí sé una cosa:\nquiero pasar cada momento\na tu lado.\n\nPara siempre.',
+                signature: 'Eternamente'
+            },
+            {
+                title: 'Bella',
+                body: 'Bella es la flor que florece,\nbella es la luna en el cielo,\npero ninguna es tan bella\ncomo tú, Larissa.\n\nEres arte.',
+                signature: 'Tu admirador'
+            },
+            {
+                title: 'Te extraño',
+                body: 'Cuando no estás,\nel mundo se siente vacío.\nTu presencia llena todo,\ntu ausencia lo deja gris.\n\nTe extraño siempre.',
+                signature: 'Tuyo'
+            }
+        ];
+
+        // ============ ESCENA ============
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a0a14, 0.022);
+
+        const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 200);
+        camera.position.set(5, 4.5, 9);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.15;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        document.body.appendChild(renderer.domElement);
+
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+        // ============ CONTROLES ============
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.target.set(0, 2.5, 0);
+        controls.minDistance = 5;
+        controls.maxDistance = 20;
+        controls.maxPolarAngle = Math.PI * 0.55;
+        controls.enablePan = false;
+
+        // ============ LUCES ============
+        scene.add(new THREE.HemisphereLight(0xffe0d0, 0x201030, 0.55));
+
+        const keyLight = new THREE.DirectionalLight(0xfff0e0, 2.2);
+        keyLight.position.set(5, 8, 5);
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight(0xff88aa, 0.9);
+        rimLight.position.set(-6, 4, -5);
+        scene.add(rimLight);
+
+        const fillLight = new THREE.PointLight(0x8899ff, 0.7);
+        fillLight.position.set(-4, 2, 4);
+        scene.add(fillLight);
+
+        const warmGlow = new THREE.PointLight(0xffaa66, 1.5, 5);
+        warmGlow.position.set(0, 3.5, 0);
+        scene.add(warmGlow);
+
+        // ============ GRUPO RAMO ============
+        const bouquet = new THREE.Group();
+        scene.add(bouquet);
+
+        // ============ GEOMETRÍA DEL PÉTALO ============
+        function createPetalGeometry(length = 1, width = 0.5, curl = 0.3) {
+            const segments = 24;
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            const uvs = [];
+            const indices = [];
+
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments;
+                const w = width * Math.sin(Math.pow(t, 0.7) * Math.PI) * 1.1;
+                const y = t * length;
+                const z = curl * t * t;
+                const wave = Math.sin(t * Math.PI * 2) * 0.015;
+
+                positions.push(-w + wave, y, z);
+                uvs.push(0, t);
+                positions.push(w - wave, y, z);
+                uvs.push(1, t);
+            }
+
+            for (let i = 0; i < segments; i++) {
+                const a = i * 2;
+                const b = i * 2 + 1;
+                const c = (i + 1) * 2;
+                const d = (i + 1) * 2 + 1;
+                indices.push(a, c, b);
+                indices.push(b, c, d);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+            geometry.setIndex(indices);
+            geometry.computeVertexNormals();
+            return geometry;
+        }
+
+        function createPetalMaterial(colorInner, colorOuter, emissive = 0x330022) {
+            return new THREE.MeshPhysicalMaterial({
+                color: colorInner,
+                emissive: emissive,
+                emissiveIntensity: 0.12,
+                roughness: 0.4,
+                metalness: 0.0,
+                clearcoat: 0.5,
+                clearcoatRoughness: 0.5,
+                sheen: 0.8,
+                sheenColor: new THREE.Color(colorOuter),
+                sheenRoughness: 0.6,
+                side: THREE.DoubleSide,
+                iridescence: 0.15,
+                iridescenceIOR: 1.3
+            });
+        }
+
+        function placePetals(group, geometry, material, count, 
+                            baseRadius, baseY, tiltAngle, 
+                            lengthScale = 1, widthScale = 1, angleOffset = 0) {
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2 + angleOffset;
+                const petal = new THREE.Mesh(geometry, material);
+                petal.scale.set(widthScale, lengthScale, lengthScale);
+                petal.position.set(
+                    Math.cos(angle) * baseRadius,
+                    baseY,
+                    Math.sin(angle) * baseRadius
+                );
+                const pivot = new THREE.Group();
+                pivot.rotation.y = angle;
+                pivot.add(petal);
+                petal.rotation.x = tiltAngle;
+                petal.rotation.z = (Math.random() - 0.5) * 0.08;
+                group.add(pivot);
+            }
+        }
+
+        // ============ FUNCIÓN: CREAR FLOR ============
+        function createFlower(options = {}) {
+            const { scale = 1, colorSet = 'pink', tilt = 0 } = options;
+            const flowerGroup = new THREE.Group();
+
+            const palettes = {
+                pink: {
+                    outer: [0xff5f7a, 0xffaacc, 0x330011],
+                    mid:   [0xff7f9a, 0xffc0d0, 0x441122],
+                    inner: [0xffa8b8, 0xffe0e8, 0x552233]
+                },
+                red: {
+                    outer: [0xd41e3c, 0xff6b8a, 0x330008],
+                    mid:   [0xe03050, 0xff8fa8, 0x440010],
+                    inner: [0xee5577, 0xffb0c0, 0x550018]
+                },
+                white: {
+                    outer: [0xf5f0e8, 0xffffff, 0x332222],
+                    mid:   [0xfffaf0, 0xffffff, 0x443333],
+                    inner: [0xfff5ea, 0xffffff, 0x554444]
+                },
+                peach: {
+                    outer: [0xff9f7f, 0xffc8b0, 0x331100],
+                    mid:   [0xffb090, 0xffd8c0, 0x442211],
+                    inner: [0xffc0a8, 0xffe8d8, 0x553322]
+                },
+                lavender: {
+                    outer: [0xa88fd8, 0xd0c0f0, 0x221133],
+                    mid:   [0xb8a0e0, 0xd8caf5, 0x332244],
+                    inner: [0xc8b8ee, 0xe8e0fa, 0x443355]
+                }
+            };
+
+            const p = palettes[colorSet] || palettes.pink;
+
+            const petalGeoOuter = createPetalGeometry(1.5, 0.7, 0.45);
+            const petalMatOuter = createPetalMaterial(p.outer[0], p.outer[1], p.outer[2]);
+            const outerGroup = new THREE.Group();
+            placePetals(outerGroup, petalGeoOuter, petalMatOuter, 6, 0.05, 0.1,
+                        THREE.MathUtils.degToRad(75), 1.0, 1.0, 0);
+            flowerGroup.add(outerGroup);
+
+            const petalGeoMid = createPetalGeometry(1.25, 0.6, 0.5);
+            const petalMatMid = createPetalMaterial(p.mid[0], p.mid[1], p.mid[2]);
+            const midGroup = new THREE.Group();
+            placePetals(midGroup, petalGeoMid, petalMatMid, 6, 0.04, 0.25,
+                        THREE.MathUtils.degToRad(55), 1.0, 1.0, Math.PI / 6);
+            flowerGroup.add(midGroup);
+
+            const petalGeoInner = createPetalGeometry(0.95, 0.45, 0.55);
+            const petalMatInner = createPetalMaterial(p.inner[0], p.inner[1], p.inner[2]);
+            const innerGroup = new THREE.Group();
+            placePetals(innerGroup, petalGeoInner, petalMatInner, 5, 0.03, 0.35,
+                        THREE.MathUtils.degToRad(30), 1.0, 1.0, Math.PI / 5);
+            flowerGroup.add(innerGroup);
+
+            const centerGeo = new THREE.SphereGeometry(0.22, 32, 24);
+            centerGeo.scale(1, 0.55, 1);
+            const centerMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffd166,
+                emissive: 0xcc6600,
+                emissiveIntensity: 0.3,
+                roughness: 0.5,
+                metalness: 0.1,
+                clearcoat: 0.7
+            });
+            const center = new THREE.Mesh(centerGeo, centerMat);
+            center.position.y = 0.38;
+            flowerGroup.add(center);
+
+            const stamensGroup = new THREE.Group();
+            const filamentMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffe0a0, roughness: 0.5, metalness: 0.1,
+                emissive: 0x553300, emissiveIntensity: 0.15
+            });
+            const antherMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffaa22, emissive: 0xff6600, emissiveIntensity: 0.5,
+                roughness: 0.35, metalness: 0.2
+            });
+
+            for (let i = 0; i < 24; i++) {
+                const angle = (i / 24) * Math.PI * 2;
+                const radius = 0.08 + Math.random() * 0.06;
+                const height = 0.08 + Math.random() * 0.1;
+
+                const filamentGeo = new THREE.CylinderGeometry(0.006, 0.009, height, 6);
+                const filament = new THREE.Mesh(filamentGeo, filamentMat);
+                const baseX = Math.cos(angle) * radius;
+                const baseZ = Math.sin(angle) * radius;
+                filament.position.set(
+                    baseX + Math.cos(angle) * height * 0.2,
+                    0.5 + height * 0.4,
+                    baseZ + Math.sin(angle) * height * 0.2
+                );
+                filament.rotation.z = -Math.cos(angle) * 0.35;
+                filament.rotation.x = Math.sin(angle) * 0.35;
+                stamensGroup.add(filament);
+
+                const antherGeo = new THREE.SphereGeometry(0.018, 10, 8);
+                antherGeo.scale(1, 0.7, 1);
+                const anther = new THREE.Mesh(antherGeo, antherMat);
+                anther.position.set(
+                    baseX + Math.cos(angle) * height * 0.5,
+                    0.5 + height * 0.85,
+                    baseZ + Math.sin(angle) * height * 0.5
+                );
+                stamensGroup.add(anther);
+            }
+            flowerGroup.add(stamensGroup);
+
+            flowerGroup.userData = { outerGroup, midGroup, innerGroup };
+            flowerGroup.scale.setScalar(scale);
+            flowerGroup.rotation.x = tilt;
+            return flowerGroup;
+        }
+
+        // ============ FLORERO ============
+        const vaseProfile = [
+            { r: 0.55, y: 0.0 },
+            { r: 0.60, y: 0.1 },
+            { r: 0.62, y: 0.4 },
+            { r: 0.65, y: 0.9 },
+            { r: 0.60, y: 1.4 },
+            { r: 0.48, y: 1.8 },
+            { r: 0.46, y: 2.1 },
+            { r: 0.52, y: 2.4 },
+            { r: 0.55, y: 2.6 },
+            { r: 0.53, y: 2.62 }
+        ];
+
+        const WATER_LEVEL = 2.0;
+        const STEM_ORIGIN = new THREE.Vector3(0, 1.2, 0);
+
+        // ============ TALLO ============
+        function createStem(startPos, endPos, radius = 0.032, color = 0x4a8f4a) {
+            const mouthY = 2.6;
+            const points = [];
+            points.push(startPos.clone());
+            points.push(new THREE.Vector3(startPos.x, startPos.y + 0.3, startPos.z));
+            points.push(new THREE.Vector3(0, mouthY - 0.3, 0));
+            points.push(new THREE.Vector3(0, mouthY, 0));
+            
+            if (endPos.y > mouthY) {
+                const mid = new THREE.Vector3(
+                    endPos.x * 0.4 + (Math.random() - 0.5) * 0.15,
+                    mouthY + (endPos.y - mouthY) * 0.5,
+                    endPos.z * 0.4 + (Math.random() - 0.5) * 0.15
+                );
+                points.push(mid);
+                points.push(endPos.clone());
+            } else {
+                points.push(endPos.clone());
+            }
+
+            const curve = new THREE.CatmullRomCurve3(points);
+            const geo = new THREE.TubeGeometry(curve, 40, radius, 8, false);
+            const mat = new THREE.MeshPhysicalMaterial({
+                color: color,
+                roughness: 0.65,
+                metalness: 0.0,
+                clearcoat: 0.25,
+                clearcoatRoughness: 0.7,
+                emissive: 0x102a10,
+                emissiveIntensity: 0.15
+            });
+            return new THREE.Mesh(geo, mat);
+        }
+
+        // ============ HOJAS ============
+        function createLeafGeometry(length = 0.8, width = 0.3) {
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.bezierCurveTo(width * 0.8, length * 0.2, width * 0.9, length * 0.5, 0, length);
+            shape.bezierCurveTo(-width * 0.9, length * 0.5, -width * 0.8, length * 0.2, 0, 0);
+            const geo = new THREE.ShapeGeometry(shape, 24);
+            const pos = geo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const x = pos.getX(i);
+                const y = pos.getY(i);
+                const t = y / length;
+                const z = Math.sin(t * Math.PI) * 0.06 - Math.pow(x / width, 2) * 0.03;
+                pos.setZ(i, z);
+            }
+            geo.computeVertexNormals();
+            return geo;
+        }
+
+        const leafMat = new THREE.MeshPhysicalMaterial({
+            color: 0x3d8b3d,
+            roughness: 0.55,
+            metalness: 0.0,
+            clearcoat: 0.4,
+            clearcoatRoughness: 0.5,
+            sheen: 0.4,
+            sheenColor: new THREE.Color(0x88cc88),
+            side: THREE.DoubleSide,
+            emissive: 0x0a1f0a,
+            emissiveIntensity: 0.1
+        });
+
+        // ============ CONFIGURACIÓN DEL RAMO ============
+        const flowerConfigs = [
+            { pos: new THREE.Vector3(0, 4.8, 0), scale: 1.0, color: 'pink', tilt: 0 },
+            { pos: new THREE.Vector3(0.7, 4.4, 0.4), scale: 0.85, color: 'red', tilt: 0.1 },
+            { pos: new THREE.Vector3(-0.6, 4.3, 0.6), scale: 0.85, color: 'peach', tilt: -0.1 },
+            { pos: new THREE.Vector3(0.5, 4.3, -0.7), scale: 0.85, color: 'white', tilt: 0.05 },
+            { pos: new THREE.Vector3(-0.7, 4.4, -0.5), scale: 0.85, color: 'pink', tilt: 0.1 },
+            { pos: new THREE.Vector3(1.1, 3.8, 0.8), scale: 0.75, color: 'lavender', tilt: 0.15 },
+            { pos: new THREE.Vector3(-1.0, 3.9, 1.0), scale: 0.75, color: 'red', tilt: -0.15 },
+            { pos: new THREE.Vector3(0.9, 3.7, -1.1), scale: 0.75, color: 'peach', tilt: 0.1 },
+            { pos: new THREE.Vector3(-1.2, 3.8, -0.8), scale: 0.75, color: 'white', tilt: -0.1 },
+            { pos: new THREE.Vector3(0.0, 3.7, 1.2), scale: 0.72, color: 'pink', tilt: 0.05 },
+            { pos: new THREE.Vector3(0.0, 3.6, -1.3), scale: 0.72, color: 'lavender', tilt: -0.05 },
+            { pos: new THREE.Vector3(1.4, 3.3, 1.1), scale: 0.65, color: 'peach', tilt: 0.25 },
+            { pos: new THREE.Vector3(-1.5, 3.2, 1.0), scale: 0.65, color: 'pink', tilt: -0.2 },
+            { pos: new THREE.Vector3(1.3, 3.3, -1.3), scale: 0.65, color: 'white', tilt: 0.2 },
+            { pos: new THREE.Vector3(-1.4, 3.2, -1.2), scale: 0.65, color: 'red', tilt: -0.25 },
+            { pos: new THREE.Vector3(0.6, 3.1, 1.5), scale: 0.62, color: 'lavender', tilt: 0.15 },
+            { pos: new THREE.Vector3(-0.5, 3.1, -1.6), scale: 0.62, color: 'peach', tilt: -0.15 },
+        ];
+
+        const animatedFlowers = [];
+        const animatedStems = [];
+        const animatedLeaves = [];
+
+        flowerConfigs.forEach((cfg, idx) => {
+            const flower = createFlower({
+                scale: cfg.scale,
+                colorSet: cfg.color,
+                tilt: cfg.tilt
+            });
+            flower.position.copy(cfg.pos);
+            flower.rotation.y = Math.random() * Math.PI * 2;
+            
+            flower.userData.finalPosition = cfg.pos.clone();
+            flower.userData.finalRotationY = flower.rotation.y;
+            
+            bouquet.add(flower);
+            animatedFlowers.push(flower);
+
+            const stemEnd = cfg.pos.clone();
+            stemEnd.y -= 0.15;
+            const stem = createStem(STEM_ORIGIN, stemEnd, 0.032);
+            stem.material.transparent = true;
+            stem.material.opacity = 0;
+            
+            bouquet.add(stem);
+            animatedStems.push(stem);
+
+            if (idx >= 10 && idx % 2 === 0) {
+                const leaf = new THREE.Mesh(createLeafGeometry(0.6 + Math.random() * 0.3, 0.22), leafMat);
+                const t = 0.7 + Math.random() * 0.2;
+                const leafPos = STEM_ORIGIN.clone().lerp(stemEnd, t);
+                if (leafPos.y < 2.7) leafPos.y = 2.7 + Math.random() * 0.3;
+                leaf.position.copy(leafPos);
+                leaf.rotation.z = (Math.random() - 0.5) * 1.5;
+                leaf.rotation.y = Math.random() * Math.PI * 2;
+                leaf.rotation.x = (Math.random() - 0.5) * 0.5;
+                
+                leaf.userData.finalPosition = leafPos.clone();
+                bouquet.add(leaf);
+                animatedLeaves.push(leaf);
+            }
+        });
+
+        for (let i = 0; i < 8; i++) {
+            const leaf = new THREE.Mesh(createLeafGeometry(0.7 + Math.random() * 0.3, 0.25), leafMat);
+            const angle = (i / 8) * Math.PI * 2;
+            const r = 0.3 + Math.random() * 0.2;
+            const pos = new THREE.Vector3(
+                Math.cos(angle) * r,
+                2.75 + Math.random() * 0.4,
+                Math.sin(angle) * r
+            );
+            leaf.position.copy(pos);
+            leaf.rotation.z = -angle - Math.PI / 2 + (Math.random() - 0.5) * 0.5;
+            leaf.rotation.y = Math.random() * Math.PI * 2;
+            leaf.rotation.x = 0.5 + Math.random() * 0.3;
+            
+            leaf.userData.finalPosition = pos.clone();
+            bouquet.add(leaf);
+            animatedLeaves.push(leaf);
+        }
+
+        // ============ FLORERO DE CRISTAL ============
+        const vaseGroup = new THREE.Group();
+        bouquet.add(vaseGroup);
+
+        const vasePoints = vaseProfile.map(p => new THREE.Vector2(p.r, p.y));
+        const vaseGeo = new THREE.LatheGeometry(vasePoints, 64);
+
+        const glassMat = new THREE.MeshPhysicalMaterial({
+            color: 0xd8e8f0,
+            metalness: 0.0,
+            roughness: 0.05,
+            transmission: 0.95,
+            thickness: 0.5,
+            ior: 1.5,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05,
+            transparent: true,
+            opacity: 0.5,
+            side: THREE.DoubleSide,
+            envMapIntensity: 1.5,
+            iridescence: 0.1,
+            iridescenceIOR: 1.3
+        });
+
+        const vase = new THREE.Mesh(vaseGeo, glassMat);
+        vaseGroup.add(vase);
+
+        const baseGeo = new THREE.CircleGeometry(0.55, 32);
+        const baseMat = new THREE.MeshPhysicalMaterial({
+            color: 0x8899aa,
+            metalness: 0.5,
+            roughness: 0.3,
+            transparent: true,
+            opacity: 0.6,
+            side: THREE.DoubleSide
+        });
+        const vaseBase = new THREE.Mesh(baseGeo, baseMat);
+        vaseBase.rotation.x = -Math.PI / 2;
+        vaseBase.position.y = 0.01;
+        vaseGroup.add(vaseBase);
+
+        const waterProfile = vaseProfile
+            .filter(p => p.y <= WATER_LEVEL)
+            .map(p => ({ r: p.r - 0.02, y: p.y }));
+        waterProfile.push({ r: 0.46, y: WATER_LEVEL });
+        
+        const waterPoints = waterProfile.map(p => new THREE.Vector2(p.r, p.y));
+        const waterGeo = new THREE.LatheGeometry(waterPoints, 48);
+        const waterMat = new THREE.MeshPhysicalMaterial({
+            color: 0x88bbdd,
+            metalness: 0.0,
+            roughness: 0.1,
+            transmission: 0.85,
+            thickness: 2.0,
+            ior: 1.33,
+            transparent: true,
+            opacity: 0.5,
+            side: THREE.DoubleSide,
+            clearcoat: 0.5
+        });
+        const water = new THREE.Mesh(waterGeo, waterMat);
+        vaseGroup.add(water);
+
+        const waterSurfaceGeo = new THREE.CircleGeometry(0.46, 32);
+        const waterSurfaceMat = new THREE.MeshPhysicalMaterial({
+            color: 0xaaddff,
+            metalness: 0.1,
+            roughness: 0.05,
+            transmission: 0.7,
+            transparent: true,
+            opacity: 0.65,
+            side: THREE.DoubleSide,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+        const waterSurface = new THREE.Mesh(waterSurfaceGeo, waterSurfaceMat);
+        waterSurface.rotation.x = -Math.PI / 2;
+        waterSurface.position.y = WATER_LEVEL;
+        vaseGroup.add(waterSurface);
+
+        const rimGeo = new THREE.TorusGeometry(0.55, 0.02, 8, 48);
+        const rimMat = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0.3,
+            roughness: 0.05,
+            clearcoat: 1.0,
+            transparent: true,
+            opacity: 0.4
+        });
+        const rim = new THREE.Mesh(rimGeo, rimMat);
+        rim.rotation.x = Math.PI / 2;
+        rim.position.y = 2.62;
+        vaseGroup.add(rim);
+
+        // ============ SUELO ============
+        const groundGeo = new THREE.CircleGeometry(12, 64);
+        const groundMat = new THREE.MeshPhysicalMaterial({
+            color: 0x0a0a15,
+            roughness: 0.9,
+            metalness: 0.1,
+            transparent: true,
+            opacity: 0.9
+        });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -0.02;
+        scene.add(ground);
+
+        const grid = new THREE.GridHelper(24, 60, 0x445588, 0x223344);
+        grid.material.transparent = true;
+        grid.material.opacity = 0.1;
+        grid.position.y = -0.01;
+        scene.add(grid);
+
+        // ============ CARTAS DE AMOR EN EL PISO ============
+        function createEnvelopeTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 384;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#f5e6d3';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < 3000; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const a = Math.random() * 0.05;
+                ctx.fillStyle = `rgba(139, 90, 60, ${a})`;
+                ctx.fillRect(x, y, 1, 1);
+            }
+
+            ctx.strokeStyle = '#d4b896';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+
+            ctx.beginPath();
+            ctx.moveTo(10, 10);
+            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 20);
+            ctx.lineTo(canvas.width - 10, 10);
+            ctx.strokeStyle = '#c9a878';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(10, 12);
+            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 22);
+            ctx.lineTo(canvas.width - 10, 12);
+            ctx.strokeStyle = 'rgba(120, 80, 50, 0.15)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2 + 20;
+
+            ctx.beginPath();
+            for (let i = 0; i <= 60; i++) {
+                const angle = (i / 60) * Math.PI * 2;
+                const r = 38 + Math.sin(angle * 5) * 3 + Math.cos(angle * 3) * 2;
+                const x = cx + Math.cos(angle) * r;
+                const y = cy + Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            
+            const grad = ctx.createRadialGradient(cx - 8, cy - 8, 5, cx, cy, 40);
+            grad.addColorStop(0, '#e8455a');
+            grad.addColorStop(0.5, '#c41e3c');
+            grad.addColorStop(1, '#8a0f28');
+            ctx.fillStyle = grad;
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(cx - 10, cy - 10, 12, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 200, 200, 0.3)';
+            ctx.fill();
+
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.beginPath();
+            const heartScale = 1.4;
+            for (let i = 0; i <= 60; i++) {
+                const t = (i / 60) * Math.PI * 2;
+                const hx = 16 * Math.pow(Math.sin(t), 3) * heartScale;
+                const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * heartScale;
+                if (i === 0) ctx.moveTo(hx, hy);
+                else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+            ctx.fillStyle = '#fff5f0';
+            ctx.fill();
+            ctx.restore();
+
+            ctx.font = 'italic 22px Georgia';
+            ctx.fillStyle = 'rgba(80, 40, 30, 0.75)';
+            ctx.textAlign = 'center';
+            ctx.fillText('Para ti', cx, 60);
+
+            ctx.save();
+            ctx.translate(60, canvas.height - 60);
+            ctx.beginPath();
+            for (let i = 0; i <= 40; i++) {
+                const t = (i / 40) * Math.PI * 2;
+                const hx = 16 * Math.pow(Math.sin(t), 3) * 0.9;
+                const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * 0.9;
+                if (i === 0) ctx.moveTo(hx, hy);
+                else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(200, 50, 80, 0.7)';
+            ctx.fill();
+            ctx.restore();
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.anisotropy = 8;
+            return texture;
+        }
+
+        function createLetterGeometry(width = 0.8, height = 0.6) {
+            const geo = new THREE.BoxGeometry(width, 0.015, height);
+            return geo;
+        }
+
+        const lettersGroup = new THREE.Group();
+        scene.add(lettersGroup);
+
+        const letters = [];
+        const envelopeTexture = createEnvelopeTexture();
+        const letterCount = 14;
+
+        for (let i = 0; i < letterCount; i++) {
+            const w = 0.75 + Math.random() * 0.25;
+            const h = 0.55 + Math.random() * 0.2;
+
+            const geo = createLetterGeometry(w, h);
+
+            const matTop = new THREE.MeshPhysicalMaterial({
+                map: envelopeTexture,
+                color: 0xffffff,
+                roughness: 0.75,
+                metalness: 0.0,
+                clearcoat: 0.15,
+                clearcoatRoughness: 0.8,
+                sheen: 0.3,
+                sheenColor: new THREE.Color(0xffd8b0),
+                side: THREE.FrontSide
+            });
+
+            const matEdge = new THREE.MeshStandardMaterial({
+                color: 0xd4b896,
+                roughness: 0.9
+            });
+
+            const materials = [
+                matEdge, matEdge, matTop, matTop, matEdge, matEdge
+            ];
+
+            const letter = new THREE.Mesh(geo, materials);
+
+            const angle = (i / letterCount) * Math.PI * 2 + Math.random() * 0.4;
+            const radius = 1.5 + Math.random() * 2.2;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+
+            letter.position.set(x, 0.01 + Math.random() * 0.02, z);
+
+            letter.rotation.x = (Math.random() - 0.5) * 0.15;
+            letter.rotation.y = Math.random() * Math.PI * 2;
+            letter.rotation.z = (Math.random() - 0.5) * 0.15;
+
+            if (Math.random() < 0.3) {
+                letter.rotation.x += (Math.random() - 0.5) * 0.4;
+            }
+
+            // Asignamos un mensaje único (o repetido si hay más cartas que mensajes)
+            const msg = letterMessages[i % letterMessages.length];
+
+            letter.userData = {
+                finalPosition: letter.position.clone(),
+                finalRotation: letter.rotation.clone(),
+                floatPhase: Math.random() * Math.PI * 2,
+                floatSpeed: 0.5 + Math.random() * 0.5,
+                message: msg,
+                isLetter: true,
+                appearProgress: 0
+            };
+
+            letter.visible = false;
+            letter.scale.setScalar(0.01);
+
+            lettersGroup.add(letter);
+            letters.push(letter);
+        }
+
+        // ============ PARTÍCULAS CON FORMA DE CORAZÓN ============
+        function createHeartGeometry(size = 1) {
+            const shape = new THREE.Shape();
+            const points = [];
+            const steps = 60;
+            for (let i = 0; i <= steps; i++) {
+                const t = (i / steps) * Math.PI * 2;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                points.push(new THREE.Vector2(x / 18, y / 18));
+            }
+            shape.setFromPoints(points);
+            const geo = new THREE.ExtrudeGeometry(shape, {
+                depth: 0.15,
+                bevelEnabled: true,
+                bevelSegments: 3,
+                bevelSize: 0.04,
+                bevelThickness: 0.03,
+                curveSegments: 24
+            });
+            geo.center();
+            geo.scale(size, size, size);
+            return geo;
+        }
+
+        const heartMat = new THREE.MeshPhysicalMaterial({
+            color: 0xff3366,
+            emissive: 0xff1144,
+            emissiveIntensity: 0.8,
+            roughness: 0.3,
+            metalness: 0.2,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1,
+            sheen: 1.0,
+            sheenColor: new THREE.Color(0xff88aa),
+            transmission: 0.2,
+            thickness: 0.5,
+            transparent: true,
+            opacity: 0.95,
+            side: THREE.DoubleSide
+        });
+
+        const heartColors = [
+            { color: 0xff3366, emissive: 0xff1144 },
+            { color: 0xff6699, emissive: 0xff3377 },
+            { color: 0xcc2255, emissive: 0xaa0033 },
+            { color: 0xff88bb, emissive: 0xff5599 },
+            { color: 0xff4477, emissive: 0xdd2255 }
+        ];
+
+        const heartsGroup = new THREE.Group();
+        scene.add(heartsGroup);
+
+        const hearts = [];
+        const heartCount = 45;
+
+        const heartGeos = [
+            createHeartGeometry(0.12),
+            createHeartGeometry(0.16),
+            createHeartGeometry(0.20),
+            createHeartGeometry(0.25)
+        ];
+
+        for (let i = 0; i < heartCount; i++) {
+            const geo = heartGeos[i % heartGeos.length];
+            const colorData = heartColors[i % heartColors.length];
+            
+            const mat = heartMat.clone();
+            mat.color.setHex(colorData.color);
+            mat.emissive.setHex(colorData.emissive);
+            
+            const heart = new THREE.Mesh(geo, mat);
+            
+            const radius = 1.5 + Math.random() * 2.5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            
+            const x = Math.sin(phi) * Math.cos(theta) * radius;
+            const y = 2.5 + Math.cos(phi) * radius * 0.7 + 1.0;
+            const z = Math.sin(phi) * Math.sin(theta) * radius;
+            
+            heart.position.set(x, y, z);
+            heart.rotation.set(
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2
+            );
+            
+            heart.userData = {
+                baseRotation: heart.rotation.clone(),
+                floatSpeed: 0.3 + Math.random() * 0.5,
+                floatAmplitude: 0.15 + Math.random() * 0.25,
+                rotateSpeed: {
+                    x: (Math.random() - 0.5) * 0.4,
+                    y: (Math.random() - 0.5) * 0.6,
+                    z: (Math.random() - 0.5) * 0.3
+                },
+                phase: Math.random() * Math.PI * 2,
+                orbitSpeed: (Math.random() - 0.5) * 0.15,
+                orbitAngle: Math.atan2(z, x),
+                orbitRadius: Math.sqrt(x*x + z*z),
+                orbitY: y,
+                pulsePhase: Math.random() * Math.PI * 2,
+                pulseSpeed: 1.0 + Math.random() * 1.5,
+                appearScale: 1
+            };
+            
+            heart.material.opacity = 0;
+            heart.visible = false;
+            
+            heartsGroup.add(heart);
+            hearts.push(heart);
+        }
+
+        const sparkleCount = 200;
+        const sparklePositions = new Float32Array(sparkleCount * 3);
+        const sparkleColors = new Float32Array(sparkleCount * 3);
+        
+        for (let i = 0; i < sparkleCount; i++) {
+            const r = 2 + Math.random() * 4;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            
+            sparklePositions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+            sparklePositions[i * 3 + 1] = Math.cos(phi) * r * 0.7 + 3;
+            sparklePositions[i * 3 + 2] = Math.sin(phi) * Math.sin(theta) * r;
+            
+            const c = new THREE.Color().setHSL(
+                0.95 + Math.random() * 0.08,
+                0.8,
+                0.6 + Math.random() * 0.3
+            );
+            sparkleColors[i * 3] = c.r;
+            sparkleColors[i * 3 + 1] = c.g;
+            sparkleColors[i * 3 + 2] = c.b;
+        }
+        
+        const sparkleGeo = new THREE.BufferGeometry();
+        sparkleGeo.setAttribute('position', new THREE.BufferAttribute(sparklePositions, 3));
+        sparkleGeo.setAttribute('color', new THREE.BufferAttribute(sparkleColors, 3));
+        
+        const sparkleMat = new THREE.PointsMaterial({
+            size: 0.04,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.7,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            sizeAttenuation: true
+        });
+        
+        const sparkles = new THREE.Points(sparkleGeo, sparkleMat);
+        scene.add(sparkles);
+
+        // ============ PALABRAS FLOTANTES ============
+        const floatingWords = [];
+        const wordsGroup = new THREE.Group();
+        scene.add(wordsGroup);
+
+        const wordTexts = [
+            'Te quiero Larissa',
+            'Eres hermosa mi Larissa',
+            'Mi Larissa',
+            'eres la dueña de mis sueños',
+            'Siempre estare contigo',
+            'siempre sere para ti',
+            'mi amor por ti es genuino',
+            'Mi vida es tuya',
+            'te amo Larissa',
+            'Gracias por existir en mi vida'
+        ];
+
+        const wordColors = [
+            '#ffd7e6', '#ffe4b5', '#ffffff', '#ffb6c1', '#ffdab9',
+            '#ffc0cb', '#fff0f5', '#ffe4e1', '#f0e6ff', '#ffddaa'
+        ];
+
+        function createTextTexture(text, color = '#ffffff', fontSize = 80) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const font = `italic ${fontSize}px 'Georgia', 'Times New Roman', serif`;
+            ctx.font = font;
+            
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+            
+            const padding = fontSize * 0.6;
+            canvas.width = Math.ceil(textWidth + padding * 2);
+            canvas.height = Math.ceil(fontSize * 2.2);
+            
+            ctx.font = font;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            ctx.shadowColor = color;
+            ctx.shadowBlur = fontSize * 0.5;
+            ctx.fillStyle = color;
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            
+            ctx.shadowBlur = fontSize * 0.25;
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            
+            ctx.shadowBlur = fontSize * 0.15;
+            ctx.shadowColor = '#ffffff';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = color;
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            ctx.globalAlpha = 1.0;
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.needsUpdate = true;
+            return texture;
+        }
+
+        const wordConfigs = [];
+        const totalWords = 24;
+
+        for (let i = 0; i < totalWords; i++) {
+            const text = wordTexts[i % wordTexts.length];
+            const color = wordColors[i % wordColors.length];
+            
+            const radius = 2.5 + Math.random() * 4.5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            
+            const x = Math.sin(phi) * Math.cos(theta) * radius;
+            const y = 3.0 + Math.cos(phi) * radius * 0.6 + 1.5;
+            const z = Math.sin(phi) * Math.sin(theta) * radius;
+            
+            const scale = 0.5 + Math.random() * 0.7;
+            
+            wordConfigs.push({
+                text, color,
+                position: new THREE.Vector3(x, y, z),
+                scale,
+                floatSpeed: 0.2 + Math.random() * 0.4,
+                floatAmplitude: 0.15 + Math.random() * 0.3,
+                phase: Math.random() * Math.PI * 2,
+                driftSpeed: (Math.random() - 0.5) * 0.08,
+                rotationSpeed: (Math.random() - 0.5) * 0.15,
+                parallaxFactor: 0.05 + Math.random() * 0.12
+            });
+        }
+
+        wordConfigs.forEach((cfg) => {
+            const texture = createTextTexture(cfg.text, cfg.color, 80);
+            
+            const material = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                opacity: 0,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending,
+                fog: false
+            });
+            
+            const sprite = new THREE.Sprite(material);
+            sprite.position.copy(cfg.position);
+            sprite.scale.set(cfg.scale * 2, cfg.scale * 0.7, 1);
+            
+            sprite.userData = {
+                ...cfg,
+                basePosition: cfg.position.clone(),
+                appearProgress: 0,
+                smoothCamPos: new THREE.Vector3()
+            };
+            
+            sprite.visible = false;
+            wordsGroup.add(sprite);
+            floatingWords.push(sprite);
+        });
+
+        // ============ INTERACCIÓN CON CARTAS ============
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const letterOverlay = document.getElementById('letter-overlay');
+        const letterBody = document.getElementById('letter-body');
+        const letterTitle = document.getElementById('letter-title');
+        const letterSignature = document.getElementById('letter-signature');
+        const closeLetter = document.getElementById('close-letter');
+
+        let hoveredLetter = null;
+        let letterOpen = false;
+
+        // Cambia el cursor al pasar sobre una carta
+        renderer.domElement.addEventListener('mousemove', (event) => {
+            if (letterOpen) return;
+            
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Solo detectamos cartas visibles
+            const visibleLetters = letters.filter(l => l.visible && l.userData.appearProgress > 0.9);
+            const intersects = raycaster.intersectObjects(visibleLetters, false);
+            
+            if (intersects.length > 0) {
+                const letter = intersects[0].object;
+                // Solo cambiamos si es distinta
+                if (hoveredLetter !== letter) {
+                    hoveredLetter = letter;
+                    renderer.domElement.style.cursor = 'pointer';
+                    
+                    // Efecto de elevación al pasar el ratón
+                    letter.userData.hoverTarget = 0.15;
+                }
+            } else {
+                if (hoveredLetter) {
+                    hoveredLetter.userData.hoverTarget = 0;
+                    hoveredLetter = null;
+                    renderer.domElement.style.cursor = 'default';
+                }
+            }
+        });
+
+        // Clic sobre una carta
+        renderer.domElement.addEventListener('click', (event) => {
+            if (letterOpen) return;
+            
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            const visibleLetters = letters.filter(l => l.visible && l.userData.appearProgress > 0.9);
+            const intersects = raycaster.intersectObjects(visibleLetters, false);
+            
+            if (intersects.length > 0) {
+                const letter = intersects[0].object;
+                openLetter(letter);
+            }
+        });
+
+        // Función para abrir la carta
+        function openLetter(letter) {
+            letterOpen = true;
+            const msg = letter.userData.message;
+            
+            letterTitle.textContent = msg.title;
+            letterBody.textContent = msg.body;
+            letterSignature.textContent = '— ' + msg.signature;
+            
+            letterOverlay.classList.add('visible');
+            renderer.domElement.style.cursor = 'default';
+            
+            // Detenemos la rotación automática
+            controls.autoRotate = false;
+            
+            // Efecto: la carta se eleva y gira hacia la cámara al abrirse
+            letter.userData.opening = true;
+            letter.userData.openingProgress = 0;
+        }
+
+        // Función para cerrar la carta
+        function closeLetterFunc() {
+            letterOpen = false;
+            letterOverlay.classList.remove('visible');
+            controls.autoRotate = true;
+        }
+
+        closeLetter.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeLetterFunc();
+        });
+
+        letterOverlay.addEventListener('click', (e) => {
+            // Cerrar si se hace clic fuera del papel
+            if (e.target === letterOverlay) {
+                closeLetterFunc();
+            }
+        });
+
+        // Escape para cerrar
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && letterOpen) {
+                closeLetterFunc();
+            }
+        });
+
+        // ============ ANIMACIÓN DE APARICIÓN ============
+        const animationState = {
+            progress: 0,
+            duration: 12.0,
+            currentTime: 0,
+            playing: true
+        };
+
+        animatedFlowers.forEach(f => {
+            f.userData.finalPosition = f.position.clone();
+            f.userData.finalScale = f.scale.clone();
+            f.userData.finalRotationX = f.rotation.x;
+        });
+
+        animatedLeaves.forEach(l => {
+            l.userData.finalPosition = l.position.clone();
+            l.userData.finalScale = l.scale.clone();
+        });
+
+        function updateAnimation(progress) {
+            const totalItems = animatedFlowers.length;
+            const windowSize = 0.35;
+            const stagger = (1 - windowSize) / Math.max(1, totalItems - 1);
+
+            animatedFlowers.forEach((flower, i) => {
+                const start = i * stagger;
+                const end = start + windowSize;
+                
+                let localProgress = (progress - start) / (end - start);
+                localProgress = Math.max(0, Math.min(1, localProgress));
+                
+                const eased = 1 - Math.pow(1 - localProgress, 3);
+
+                const origin = STEM_ORIGIN.clone();
+                const finalPos = flower.userData.finalPosition;
+                
+                flower.position.lerpVectors(origin, finalPos, eased);
+                
+                const scaleFactor = 0.05 + 0.95 * eased;
+                flower.scale.copy(flower.userData.finalScale).multiplyScalar(scaleFactor);
+                
+                flower.rotation.y = flower.userData.finalRotationY + (1 - eased) * Math.PI * 2;
+                
+                flower.visible = localProgress > 0.01;
+            });
+
+            animatedStems.forEach((stem, i) => {
+                const start = i * stagger;
+                const end = start + windowSize;
+                let localProgress = (progress - start) / (end - start);
+                localProgress = Math.max(0, Math.min(1, localProgress));
+                
+                stem.material.opacity = localProgress * 0.95;
+                stem.visible = localProgress > 0.01;
+            });
+
+            animatedLeaves.forEach((leaf, i) => {
+                const leafStart = 0.6 + (i / animatedLeaves.length) * 0.3;
+                const leafEnd = leafStart + 0.12;
+                let localProgress = (progress - leafStart) / (leafEnd - leafStart);
+                localProgress = Math.max(0, Math.min(1, localProgress));
+                
+                const eased = 1 - Math.pow(1 - localProgress, 3);
+                
+                leaf.scale.copy(leaf.userData.finalScale).multiplyScalar(eased);
+                leaf.visible = localProgress > 0.01;
+            });
+
+            const letterStart = 0.05;
+            const letterEnd = 0.45;
+            let letterProgress = (progress - letterStart) / (letterEnd - letterStart);
+            letterProgress = Math.max(0, Math.min(1, letterProgress));
+            
+            letters.forEach((letter, i) => {
+                const delay = (i / letters.length) * 0.5;
+                let localLetterProgress = (letterProgress - delay) / (1 - delay);
+                localLetterProgress = Math.max(0, Math.min(1, localLetterProgress));
+                
+                const eased = 1 - Math.pow(1 - localLetterProgress, 3);
+                
+                letter.scale.setScalar(0.01 + 0.99 * eased);
+                letter.visible = localLetterProgress > 0.01;
+                letter.userData.appearProgress = eased;
+            });
+
+            const heartStart = 0.4;
+            const heartEnd = 1.0;
+            let heartProgress = (progress - heartStart) / (heartEnd - heartStart);
+            heartProgress = Math.max(0, Math.min(1, heartProgress));
+            
+            hearts.forEach((heart, i) => {
+                const heartDelay = (i / hearts.length) * 0.6;
+                let localHeartProgress = (heartProgress - heartDelay) / (1 - heartDelay);
+                localHeartProgress = Math.max(0, Math.min(1, localHeartProgress));
+                
+                const eased = 1 - Math.pow(1 - localHeartProgress, 2);
+                
+                heart.material.opacity = eased * 0.95;
+                heart.visible = localHeartProgress > 0.01;
+                
+                const s = 0.3 + 0.7 * eased;
+                heart.scale.setScalar(s);
+                heart.userData.appearScale = s;
+            });
+
+            const wordStart = 0.5;
+            const wordEnd = 1.0;
+            let wordProgress = (progress - wordStart) / (wordEnd - wordStart);
+            wordProgress = Math.max(0, Math.min(1, wordProgress));
+            
+            floatingWords.forEach((word, i) => {
+                const wordDelay = (i / floatingWords.length) * 0.6;
+                let localWordProgress = (wordProgress - wordDelay) / (1 - wordDelay);
+                localWordProgress = Math.max(0, Math.min(1, localWordProgress));
+                
+                const eased = 1 - Math.pow(1 - localWordProgress, 2);
+                
+                word.material.opacity = eased * 0.9;
+                word.visible = localWordProgress > 0.01;
+                word.userData.appearProgress = eased;
+            });
+
+            vaseGroup.scale.setScalar(Math.min(1, progress * 4));
+            vaseGroup.visible = progress > 0.005;
+        }
+
+        animatedFlowers.forEach(f => { f.visible = false; });
+        animatedStems.forEach(s => { s.visible = false; });
+        animatedLeaves.forEach(l => { l.visible = false; });
+        hearts.forEach(h => { h.visible = false; });
+        floatingWords.forEach(w => { w.visible = false; });
+        letters.forEach(l => { l.visible = false; });
+        vaseGroup.visible = false;
+
+        // ============ BOTÓN DE REPLAY ============
+        document.getElementById('replay').addEventListener('click', (e) => {
+            e.stopPropagation();
+            animationState.currentTime = 0;
+            animationState.playing = true;
+            animationState.progress = 0;
+            animatedFlowers.forEach(f => { f.visible = false; });
+            animatedStems.forEach(s => { s.visible = false; s.material.opacity = 0; });
+            animatedLeaves.forEach(l => { l.visible = false; l.scale.setScalar(0); });
+            hearts.forEach(h => { h.visible = false; h.material.opacity = 0; h.scale.setScalar(0.3); });
+            floatingWords.forEach(w => { w.visible = false; w.material.opacity = 0; });
+            letters.forEach(l => { l.visible = false; l.scale.setScalar(0.01); l.userData.hoverTarget = 0; l.position.copy(l.userData.finalPosition); });
+            vaseGroup.visible = false;
+            if (letterOpen) closeLetterFunc();
+        });
+
+        // ============ ANIMACIÓN PRINCIPAL ============
+        const clock = new THREE.Clock();
+        const flowerMeshes = [];
+        bouquet.traverse(obj => {
+            if (obj.userData && obj.userData.outerGroup) {
+                flowerMeshes.push(obj);
+            }
+        });
+
+        const cameraOffset = new THREE.Vector3();
+        const smoothedCameraPos = new THREE.Vector3();
+        smoothedCameraPos.copy(camera.position);
+
+        function animate() {
+            const delta = clock.getDelta();
+            const t = clock.getElapsedTime();
+            
+            if (animationState.playing) {
+                animationState.currentTime += delta;
+                const progress = Math.min(1, animationState.currentTime / animationState.duration);
+                animationState.progress = progress;
+                updateAnimation(progress);
+                
+                if (progress >= 1) {
+                    animationState.playing = false;
+                    updateAnimation(1);
+                }
+            }
+            
+            bouquet.rotation.z = Math.sin(t * 0.6) * 0.012;
+            bouquet.rotation.x = Math.cos(t * 0.4) * 0.008;
+            
+            if (!animationState.playing) {
+                flowerMeshes.forEach((f) => {
+                    if (!f.visible) return;
+                    const { outerGroup, midGroup, innerGroup } = f.userData;
+                    if (outerGroup) outerGroup.rotation.y += 0.0004;
+                    if (midGroup) midGroup.rotation.y -= 0.0006;
+                    if (innerGroup) innerGroup.rotation.y += 0.0010;
+                });
+            }
+            
+            hearts.forEach((heart) => {
+                if (!heart.visible) return;
+                const d = heart.userData;
+                
+                const floatOffset = Math.sin(t * d.floatSpeed + d.phase) * d.floatAmplitude;
+                const orbitOffset = t * d.orbitSpeed;
+                const newAngle = d.orbitAngle + orbitOffset;
+                const newX = Math.cos(newAngle) * d.orbitRadius;
+                const newZ = Math.sin(newAngle) * d.orbitRadius;
+                
+                heart.position.x = newX;
+                heart.position.y = d.orbitY + floatOffset;
+                heart.position.z = newZ;
+                
+                heart.rotation.x = d.baseRotation.x + t * d.rotateSpeed.x;
+                heart.rotation.y = d.baseRotation.y + t * d.rotateSpeed.y;
+                heart.rotation.z = d.baseRotation.z + t * d.rotateSpeed.z;
+                
+                const pulse = 1 + Math.sin(t * d.pulseSpeed + d.pulsePhase) * 0.15;
+                heart.scale.setScalar(pulse * (d.appearScale || 1));
+            });
+            
+            // Animación de las cartas
+            letters.forEach((letter) => {
+                if (!letter.visible) return;
+                const d = letter.userData;
+                
+                // Flotación sutil
+                const floatOffset = Math.sin(t * d.floatSpeed + d.floatPhase) * 0.005;
+                
+                // Efecto de elevación al pasar el ratón
+                const hoverTarget = d.hoverTarget || 0;
+                d.currentHover = d.currentHover || 0;
+                d.currentHover += (hoverTarget - d.currentHover) * 0.15;
+                
+                letter.position.y = d.finalPosition.y + floatOffset + d.currentHover;
+                
+                // Pequeña rotación extra cuando está en hover
+                if (d.currentHover > 0.01) {
+                    letter.rotation.y += 0.005;
+                }
+                
+                // Efecto de "apertura": la carta se eleva y gira hacia la cámara
+                if (d.opening) {
+                    d.openingProgress += 0.02;
+                    const p = Math.min(1, d.openingProgress);
+                    letter.position.y = d.finalPosition.y + p * 1.5;
+                    letter.rotation.y += p * 0.1;
+                    
+                    if (p >= 1) {
+                        d.opening = false;
+                    }
+                }
+            });
+            
+            smoothedCameraPos.lerp(camera.position, 0.05);
+            cameraOffset.copy(smoothedCameraPos).sub(controls.target);
+            
+            floatingWords.forEach((word) => {
+                if (!word.visible) return;
+                const d = word.userData;
+                
+                const floatOffset = Math.sin(t * d.floatSpeed + d.phase) * d.floatAmplitude;
+                const driftX = Math.sin(t * d.driftSpeed + d.phase * 2) * 0.15;
+                const driftZ = Math.cos(t * d.driftSpeed * 0.8 + d.phase) * 0.15;
+                
+                const parallaxX = -cameraOffset.x * d.parallaxFactor;
+                const parallaxY = -cameraOffset.y * d.parallaxFactor * 0.6;
+                const parallaxZ = -cameraOffset.z * d.parallaxFactor;
+                
+                word.position.x = d.basePosition.x + driftX + parallaxX;
+                word.position.y = d.basePosition.y + floatOffset + parallaxY;
+                word.position.z = d.basePosition.z + driftZ + parallaxZ;
+                
+                const dist = word.position.distanceTo(camera.position);
+                const distanceFade = Math.max(0.3, Math.min(1.0, 1.0 - (dist - 4) / 14));
+                word.material.opacity = d.appearProgress * 0.9 * distanceFade;
+                
+                const scalePulse = 1 + Math.sin(t * 0.8 + d.phase) * 0.04;
+                word.scale.set(
+                    d.scale * 2 * scalePulse,
+                    d.scale * 0.7 * scalePulse,
+                    1
+                );
+            });
+            
+            sparkles.rotation.y = t * 0.02;
+            warmGlow.intensity = 1.5 + Math.sin(t * 1.2) * 0.4;
+            
+            controls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        addEventListener('resize', () => {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+        });
+    </script>
+</body>
+</html>
